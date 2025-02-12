@@ -7,6 +7,7 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { headers } from 'next/headers'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -28,12 +29,12 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = createServerComponentClient({ cookies })
-  const { data: { session } } = await supabase.auth.getSession()
+  const supabase = createClientComponentClient()
+  const session = await supabase.auth.getSession()
 
   // Add protected routes here
   const protectedPaths = ['/protected-route-1', '/protected-route-2']
-  const currentPath = headers().get('x-pathname') || '/'
+  const currentPath = (await headers()).get('x-pathname') || '/'
 
   if (!session && protectedPaths.includes(currentPath)) {
     redirect('/auth/signin')
