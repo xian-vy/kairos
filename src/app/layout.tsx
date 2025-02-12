@@ -1,13 +1,11 @@
-import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
-import "./globals.css";
-import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
-import { headers } from 'next/headers'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import Navigation from "@/components/navigation";
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import type { Metadata } from "next";
+import { Inter, Space_Grotesk } from "next/font/google";
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
