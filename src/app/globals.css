@@ -126,3 +126,12 @@ body {
 .relative {
   z-index: 1;
 }
+
+/* Add these styles to handle z-index stacking */
+.radix-select-content {
+  z-index: 9999 !important;
+}
+
+[data-radix-popper-content-wrapper] {
+  z-index: 9999 !important;
+}
