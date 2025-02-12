@@ -1,7 +1,10 @@
+'use client'
 import { Button } from '@/components/ui/button'
 import React from 'react'
+import { useRouter } from 'next/navigation'
 
 const Hero = () => {
+  const router = useRouter()
   return (
     <div className="relative min-h-[400px] 2xl:min-h-[550px] flex items-center justify-center overflow-hidden">
     {/* Glowing circle gradient */}
@@ -30,6 +33,7 @@ const Hero = () => {
       </p>
       <div className="flex justify-center">
         <Button
+         onClick={() => router.push('/app')}
           size="lg"
           className="relative bg-[#4B79E4] text-white 
             hover:bg-[#3D63C9] 

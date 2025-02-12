@@ -1,9 +1,11 @@
-import Index from "@/features/public";
+import Features from "@/features/public/features";
+import Hero from "@/features/public/hero";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#0A0C1B]">
-      <Index />
-    </div>
+    <>
+      <Hero />
+      <Features />
+    </>
   );
 }

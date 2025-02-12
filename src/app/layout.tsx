@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
+import Navigation from "@/components/navigation";
+import Footer from "@/components/footer";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -22,9 +24,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
+  return (   
     <html lang="en">
-      <body className={`${spaceGrotesk.variable} ${inter.variable} font-inter antialiased`}>{children}</body>
+      <body className={`min-h-screen bg-[#0A0C1B] ${spaceGrotesk.variable} ${inter.variable} font-inter antialiased`}>
+       <Navigation />
+        {children}
+        <Footer />
+       </body>
     </html>
   );
 }
