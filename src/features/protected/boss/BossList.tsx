@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { BOSSDATA_NIGHTCROWS } from "@/lib/data/presets"
-import { MapPin } from "lucide-react"
+import { Info, MapPin } from "lucide-react"
 import { useState, useEffect } from 'react'
 import { FaSkull } from "react-icons/fa"
 import { BossTimerDialog } from './BossTimerDialog'
@@ -54,12 +54,10 @@ export function BossList() {
     <div className="p-4 space-y-6">
       <div className="space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">World Bosses</h2>
-        <p className="text-muted-foreground">
-          Track and monitor Night Crows world boss spawns
+        <p className="text-[#B4B7E5] text-sm flex items-center gap-1.5">
+            <Info className="h-4 w-4" /> Click on a boss to create a timer for their next spawn      
         </p>
       </div>
-
-      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {BOSSDATA_NIGHTCROWS.map((boss) => (
           <Card 
@@ -95,7 +93,7 @@ export function BossList() {
                 </Badge>
               </CardTitle>
               <CardDescription className="text-xs text-[#B4B7E5]">
-                Spawns {boss.respawnCount}x every {boss.respawnInterval} hours
+                Spawns <span className="font-extrabold">{boss.respawnCount}x</span> every <span className="font-extrabold">{boss.respawnInterval} {boss.respawnInterval === 1 ? 'hour' : 'hours'}</span>
               </CardDescription>
             </CardHeader>
             <CardContent>
