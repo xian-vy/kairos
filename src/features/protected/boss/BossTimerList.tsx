@@ -32,6 +32,7 @@ export function BossTimerList() {
         })
       } else {
         setTimers(data)
+        console.log(data)
       }
     }
 
@@ -79,16 +80,21 @@ export function BossTimerList() {
   }
 
 
-  // Filter out elapsed timers and sort remaining ones
+  // Sort timers - respawned ones first, then by time of death
   const activeTimers = timers
-    .filter(timer => {
-      const timeLeft = formatTimeLeft(
-        timer.time_of_death, 
-        getPresetRespawnInterval(timer.boss_name)
-      )
-      return timeLeft !== null
+    .sort((a, b) => {
+      const aSpawnTime = new Date(a.time_of_death).getTime() + (getPresetRespawnInterval(a.boss_name) * 60 * 60 * 1000)
+      const bSpawnTime = new Date(b.time_of_death).getTime() + (getPresetRespawnInterval(b.boss_name) * 60 * 60 * 1000)
+      const now = new Date().getTime()
+      
+      // If both have passed or both haven't passed, sort by time of death (most recent first)
+      if ((aSpawnTime < now && bSpawnTime < now) || (aSpawnTime >= now && bSpawnTime >= now)) {
+        return new Date(b.time_of_death).getTime() - new Date(a.time_of_death).getTime()
+      }
+      
+      // Put respawned ones first
+      return aSpawnTime < now ? -1 : 1
     })
-    .sort((a, b) => new Date(a.time_of_death).getTime() - new Date(b.time_of_death).getTime())
 
   return (
     <div className="space-y-2">
@@ -119,7 +125,12 @@ export function BossTimerList() {
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-right shrink-0">
-                    <div className="flex items-center gap-2 text-[#B4B7E5]">
+                    <div className={cn(
+                      "flex items-center gap-2",
+                      new Date().getTime() > new Date(timer.time_of_death).getTime() + (getPresetRespawnInterval(timer.boss_name) * 60 * 60 * 1000)
+                        ? "text-green-500"
+                        : "text-[#B4B7E5]"
+                    )}>
                       <Timer className="h-3 w-3" />
                       <span>
                         {formatTimeLeft(

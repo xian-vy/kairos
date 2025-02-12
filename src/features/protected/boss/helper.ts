@@ -44,7 +44,7 @@ export function formatTimeLeft(
   timeOfDeath: string, 
   respawnInterval: number, 
   includeSeconds: boolean = false
-): string | null {
+): string {
   const now = new Date()
   const deathTime = new Date(timeOfDeath)
   
@@ -53,17 +53,16 @@ export function formatTimeLeft(
   const respawnMs = respawnInterval * 60 * 60 * 1000
   const nextSpawn = new Date(deathTime.getTime() + respawnMs)
   
-  if (deathTime.getTime() > now.getTime()) {
-    return `${respawnInterval}h 0m${includeSeconds ? ' 0s' : ''}`
-  }
-  
-  while (nextSpawn.getTime() <= now.getTime()) {
-    nextSpawn.setTime(nextSpawn.getTime() + respawnMs)
+  // If we're past the next spawn time, show elapsed time since respawn
+  if (now.getTime() > nextSpawn.getTime()) {
+    const elapsedMs = now.getTime() - nextSpawn.getTime()
+    const hours = Math.floor(elapsedMs / (1000 * 60 * 60))
+    const minutes = Math.floor((elapsedMs % (1000 * 60 * 60)) / (1000 * 60))
+    
+    return `Respawned ${hours}h ${minutes}m ago`
   }
   
   const timeUntilSpawn = nextSpawn.getTime() - now.getTime()
-  
-  if (timeUntilSpawn <= 0) return null
   
   const hours = Math.floor(timeUntilSpawn / (1000 * 60 * 60))
   const minutes = Math.floor((timeUntilSpawn % (1000 * 60 * 60)) / (1000 * 60))
@@ -94,9 +93,9 @@ export const getTimerColor = (timeOfDeath: string, respawnInterval: number) => {
   // Calculate next spawn time
   const nextSpawn = new Date(deathTime.getTime() + respawnMs)
   
-  // If the next spawn time is in the past, calculate the next future spawn
-  while (nextSpawn.getTime() <= now.getTime()) {
-    nextSpawn.setTime(nextSpawn.getTime() + respawnMs)
+  // If the spawn time has passed, return green
+  if (now.getTime() > nextSpawn.getTime()) {
+    return 'fill-green-500 stroke-green-500'  // Already spawned
   }
   
   const timeUntilSpawn = nextSpawn.getTime() - now.getTime()
@@ -108,7 +107,7 @@ export const getTimerColor = (timeOfDeath: string, respawnInterval: number) => {
   } else if (timeUntilSpawn <= oneHour) {
     return 'fill-orange-500 stroke-orange-500'  // Less than 1 hour until spawn
   } else {
-    return 'fill-red-500 stroke-red-500'  // More than 30 minutes until spawn
+    return 'fill-red-500 stroke-red-500'  // More than 1 hour until spawn
   }
 }
 
