@@ -153,7 +153,7 @@ export async function getBossKillCount(
 }
 
 export function getKillCountColor(current: number, total: number): string {
-  if (current === total) {
+  if (current >= total) {
     return 'text-green-500'
   }
   if (current > 0) {
