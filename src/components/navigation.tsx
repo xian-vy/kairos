@@ -1,15 +1,18 @@
+'use client'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import React from 'react'
 import { FaDiscord, FaFacebookMessenger, FaGithub } from "react-icons/fa";
+import { useRouter } from 'next/navigation';
 
 const Navigation = () => {
+  const router = useRouter();
   return (
     <nav className="border-b border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex items-center justify-between h-16">
         <div className="flex items-center">
-          <span className="font-space-grotesk mb-0.5 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
+          <span onClick={() => router.push('/')} className="cursor-pointer font-space-grotesk mb-0.5 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
             Kairos
           </span>
           <Button variant="ghost" className="ml-3 text-[#E2E4FF] hover:text-black hidden md:block">
