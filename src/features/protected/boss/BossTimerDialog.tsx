@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -17,6 +17,7 @@ interface BossTimerDialogProps {
   onClose: () => void
   bossName: string
   locations: string[]
+  selectedLocation?: string
   onTimerCreated: () => void
 }
 
@@ -25,6 +26,7 @@ export function BossTimerDialog({
   onClose, 
   bossName, 
   locations,
+  selectedLocation,
   onTimerCreated 
 }: BossTimerDialogProps) {
   const [isLoading, setIsLoading] = useState(false)
@@ -32,12 +34,18 @@ export function BossTimerDialog({
     const now = new Date()
     return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
   })
-  const [location, setLocation] = useState('')
+  const [location, setLocation] = useState(selectedLocation || '')
   const [notes, setNotes] = useState('')
   const { toast } = useToast()
   const supabase = createClientComponentClient()
 
- 
+  useEffect(() => {
+    if (selectedLocation) {
+      setLocation(selectedLocation)
+    } else {
+      setLocation(locations[0]);
+    }
+  }, [selectedLocation,locations])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -165,6 +173,7 @@ export function BossTimerDialog({
               onChange={(e) => setNotes(e.target.value)}
               className="border-[#1F2137]  text-[#E2E4FF]"
               placeholder="Add any additional notes..."
+              maxLength={80}
             />
           </div>
           <div className="flex justify-end space-x-2">

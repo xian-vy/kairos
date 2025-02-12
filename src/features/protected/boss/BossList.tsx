@@ -14,6 +14,7 @@ export function BossList() {
     name: string; 
     respawnInterval: number;
     locations: string[];
+    selectedLocation?: string;
   } | null>(null)
 
   return (
@@ -59,7 +60,16 @@ export function BossList() {
                   {boss.locations.map((location) => (
                     <div
                       key={location}
-                      className="flex items-center gap-2 text-sm text-[#B4B7E5] group-hover:text-[#E2E4FF] transition-colors"
+                      className="flex hover:underline items-center gap-2 text-sm text-[#B4B7E5] group-hover:text-[#E2E4FF] transition-colors cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedBoss({ 
+                          name: boss.name, 
+                          respawnInterval: boss.respawnInterval,
+                          locations: boss.locations,
+                          selectedLocation: location
+                        })
+                      }}
                     >
                       <MapPin className="h-3.5 w-3.5" />
                       <span className="text-xs">{location}</span>
@@ -77,6 +87,7 @@ export function BossList() {
         onClose={() => setSelectedBoss(null)}
         bossName={selectedBoss?.name ?? ''}
         locations={selectedBoss?.locations ?? []}
+        selectedLocation={selectedBoss?.selectedLocation}
         onTimerCreated={() => {
           // This will trigger a refresh of the timer list
           const event = new Event('bossTimerCreated')

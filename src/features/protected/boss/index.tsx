@@ -9,7 +9,7 @@ import { Timer } from "lucide-react"
 
 export function BossPage() {
   return (
-    <Tabs defaultValue="timers" className="w-full">
+    <Tabs defaultValue="bosses" className="w-full">
       <TabsList className="flex justify-center mt-2 xl:mt-5">
         <TabsTrigger value="bosses" className="flex items-center gap-2">
             <FaSkull className="h-4 w-4 fill-red-800" /> Boss List
