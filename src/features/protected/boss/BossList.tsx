@@ -134,6 +134,7 @@ export function BossList() {
           const event = new Event('bossTimerCreated')
           window.dispatchEvent(event)
           refreshKillCounts()
+          setSelectedBoss(null)
         }}
       />
     </div>

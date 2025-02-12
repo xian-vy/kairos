@@ -59,11 +59,16 @@ export function BossTimerDialog({
       const tod = new Date()
       tod.setHours(parseInt(hours), parseInt(minutes), 0, 0)
 
+      // Get the current user
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) throw new Error("User not authenticated")
+
       const timerData = {
         boss_name: bossName,
         location,
         time_of_death: tod.toISOString(),
-        notes: notes || null
+        notes: notes || null,
+        user_id: user.id
       }
 
       let error
