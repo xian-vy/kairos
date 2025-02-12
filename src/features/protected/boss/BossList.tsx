@@ -5,9 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { BOSSDATA_NIGHTCROWS } from "@/lib/data/presets"
 import { MapPin } from "lucide-react"
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { FaSkull } from "react-icons/fa"
 import { BossTimerDialog } from './BossTimerDialog'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { getBossKillCount, getKillCountColor } from './helper'
 
 export function BossList() {
   const [selectedBoss, setSelectedBoss] = useState<{ 
@@ -16,6 +18,37 @@ export function BossList() {
     locations: string[];
     selectedLocation?: string;
   } | null>(null)
+  
+  const [killCounts, setKillCounts] = useState<Record<string, { 
+    current: number, 
+    total: number 
+  }>>({})
+  
+  const supabase = createClientComponentClient()
+
+  const refreshKillCounts = async () => {
+    const counts: Record<string, { current: number, total: number }> = {}
+    
+    for (const boss of BOSSDATA_NIGHTCROWS) {
+      const count = await getBossKillCount(boss.name, supabase)
+      counts[boss.name] = {
+        current: count.currentKills,
+        total: count.totalRequired
+      }
+    }
+    
+    setKillCounts(counts)
+  }
+
+  useEffect(() => {
+    refreshKillCounts()
+    
+    // Refresh kill counts when a new timer is created
+    window.addEventListener('bossTimerCreated', refreshKillCounts)
+    return () => {
+      window.removeEventListener('bossTimerCreated', refreshKillCounts)
+    }
+  }, [])
 
   return (
     <div className="p-4 space-y-6">
@@ -41,7 +74,18 @@ export function BossList() {
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center justify-between text-[#E2E4FF]">
                 <span className="group-hover:text-[#4B79E4] transition-colors text-base flex items-center gap-2" >
-                  <FaSkull className="h-4 w-4 fill-red-800" /> {boss.name}
+                  <FaSkull className="h-4 w-4 fill-red-800" /> 
+                  <div className="flex items-center gap-2">
+                    {boss.name}
+                    <span 
+                      className={`text-xs ${getKillCountColor(
+                        killCounts[boss.name]?.current || 0, 
+                        killCounts[boss.name]?.total || boss.respawnCount
+                      )}`}
+                    >
+                      ({killCounts[boss.name]?.current || 0}/{killCounts[boss.name]?.total || boss.respawnCount})
+                    </span>
+                  </div>
                 </span>
                 <Badge 
                   variant="secondary" 
@@ -50,7 +94,7 @@ export function BossList() {
                   {boss.respawnInterval}h
                 </Badge>
               </CardTitle>
-              <CardDescription className="text-sm text-[#B4B7E5]">
+              <CardDescription className="text-xs text-[#B4B7E5]">
                 Spawns {boss.respawnCount}x every {boss.respawnInterval} hours
               </CardDescription>
             </CardHeader>
@@ -89,9 +133,9 @@ export function BossList() {
         locations={selectedBoss?.locations ?? []}
         selectedLocation={selectedBoss?.selectedLocation}
         onTimerCreated={() => {
-          // This will trigger a refresh of the timer list
           const event = new Event('bossTimerCreated')
           window.dispatchEvent(event)
+          refreshKillCounts()
         }}
       />
     </div>

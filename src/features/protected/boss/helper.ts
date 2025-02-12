@@ -1,4 +1,5 @@
 import { BOSSDATA_NIGHTCROWS } from "@/lib/data/presets"
+import { SupabaseClient } from '@supabase/supabase-js'
 
 export const createDateFromTimeString = (timeStr: string) => {
     const today = new Date()
@@ -109,5 +110,55 @@ export const getTimerColor = (timeOfDeath: string, respawnInterval: number) => {
   } else {
     return 'fill-red-500 stroke-red-500'  // More than 30 minutes until spawn
   }
+}
+
+interface BossKillCount {
+  currentKills: number;
+  totalRequired: number;
+}
+
+export async function getBossKillCount(
+  bossName: string, 
+  supabase: SupabaseClient
+): Promise<BossKillCount> {
+  // Get the preset data for this boss
+  const preset = BOSSDATA_NIGHTCROWS.find(boss => boss.name === bossName)
+  const totalRequired = preset?.respawnCount || 1
+
+  // Get today's date at midnight
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  try {
+    const { data: kills, error } = await supabase
+      .from('boss_timers')
+      .select('*')
+      .eq('boss_name', bossName)
+      .gte('time_of_death', today.toISOString())
+      .lt('time_of_death', new Date(today.getTime() + 24 * 60 * 60 * 1000).toISOString())
+
+    if (error) throw error
+
+    return {
+      currentKills: kills?.length || 0,
+      totalRequired
+    }
+  } catch (error) {
+    console.error('Error fetching boss kills:', error)
+    return {
+      currentKills: 0,
+      totalRequired
+    }
+  }
+}
+
+export function getKillCountColor(current: number, total: number): string {
+  if (current === total) {
+    return 'text-green-500'
+  }
+  if (current > 0) {
+    return 'text-yellow-500'
+  }
+  return 'text-[#B4B7E5]'
 }
 
