@@ -128,7 +128,7 @@ export function BossTimerList() {
                       )}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-[#B4B7E5] mt-1">
+                  <div className="flex items-center gap-2 text-xs text-[#B4B7E5] mt-1 min-w-[95px]">
                     <FaSkullCrossbones className="h-3 w-3" />
                     <span>
                       {new Date(timer.time_of_death).toLocaleString(undefined, {
