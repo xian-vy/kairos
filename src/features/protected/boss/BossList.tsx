@@ -1,14 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-import { BOSSDATA_NIGHTCROWS } from "@/lib/data/presets"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { BOSSDATA_NIGHTCROWS } from "@/lib/data/presets"
 import { MapPin } from "lucide-react"
-import { BossTimerDialog } from './BossTimerDialog'
-import { BossTimerList } from './BossTimerList'
+import { useState } from 'react'
 import { FaSkull } from "react-icons/fa"
+import { BossTimerDialog } from './BossTimerDialog'
 
 export function BossList() {
   const [selectedBoss, setSelectedBoss] = useState<{ 
@@ -26,7 +25,6 @@ export function BossList() {
         </p>
       </div>
 
-      <BossTimerList />
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {BOSSDATA_NIGHTCROWS.map((boss) => (
