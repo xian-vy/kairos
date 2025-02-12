@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { MapPin } from "lucide-react"
 import { BossTimerDialog } from './BossTimerDialog'
 import { BossTimerList } from './BossTimerList'
+import { FaSkull } from "react-icons/fa"
 
 export function BossList() {
   const [selectedBoss, setSelectedBoss] = useState<{ 
@@ -40,8 +41,8 @@ export function BossList() {
           >
             <CardHeader className="pb-3">
               <CardTitle className="flex items-center justify-between text-[#E2E4FF]">
-                <span className="group-hover:text-[#4B79E4] transition-colors">
-                  {boss.name}
+                <span className="group-hover:text-[#4B79E4] transition-colors text-base flex items-center gap-2" >
+                  <FaSkull className="h-4 w-4 fill-red-800" /> {boss.name}
                 </span>
                 <Badge 
                   variant="secondary" 
@@ -63,7 +64,7 @@ export function BossList() {
                       className="flex items-center gap-2 text-sm text-[#B4B7E5] group-hover:text-[#E2E4FF] transition-colors"
                     >
                       <MapPin className="h-3.5 w-3.5" />
-                      <span>{location}</span>
+                      <span className="text-xs">{location}</span>
                     </div>
                   ))}
                 </div>
@@ -77,7 +78,6 @@ export function BossList() {
         isOpen={!!selectedBoss}
         onClose={() => setSelectedBoss(null)}
         bossName={selectedBoss?.name ?? ''}
-        respawnInterval={selectedBoss?.respawnInterval ?? 0}
         locations={selectedBoss?.locations ?? []}
         onTimerCreated={() => {
           // This will trigger a refresh of the timer list

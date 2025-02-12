@@ -1,9 +1,10 @@
-export type BossTimer = {
+export interface BossTimer {
   id: string
+  created_at: string
   user_id: string
   boss_name: string
   location: string
   time_of_death: string
-  notes?: string
-  created_at: string
+  next_spawn: string
+  notes: string | null
 } 

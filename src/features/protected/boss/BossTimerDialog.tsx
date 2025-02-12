@@ -10,12 +10,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useToast } from "@/hooks/use-toast"
 import { Icons } from "@/components/ui/icons"
+import { createDateFromTimeString } from './helper'
 
 interface BossTimerDialogProps {
   isOpen: boolean
   onClose: () => void
   bossName: string
-  respawnInterval: number
   locations: string[]
   onTimerCreated: () => void
 }
@@ -24,7 +24,6 @@ export function BossTimerDialog({
   isOpen, 
   onClose, 
   bossName, 
-  respawnInterval, 
   locations,
   onTimerCreated 
 }: BossTimerDialogProps) {
@@ -38,18 +37,7 @@ export function BossTimerDialog({
   const { toast } = useToast()
   const supabase = createClientComponentClient()
 
-  const createDateFromTimeString = (timeStr: string) => {
-    const today = new Date()
-    const [hours, minutes] = timeStr.split(':')
-    today.setHours(parseInt(hours, 10), parseInt(minutes, 10), 0, 0)
-    return today
-  }
-
-  const calculateNextSpawn = (timeStr: string) => {
-    const deathTime = createDateFromTimeString(timeStr)
-    deathTime.setHours(deathTime.getHours() + respawnInterval)
-    return deathTime.toISOString()
-  }
+ 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -70,7 +58,6 @@ export function BossTimerDialog({
       if (!user) throw new Error('User not authenticated')
 
       const deathDateTime = createDateFromTimeString(timeOfDeath)
-      const nextSpawnTime = calculateNextSpawn(timeOfDeath)
 
       const { error } = await supabase
         .from('boss_timers')
@@ -79,7 +66,6 @@ export function BossTimerDialog({
           boss_name: bossName,
           location: location,
           time_of_death: deathDateTime.toISOString(),
-          next_spawn: nextSpawnTime,
           notes: notes,
         })
 

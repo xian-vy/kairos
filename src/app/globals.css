@@ -69,6 +69,12 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+  span {
+    @apply text-xs;
+  }
+  p {
+    @apply text-[0.8rem];
+  } 
 }
 
 .text-base,
