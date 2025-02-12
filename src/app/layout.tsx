@@ -6,7 +6,7 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import "./globals.css";
-
+import { Toaster } from "@/components/ui/toaster";
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
@@ -44,6 +44,7 @@ export default async function RootLayout({
        <Navigation />
         {children}
         <Footer />
+        <Toaster />
        </body>
     </html>
   );
