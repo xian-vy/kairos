@@ -50,7 +50,7 @@ export default function SignIn() {
         })
         if (signInError) throw signInError
 
-        router.push('/')
+        router.push('/app')
         router.refresh()
       } else {
         // Validate password for sign up
