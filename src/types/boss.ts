@@ -6,4 +6,5 @@ export type BossTimer = {
   time_of_death: string
   notes?: string
   created_at: string
+  allLocations?: string[]
 } 

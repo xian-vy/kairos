@@ -1,5 +1,4 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
@@ -10,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useToast } from "@/hooks/use-toast"
 import { Icons } from "@/components/ui/icons"
-import { createDateFromTimeString } from './helper'
 
 interface BossTimerDialogProps {
   isOpen: boolean
@@ -18,6 +16,9 @@ interface BossTimerDialogProps {
   bossName: string
   locations: string[]
   selectedLocation?: string
+  initialNotes?: string
+  initialTimeOfDeath?: string
+  timerId?: string
   onTimerCreated: () => void
 }
 
@@ -27,15 +28,17 @@ export function BossTimerDialog({
   bossName, 
   locations,
   selectedLocation,
+  initialNotes = '',
+  initialTimeOfDeath,
+  timerId,
   onTimerCreated 
 }: BossTimerDialogProps) {
   const [isLoading, setIsLoading] = useState(false)
-  const [timeOfDeath, setTimeOfDeath] = useState(() => {
-    const now = new Date()
-    return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`
-  })
+  const [timeOfDeath, setTimeOfDeath] = useState(() => 
+    initialTimeOfDeath || new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
+  )
   const [location, setLocation] = useState(selectedLocation || '')
-  const [notes, setNotes] = useState('')
+  const [notes, setNotes] = useState(initialNotes)
   const { toast } = useToast()
   const supabase = createClientComponentClient()
 
@@ -43,57 +46,51 @@ export function BossTimerDialog({
     if (selectedLocation) {
       setLocation(selectedLocation)
     } else {
-      setLocation(locations[0]);
+      setLocation(locations[0])
     }
-  }, [selectedLocation,locations])
+  }, [selectedLocation, locations])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
-    if (!location || !timeOfDeath) {
-      toast({
-        title: "Validation Error",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      })
-      return
-    }
-
     setIsLoading(true)
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) throw new Error('User not authenticated')
+      const [hours, minutes] = timeOfDeath.split(':')
+      const tod = new Date()
+      tod.setHours(parseInt(hours), parseInt(minutes), 0, 0)
 
-      const deathDateTime = createDateFromTimeString(timeOfDeath)
+      const timerData = {
+        boss_name: bossName,
+        location,
+        time_of_death: tod.toISOString(),
+        notes: notes || null
+      }
 
-      const { error } = await supabase
-        .from('boss_timers')
-        .insert({
-          user_id: user.id,
-          boss_name: bossName,
-          location: location,
-          time_of_death: deathDateTime.toISOString(),
-          notes: notes,
-        })
+      let error
+      if (timerId) {
+        // Update existing timer
+        ({ error } = await supabase
+          .from('boss_timers')
+          .update(timerData)
+          .eq('id', timerId))
+      } else {
+        // Create new timer
+        ({ error } = await supabase
+          .from('boss_timers')
+          .insert([timerData]))
+      }
 
       if (error) throw error
 
       toast({
-        title: "Timer Created",
-        description: `Successfully registered timer for ${bossName}`,
+        title: timerId ? "Timer updated" : "Timer created",
+        description: timerId ? "The timer has been updated successfully" : "The timer has been created successfully",
       })
-      
       onTimerCreated()
-      onClose()
-      setTimeOfDeath('')
-      setLocation('')
-      setNotes('')
-    } catch (error) {
-      console.error('Error:', error)
+    } catch (error: Error | unknown) {
       toast({
         title: "Error",
-        description: "Failed to create timer. Please try again.",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
         variant: "destructive",
       })
     } finally {
@@ -188,10 +185,10 @@ export function BossTimerDialog({
             <Button 
               type="submit"
               disabled={isLoading}
-              className="bg-[#4B79E4] hover:bg-[#3D63C9] text-white"
+              className={`hover:bg-[#3D63C9] text-white ${timerId ? "bg-blue-800" : "bg-green-700"}`} 
             >
               {isLoading && <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />}
-              Create Timer
+              {timerId ? "Update Timer" : "Create Timer"}
             </Button>
           </div>
         </form>

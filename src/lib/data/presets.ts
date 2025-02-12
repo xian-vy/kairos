@@ -118,7 +118,7 @@ export const BOSSDATA_NIGHTCROWS: BOSSDATA_TYPE[] = [
         name: BOSS_NAMES_NIGHTCROWS.Seyron,
         locations: Object.values(Seyron_SpawnLocation),
         respawnCount: 1,
-        respawnInterval: 12,
+        respawnInterval: 6,
         respawnIntervalDelay: 1
     },
     {
