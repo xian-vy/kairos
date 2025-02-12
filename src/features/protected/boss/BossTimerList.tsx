@@ -14,6 +14,7 @@ import { formatTimeLeft, getPresetRespawnInterval, getTimerColor } from "./helpe
 export function BossTimerList() {
   const [timers, setTimers] = useState<BossTimer[]>([])
   const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({})
+  const [, forceUpdate] = useState({})
   const { toast } = useToast()
   const supabase = createClientComponentClient()
 
@@ -61,6 +62,14 @@ export function BossTimerList() {
       subscription.unsubscribe()
     }
   }, [supabase, toast])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      forceUpdate({})
+    }, 1000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   const toggleCard = (id: string) => {
     setExpandedCards(prev => ({
@@ -114,7 +123,8 @@ export function BossTimerList() {
                     <span>
                       {formatTimeLeft(
                         timer.time_of_death, 
-                        getPresetRespawnInterval(timer.boss_name)
+                        getPresetRespawnInterval(timer.boss_name),
+                        true
                       )}
                     </span>
                   </div>

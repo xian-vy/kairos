@@ -39,22 +39,23 @@ export function formatTimeRemaining(nextSpawn: string): string {
   return `${hours}h ${minutes}m`
 }
 
-export function formatTimeLeft(timeOfDeath: string, respawnInterval: number): string | null {
+export function formatTimeLeft(
+  timeOfDeath: string, 
+  respawnInterval: number, 
+  includeSeconds: boolean = false
+): string | null {
   const now = new Date()
   const deathTime = new Date(timeOfDeath)
   
   if (isNaN(deathTime.getTime())) return 'Invalid time'
   
-  // Convert hours to milliseconds (respawnInterval is in hours)
-  const respawnMs = respawnInterval * 60 * 60 * 1000 // Convert hours to milliseconds
+  const respawnMs = respawnInterval * 60 * 60 * 1000
   const nextSpawn = new Date(deathTime.getTime() + respawnMs)
   
-  // If the death time is in the future (which shouldn't happen), return the full interval
   if (deathTime.getTime() > now.getTime()) {
-    return `${respawnInterval}h 0m`
+    return `${respawnInterval}h 0m${includeSeconds ? ' 0s' : ''}`
   }
   
-  // If the next spawn time is in the past, calculate the next future spawn
   while (nextSpawn.getTime() <= now.getTime()) {
     nextSpawn.setTime(nextSpawn.getTime() + respawnMs)
   }
@@ -65,8 +66,11 @@ export function formatTimeLeft(timeOfDeath: string, respawnInterval: number): st
   
   const hours = Math.floor(timeUntilSpawn / (1000 * 60 * 60))
   const minutes = Math.floor((timeUntilSpawn % (1000 * 60 * 60)) / (1000 * 60))
+  const seconds = Math.floor((timeUntilSpawn % (1000 * 60)) / 1000)
   
-  return `${hours}h ${minutes}m`
+  return includeSeconds 
+    ? `${hours}h ${minutes}m ${seconds}s`
+    : `${hours}h ${minutes}m`
 }
 
 export const getPresetRespawnInterval = (bossName: string) => {
