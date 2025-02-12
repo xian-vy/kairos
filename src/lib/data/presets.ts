@@ -83,7 +83,7 @@ export const BOSSDATA_NIGHTCROWS: BOSSDATA_TYPE[] = [
         name: BOSS_NAMES_NIGHTCROWS.Anggolt,
         locations: Object.values(Anggolt_SpawnLocation),
         respawnCount: 1,
-        respawnInterval: 12,
+        respawnInterval: 1,
         respawnIntervalDelay: 1
     },
     {

@@ -5,31 +5,11 @@ import { useToast } from "@/hooks/use-toast"
 import { cn } from '@/lib/utils'
 import type { BossTimer } from '@/types/boss'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { ChevronDown, MapPin, Star, Timer } from 'lucide-react'
+import { ChevronDown, Circle, MapPin, Star, Timer } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { FaSkullCrossbones } from 'react-icons/fa'
+import { formatTimeLeft, getPresetRespawnInterval, getTimerColor } from "./helper"
 
-function formatTimeLeft(timeOfDeath: string, respawnInterval: number): string {
-  const now = new Date()
-  const deathTime = new Date(timeOfDeath)
-  
-  if (isNaN(deathTime.getTime())) return 'Invalid time'
-  
-  // Calculate how many intervals have passed since death
-  const timeSinceDeath = now.getTime() - deathTime.getTime()
-  const intervalsPassed = Math.floor(timeSinceDeath / (respawnInterval * 60 * 1000))
-  
-  // Calculate next spawn time by adding intervals to death time
-  const nextSpawn = new Date(deathTime.getTime() + (intervalsPassed + 1) * respawnInterval * 60 * 1000)
-  const timeUntilSpawn = nextSpawn.getTime() - now.getTime()
-  
-  if (timeUntilSpawn <= 0) return 'Ready to spawn!'
-  
-  const hours = Math.floor(timeUntilSpawn / (1000 * 60 * 60))
-  const minutes = Math.floor((timeUntilSpawn % (1000 * 60 * 60)) / (1000 * 60))
-  
-  return `${hours}h ${minutes}m`
-}
 
 export function BossTimerList() {
   const [timers, setTimers] = useState<BossTimer[]>([])
@@ -89,11 +69,23 @@ export function BossTimerList() {
     }))
   }
 
-  if (timers.length === 0) return null
+
+  // Filter out elapsed timers and sort remaining ones
+  const activeTimers = timers
+    .filter(timer => {
+      const timeLeft = formatTimeLeft(
+        timer.time_of_death, 
+        getPresetRespawnInterval(timer.boss_name)
+      )
+      return timeLeft !== null
+    })
+    .sort((a, b) => new Date(a.time_of_death).getTime() - new Date(b.time_of_death).getTime())
+
+  if (activeTimers.length === 0) return null
 
   return (
     <div className="space-y-2">
-      {timers.map((timer) => (
+      {activeTimers.map((timer) => (
         <Card 
           key={timer.id} 
           className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm"
@@ -106,6 +98,7 @@ export function BossTimerList() {
               <div className="flex items-center gap-4">
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-1.5">
+                    <Circle className={`h-3 w-3 text-[#E2E4FF] ${getTimerColor(timer.time_of_death, getPresetRespawnInterval(timer.boss_name))}`} />
                      <h3 className="!text-sm font-semibold text-[#E2E4FF]">{timer.boss_name}</h3>
                      {timer.notes &&
                       <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />
@@ -116,17 +109,19 @@ export function BossTimerList() {
               </div>
               <div className="flex items-center gap-4">
                 <div className="text-right shrink-0">
-                  <div className="flex items-center gap-2 text-[#4B79E4]">
-                    <Timer className="h-4 w-4" />
-                    <span>{formatTimeLeft(timer.time_of_death, 12)}</span>
+                  <div className="flex items-center gap-2 text-[#B4B7E5]">
+                    <Timer className="h-3 w-3" />
+                    <span>
+                      {formatTimeLeft(
+                        timer.time_of_death, 
+                        getPresetRespawnInterval(timer.boss_name)
+                      )}
+                    </span>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-[#B4B7E5] mt-1">
-                    <FaSkullCrossbones className="h-3 w-3 fill-red-800" />
+                    <FaSkullCrossbones className="h-3 w-3" />
                     <span>
                       {new Date(timer.time_of_death).toLocaleString(undefined, {
-                        year: 'numeric',
-                        month: 'numeric',
-                        day: 'numeric',
                         hour: '2-digit',
                         minute: '2-digit',
                         hour12: true
