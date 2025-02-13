@@ -17,9 +17,11 @@ export function JoinGroupDialog({ onGroupJoined, variant = "default" }: JoinGrou
   const [joinGroupName, setJoinGroupName] = useState("");
   const supabase = createClientComponentClient<Database>();
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const joinGroup = async () => {
     try {
+      setIsLoading(true);
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -68,6 +70,8 @@ export function JoinGroupDialog({ onGroupJoined, variant = "default" }: JoinGrou
         title: "Error",
         description: "An unexpected error occurred",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -107,8 +111,13 @@ export function JoinGroupDialog({ onGroupJoined, variant = "default" }: JoinGrou
             >
               Cancel
             </Button>
-            <Button onClick={joinGroup} className="bg-blue-600 hover:bg-blue-700 text-white">
-              Join
+            <Button
+              type="submit"
+              disabled={isLoading}
+              onClick={joinGroup}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              {isLoading ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : "Join"}
             </Button>
           </div>
         </div>

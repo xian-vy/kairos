@@ -17,9 +17,11 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
   const [newGroupName, setNewGroupName] = useState("");
   const supabase = createClientComponentClient<Database>();
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   const createGroup = async () => {
     try {
+      setIsLoading(true);
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -69,15 +71,25 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
         title: "Error",
         description: "An unexpected error occurred",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <Dialog open={showCreateForm} onOpenChange={setShowCreateForm}>
       <DialogTrigger asChild>
-        <Button size={variant === "default" ? "sm" : "default"} className="bg-blue-600 hover:bg-blue-700">
+        <Button
+          size={variant === "default" ? "sm" : "default"}
+          className="bg-blue-600 hover:bg-blue-700"
+          disabled={isLoading}
+        >
           <PlusCircle className="mr-2 h-4 w-4" />
-          Create {variant === "default" ? "Group" : "a Group"}
+          {isLoading ? (
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+          ) : (
+            `Create ${variant === "default" ? "Group" : "a Group"}`
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent className="bg-[#0A0C1B] border-gray-800">
@@ -99,8 +111,13 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
             >
               Cancel
             </Button>
-            <Button onClick={createGroup} className="bg-blue-600 hover:bg-blue-700 text-white">
-              Create
+            <Button
+              type="submit"
+              onClick={createGroup}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+              disabled={isLoading}
+            >
+              {isLoading ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : "Create"}
             </Button>
           </div>
         </div>

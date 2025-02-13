@@ -11,6 +11,7 @@ import { JoinGroupDialog } from "./join-group-dialog";
 
 export function GroupSelection() {
   const [groups, setGroups] = useState<Group[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const supabase = createClientComponentClient<Database>();
 
   useEffect(() => {
@@ -18,17 +19,32 @@ export function GroupSelection() {
   }, []);
 
   const fetchUserGroups = async () => {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (!user) return;
+    try {
+      setIsLoading(true);
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (!user) return;
 
-    const { data: memberGroups } = await supabase.from("group_members").select("groups(*)").eq("user_id", user.id);
+      const { data: memberGroups } = await supabase.from("group_members").select("groups(*)").eq("user_id", user.id);
 
-    if (memberGroups) {
-      setGroups(memberGroups.map((mg) => mg.groups) as unknown as Group[]);
+      if (memberGroups) {
+        setGroups(memberGroups.map((mg) => mg.groups) as unknown as Group[]);
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return (
+      <Card className="bg-black/20 border-none">
+        <CardContent className="flex justify-center items-center min-h-[200px]">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white" />
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-6">
