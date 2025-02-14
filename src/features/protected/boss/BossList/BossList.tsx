@@ -49,12 +49,9 @@ export function BossList() {
 
   return (
     <div className="p-4 space-y-6">
-      <div className="space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">World Bosses</h2>
-        <p className="text-[#B4B7E5] text-sm flex items-center gap-1.5">
+        <p className="text-[#B4B7E5] text-xs flex items-center gap-1.5 ">
             <Info className="h-4 w-4" /> Click on a boss to create a timer for their next spawn      
         </p>
-      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {BOSSDATA_NIGHTCROWS.map((boss) => (
           <BossListCard
