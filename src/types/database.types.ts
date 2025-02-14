@@ -7,6 +7,7 @@ export interface BossTimer {
   time_of_death: string;
   next_spawn: string;
   notes: string | null;
+  group_id: string;
 }
 
 export type Database = {
