@@ -25,7 +25,10 @@ export function JoinGroupDialog({ onGroupJoined, variant = "default" }: JoinGrou
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        console.error("No user found");
+        return;
+      }
 
       const { data: group } = await supabase.from("groups").select("id").eq("name", joinGroupName).single();
 
@@ -54,15 +57,17 @@ export function JoinGroupDialog({ onGroupJoined, variant = "default" }: JoinGrou
         return;
       }
 
-      await supabase.from("group_members").insert([{ group_id: group.id, user_id: user.id, role: "member" }]);
+      const { error: memberError } = await supabase
+        .from("group_members")
+        .insert([{ group_id: group.id, user_id: user.id, role: "member" }]);
 
-      onGroupJoined();
-      setShowJoinForm(false);
-      setJoinGroupName("");
+      if (memberError) throw memberError;
+
       toast({
         title: "Success",
         description: "Joined group successfully",
       });
+      onGroupJoined();
     } catch (error) {
       console.error("Unexpected error:", error);
       toast({
@@ -72,6 +77,8 @@ export function JoinGroupDialog({ onGroupJoined, variant = "default" }: JoinGrou
       });
     } finally {
       setIsLoading(false);
+      setShowJoinForm(false);
+      setJoinGroupName("");
     }
   };
 
@@ -86,9 +93,14 @@ export function JoinGroupDialog({ onGroupJoined, variant = "default" }: JoinGrou
               ? "border-gray-800 hover:bg-gray-800 text-white"
               : "bg-gray-800 hover:bg-gray-900 text-white"
           }
+          disabled={isLoading}
         >
           <UserPlus className="mr-2 h-4 w-4" />
-          Join {variant === "default" ? "Group" : "a Group"}
+          {isLoading ? (
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+          ) : (
+            `Join ${variant === "default" ? "Group" : "a Group"}`
+          )}
         </Button>
       </DialogTrigger>
       <DialogContent className="bg-[#0A0C1B] border-gray-800">
@@ -104,7 +116,6 @@ export function JoinGroupDialog({ onGroupJoined, variant = "default" }: JoinGrou
           />
           <div className="flex justify-end gap-2">
             <Button
-              type="button"
               variant="ghost"
               onClick={() => setShowJoinForm(false)}
               className="text-[#B4B7E5] hover:text-[#E2E4FF] hover:bg-[#1F2137]/50"
@@ -113,9 +124,9 @@ export function JoinGroupDialog({ onGroupJoined, variant = "default" }: JoinGrou
             </Button>
             <Button
               type="submit"
-              disabled={isLoading}
               onClick={joinGroup}
               className="bg-blue-600 hover:bg-blue-700 text-white"
+              disabled={isLoading}
             >
               {isLoading ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" /> : "Join"}
             </Button>
