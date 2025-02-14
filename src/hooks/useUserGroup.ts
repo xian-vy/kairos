@@ -12,7 +12,7 @@ export function useUserGroup() {
 
   useEffect(() => {
     fetchUserGroup();
-  },);
+  }, []);
 
   const fetchUserGroup = async () => {
     try {

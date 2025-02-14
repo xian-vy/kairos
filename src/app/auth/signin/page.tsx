@@ -158,7 +158,7 @@ export default function SignIn() {
 
   return (
     <div className="container flex min-h-screen flex-col items-center justify-center w-full mx-auto">
-      <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+      <div className="mx-auto flex flex-col justify-center space-y-6 w-11/12 sm:w-[350px]">
         <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
           <CardHeader className="space-y-2 text-center">
             <CardTitle className="text-xl font-bold text-[#E2E4FF]">

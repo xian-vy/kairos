@@ -112,11 +112,11 @@ export function BossTimerDialog({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
-        className="sm:max-w-[425px] border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-xl z-50"
+        className=" w-11/12 sm:max-w-[425px] border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-xl z-50"
         forceMount
       >
         <DialogHeader>
-          <DialogTitle className="text-[#E2E4FF]"> {bossName}</DialogTitle>
+          <DialogTitle className="text-[#E2E4FF] text-start"> {bossName}</DialogTitle>
           <DialogDescription className="text-[#B4B7E5]">
           </DialogDescription>
         </DialogHeader>

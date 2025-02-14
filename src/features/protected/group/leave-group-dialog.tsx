@@ -150,8 +150,8 @@ export function LeaveGroupDialog({onLeaveGroup, group}: {onLeaveGroup: () => voi
                 You are the admin of this group. Deleting the group will delete all related data including all boss timers and group members.
               </div>
               <div className="space-y-3">
-                <label className="text-[#B4B7E5] text-sm flex items-center gap-1">
-                  <Lock className="h-4 w-4" />
+                <label className="text-[#B4B7E5] text-xs lg:text-sm flex items-center gap-1">
+                  <Lock strokeWidth={1.5} className="h-4 w-4" />
                   Confirm your password to delete
                 </label>
                 <Input

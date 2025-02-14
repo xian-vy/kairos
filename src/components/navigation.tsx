@@ -24,7 +24,7 @@ import { GAMESLIST } from '@/lib/data/utils'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useState } from 'react'
 import { FaDiscord, FaFacebookMessenger, FaGithub, FaUser } from "react-icons/fa"
 import { Select, SelectTrigger } from './ui/select'
@@ -32,6 +32,7 @@ import { Loader2 } from "lucide-react"
 
 const Navigation = () => {
   const router = useRouter()
+  const pathname = usePathname()
   const supabase = createClientComponentClient()
   const [signOutDialogOpen, setSignOutDialogOpen] = useState(false)
   const [isSigningOut, setIsSigningOut] = useState(false)
@@ -76,26 +77,30 @@ const Navigation = () => {
                 <span className="font-space-grotesk">Guide</span>
               </Button>
             </div>
+           
             <div className="flex items-center gap-4">
-              <Link href="https://discord.com" target="_blank" className="text-[#B4B7E5] hover:text-white">
-                <FaDiscord className="h-4 w-4" />
-              </Link>
-              <Link href="https://github.com" target="_blank" className="text-[#B4B7E5] hover:text-white">
-                <FaGithub className="h-4 w-4" />
-              </Link>
-              <Link href="https://github.com" target="_blank" className="text-[#B4B7E5] hover:text-white">
-                <FaFacebookMessenger className="h-4 w-4" />
-              </Link>
-       
                {!currentUser && (
-               <Button 
-               variant="ghost" 
-               className="text-[#E2E4FF] hover:text-black"
-               onClick={handleSignIn}
-             >
-               <span className="font-space-grotesk">Sign In</span>
-             </Button>
-              )}
+                      <>
+                      <Link href="https://discord.com" target="_blank" className="text-[#B4B7E5] hover:text-white">
+                        <FaDiscord className="h-4 w-4" />
+                      </Link>
+                      <Link href="https://github.com" target="_blank" className="text-[#B4B7E5] hover:text-white">
+                        <FaGithub className="h-4 w-4" />
+                      </Link>
+                      <Link href="https://github.com" target="_blank" className="text-[#B4B7E5] hover:text-white">
+                        <FaFacebookMessenger className="h-4 w-4" />
+                      </Link>
+                      </>
+                )}
+                {!currentUser && pathname !== '/auth/signin' && (
+                    <Button 
+                    variant="ghost" 
+                    className="text-[#E2E4FF] hover:text-black"
+                    onClick={handleSignIn}
+                      >
+                    <span className="font-space-grotesk">Sign In</span>
+                  </Button>
+                )}
                {currentUser ? (
                 <div className="flex items-center gap-4">
                   <div className="ml-2">
@@ -136,9 +141,11 @@ const Navigation = () => {
                   </DropdownMenu>
                 </div>
               ) : (
+                pathname !== '/auth/signin' && (
                 <Button className="bg-[#4B79E4] hover:bg-[#3D63C9] hidden md:block">
                   <span className="font-space-grotesk">Get Started</span>
                 </Button>
+                )
               )}
             </div>
           </div>

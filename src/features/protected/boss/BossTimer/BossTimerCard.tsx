@@ -24,7 +24,7 @@ export const TimerCard = ({
   onDelete 
 }: TimerCardProps) => (
   <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
-    <CardContent className="py-3">
+    <CardContent className="py-3 px-3 sm:px-6">
       <div 
         className="flex items-center justify-between cursor-pointer"
         onClick={onToggle}
