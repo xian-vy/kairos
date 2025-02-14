@@ -33,7 +33,7 @@ export function GroupSelection() {
       ) : (
         <div className="flex justify-between items-center w-full px-4 py-4 3xl:py-8">
           <h2 className="text-2xl font-bold text-center text-[#E2E4FF] font-space-grotesk">Welcome to {group.name}!</h2>
-          <LeaveGroupDialog onLeaveGroup={refetch} />
+          <LeaveGroupDialog onLeaveGroup={refetch} group={group} />
         </div>
       )}
     </div>

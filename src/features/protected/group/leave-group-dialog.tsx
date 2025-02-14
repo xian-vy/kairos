@@ -10,18 +10,20 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import useCurrentUser from "@/hooks/useCurrentUser";
 import type { Database } from "@/types/database.types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { LogOut, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export function LeaveGroupDialog({onLeaveGroup}: {onLeaveGroup: () => void}) {
+export function LeaveGroupDialog({onLeaveGroup, group}: {onLeaveGroup: () => void, group: Database['public']['Tables']['groups']['Row']}) {
   const supabase = createClientComponentClient<Database>();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const { currentUser } = useCurrentUser();
 
   const handleLeaveGroup = async () => {
     setIsLoading(true);
@@ -128,10 +130,17 @@ export function LeaveGroupDialog({onLeaveGroup}: {onLeaveGroup: () => void}) {
       </AlertDialogTrigger>
       <AlertDialogContent className="bg-[#0A0C1B] border-gray-800">
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-[#E2E4FF]">Leave Group</AlertDialogTitle>
-          <AlertDialogDescription className="text-[#B4B7E5]">
-            Are you sure you want to leave this group? You will need to be invited back to rejoin.
-          </AlertDialogDescription>
+          <AlertDialogTitle className="text-[#E2E4FF]">{group?.created_by === currentUser?.id ? "Delete Group" : "Leave Group"}</AlertDialogTitle>
+          { group?.created_by === currentUser?.id ? (
+              <AlertDialogDescription className=" text-red-400">
+              You are the admin of this group. Deleting the group will delete all related data including all boss timers and group members.
+              </AlertDialogDescription>
+          ) : (
+            <AlertDialogDescription className="text-[#B4B7E5]">
+              Are you sure you want to leave this group? You will need to be invited back to rejoin.
+            </AlertDialogDescription>
+          )}
+
         </AlertDialogHeader>
         <AlertDialogFooter>
           <Button
@@ -143,9 +152,9 @@ export function LeaveGroupDialog({onLeaveGroup}: {onLeaveGroup: () => void}) {
           </Button>
           <Button
             onClick={handleLeaveGroup}
-            className="bg-red-500 hover:bg-red-600 text-white border-none"
+            className="bg-red-700 hover:bg-red-600 text-white border-none"
           >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Leave Group"}
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : group?.created_by === currentUser?.id ? "Delete Group" : "Leave Group"}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
