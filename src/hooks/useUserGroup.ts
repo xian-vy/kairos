@@ -4,7 +4,7 @@ import type { Database } from "@/types/database.types";
 import { Group } from "@/types/group";
 
 export function useUserGroup() {
-  const [group, setGroup] = useState<Group>();
+  const [group, setGroup] = useState<Group | undefined>();
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error>();
   const supabase = createClientComponentClient<Database>();
@@ -17,6 +17,7 @@ export function useUserGroup() {
     try {
       setIsLoading(true);
       setError(undefined);
+      setGroup(undefined);
       
       const {
         data: { user },
@@ -29,9 +30,11 @@ export function useUserGroup() {
         .eq("user_id", user.id)
         .single();
 
-      if (error) throw error;
+      if (error && error.code !== 'PGRST116') {
+        throw error;
+      }
 
-      if (memberGroups) {
+      if (memberGroups?.groups) {
         setGroup(memberGroups.groups as unknown as Group);
       }
     } catch (err) {

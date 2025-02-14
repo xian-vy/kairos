@@ -1,12 +1,10 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useUserGroup } from "@/hooks/useUserGroup";
 import { CreateGroupDialog } from "./create-group-dialog";
 import { JoinGroupDialog } from "./join-group-dialog";
-import { useUserGroup } from "@/hooks/useUserGroup";
-import { Button } from "@/components/ui/button";
-import { LogOut } from "lucide-react";
-
+import { LeaveGroupDialog } from "./leave-group-dialog";
 export function GroupSelection() {
   const { group, isLoading, refetch } = useUserGroup();
 
@@ -35,9 +33,7 @@ export function GroupSelection() {
       ) : (
         <div className="flex justify-between items-center w-full px-4">
           <h2 className="text-2xl font-bold text-center text-[#E2E4FF] font-space-grotesk">Welcome to {group.name}!</h2>
-          <Button variant="ghost" className="text-xs text-[#B4B7E5] hover:bg-red-500 hover:text-white">
-            <LogOut className="h-3 w-3" /> Leave Group
-          </Button>
+          <LeaveGroupDialog onLeaveGroup={refetch} />
         </div>
       )}
     </div>
