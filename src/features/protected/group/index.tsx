@@ -5,10 +5,15 @@ import { useUserGroup } from "@/hooks/useUserGroup";
 import { CreateGroupDialog } from "./create-group-dialog";
 import { JoinGroupDialog } from "./join-group-dialog";
 import { LeaveGroupDialog } from "./leave-group-dialog";
-export function GroupSelection() {
-  const { group, isLoading, refetch } = useUserGroup();
+import { Button } from "@/components/ui/button";
+import { useUser } from "@/hooks/useUser";
 
-  if (isLoading) {
+
+export function GroupSelection() {
+  const { group, isLoading: groupLoading, refetch } = useUserGroup();
+  const { user, isLoading: userLoading } = useUser();
+
+  if (groupLoading || userLoading) {
     return (
       <Card className="bg-black/20 border-none">
         <CardContent className="flex justify-center items-center min-h-[200px]">
@@ -26,8 +31,27 @@ export function GroupSelection() {
             <CardTitle className="text-xl text-center text-[#E2E4FF]">Welcome to Kairos!</CardTitle>
           </CardHeader>
           <CardContent className="flex justify-center gap-4">
-            <CreateGroupDialog onGroupCreated={refetch} variant="welcome" />
-            <JoinGroupDialog onGroupJoined={refetch} variant="welcome" />
+            {user?.status === 'pending' ? (
+              <>
+                <p className="text-[#E2E4FF] text-center">
+                  Your request to join {user?.pending_group?.name || 'a group'} is pending approval
+                </p>
+                <Button 
+                  variant="destructive"
+                  onClick={() => {
+                    // TODO: Add cancel pending request logic
+                    refetch();
+                  }}
+                >
+                  Cancel Request
+                </Button>
+              </>
+            ) : (
+              <>
+                <CreateGroupDialog onGroupCreated={refetch} variant="welcome" />
+                <JoinGroupDialog onGroupJoined={refetch} variant="welcome" />
+              </>
+            )}
           </CardContent>
         </Card>
       ) : (
