@@ -5,13 +5,14 @@ import { Icons } from '@/components/ui/icons'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/hooks/use-toast'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { Lock, Mail } from 'lucide-react'
+import { Lock, Mail, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 export default function SignIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [username, setUsername] = useState('')
   const [message, setMessage] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
@@ -35,6 +36,16 @@ export default function SignIn() {
     return null
   }
 
+  const validateUsername = (username: string) => {
+    if (username.length < 3) {
+      return 'Username must be at least 3 characters long'
+    }
+    if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+      return 'Username can only contain letters, numbers, and underscores'
+    }
+    return null
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setIsLoading(true)
@@ -51,11 +62,22 @@ export default function SignIn() {
         router.push('/app')
         router.refresh()
       } else {
+        // Validate username for sign up
+        const usernameError = validateUsername(username)
+        if (usernameError) {
+          toast({
+            title: "Sign Up Failed",
+            description: usernameError,
+          })
+          setIsLoading(false)
+          return
+        }
+
         // Validate password for sign up
         const passwordError = validatePassword(password)
         if (passwordError) {
           toast({
-            title: "Sign In Failed",
+            title: "Sign Up Failed",
             description: passwordError,
           })
           setIsLoading(false)
@@ -65,7 +87,7 @@ export default function SignIn() {
         // Check if passwords match
         if (password !== confirmPassword) {
           toast({
-            title: "Sign In Failed",
+            title: "Sign Up Failed",
             description: 'Passwords do not match',
           })
           setIsLoading(false)
@@ -78,18 +100,28 @@ export default function SignIn() {
           options: {
             emailRedirectTo: `${window.location.origin}/auth/callback`,
             data: {
+              username,
               email_confirmed: false,
             },
           },
         })
         
-        if (signUpError) {
-          console.error('Signup error:', signUpError)
-          toast({
-            title: "Sign In Failed",
-            description: signUpError.message,
-          })
-          return
+        if (signUpError) throw signUpError
+
+        // Insert into users table
+        if (data.user) {
+          const { error: insertError } = await supabase
+            .from('users')
+            .insert([
+              {
+                id: data.user.id,
+                username,
+                status: 'pending',
+                email: email,
+              }
+            ])
+
+          if (insertError) throw insertError
         }
 
         // Check if the response indicates user already exists
@@ -108,6 +140,7 @@ export default function SignIn() {
         setEmail('')
         setPassword('')
         setConfirmPassword('')
+        setUsername('')
         
         // Don't redirect yet - wait for email confirmation
         return
@@ -139,7 +172,21 @@ export default function SignIn() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit}>
-              <div className="grid gap-6">
+              <div className="grid gap-4">
+                {mode === 'signup' && (
+                  <div className="grid gap-2 relative">
+                    <User className='w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#B4B7E5] text-sm' />
+                    <Input
+                      id="username"
+                      placeholder="Username"
+                      type="text"
+                      disabled={isLoading}
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="border-[#1F2137] bg-[#0D0F23] text-[#E2E4FF] placeholder:text-[#B4B7E5]/50 pl-10"
+                    />
+                  </div>
+                )}
                 <div className="grid gap-2 relative">
                 < Mail className='w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#B4B7E5] text-sm' />
                   <Input
@@ -208,6 +255,7 @@ export default function SignIn() {
                 setEmail('')
                 setPassword('')
                 setConfirmPassword('')
+                setUsername('')
               }}
             >
               {mode === 'signin'
