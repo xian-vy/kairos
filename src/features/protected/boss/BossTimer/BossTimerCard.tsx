@@ -34,6 +34,11 @@ export const TimerCard = ({
             <div className="flex items-center gap-1.5">
               <Circle className={`h-3 w-3 text-[#E2E4FF] ${getTimerColor(timer.time_of_death, getPresetRespawnInterval(timer.boss_name))}`} />
               <h3 className="!text-sm font-semibold text-[#E2E4FF]">{timer.boss_name}</h3>
+              {timer.users?.username && (
+                <span className="text-xs text-[#B4B7E5] flex items-center gap-1">
+                  • by {timer.users.username}
+                </span>
+              )}
               {timer.notes && <Star className="h-3 w-3 text-yellow-500 fill-yellow-500" />}
             </div>
             <p className="text-xs text-[#B4B7E5] flex items-center gap-1.5">

@@ -8,10 +8,10 @@ import { BossTimerDialog } from "./BossTimerDialog"
 import { DeleteDialog } from "./BossTimerDeleteDialog"
 import { TimerCard } from "./BossTimerCard"
 import { enrichTimerWithLocations, sortTimers } from "../helper"
+import { useUserGroup } from "@/hooks/useUserGroup"
 
 export function BossTimerList() {
   const [timers, setTimers] = useState<BossTimer[]>([])
-  const [userGroupId, setUserGroupId] = useState<string | null>(null)
   const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({})
   const [, forceUpdate] = useState({})
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -20,44 +20,46 @@ export function BossTimerList() {
   const [timerToEdit, setTimerToEdit] = useState<BossTimer | null>(null)
   const { toast } = useToast()
   const supabase = createClientComponentClient()
+  const { group } = useUserGroup()
 
   useEffect(() => {
-    const fetchUserGroupAndTimers = async () => {
-      // Get current user's group
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
+    const fetchTimers = async () => {
+      if (!group?.id) return;
 
-      // Get user's group membership
-      const { data: groupMember } = await supabase
-        .from('group_members')
-        .select('group_id')
-        .eq('user_id', user.id)
-        .single()
+      const { data: timerData, error } = await supabase
+        .from('boss_timers')
+        .select(`
+          *,
+          users:user_id (
+            id,
+            username,
+            email,
+            group_id
+          )
+        `)
+        .eq('users.group_id', group.id)
+        .eq('users.status', 'accepted')
 
-      if (groupMember) {
-        setUserGroupId(groupMember.group_id)
-        
-        // Fetch timers for the user's group
-        const { data: timerData, error } = await supabase
-          .from('boss_timers')
-          .select('*')
-          .eq('group_id', groupMember.group_id)
-
-        if (error) {
-          toast({
-            title: "Error fetching timers",
-            description: error.message,
-            variant: "destructive",
-          })
-        } else {
-          setTimers(timerData)
-        }
+      if (error) {
+        toast({
+          title: "Error fetching timers",
+          description: error.message,
+          variant: "destructive",
+        })
+      } else {
+        // Transform the data to match our BossTimer type
+        const transformedTimers = timerData.map(timer => ({
+          ...timer,
+          users: Array.isArray(timer.users) ? timer.users[0] : timer.users
+        }))
+        console.log(transformedTimers)
+        setTimers(transformedTimers)
       }
     }
 
-    fetchUserGroupAndTimers()
+    fetchTimers()
 
-    // Update subscription to filter by group_id
+    // Update subscription to filter by user's group
     const subscription = supabase
       .channel('boss_timers')
       .on(
@@ -65,20 +67,45 @@ export function BossTimerList() {
         { 
           event: '*', 
           schema: 'public', 
-          table: 'boss_timers',
-          filter: userGroupId ? `group_id=eq.${userGroupId}` : undefined
+          table: 'boss_timers'
+          // Remove group_id filter as it's now handled through the join
         },
-        (payload) => {
-          switch (payload.eventType) {
-            case 'INSERT':
-              setTimers((prev) => [...prev, payload.new as BossTimer])
-              break
-            case 'UPDATE':
-              setTimers((prev) => prev.map(timer => timer.id === payload.new.id ? payload.new as BossTimer : timer))
-              break
-            case 'DELETE':
-              setTimers((prev) => prev.filter(timer => timer.id !== payload.old.id))
-              break
+        async (payload) => {
+          if (!group?.id) return;
+          if (payload.eventType === 'INSERT' || payload.eventType === 'UPDATE') {
+            const { data: timer, error } = await supabase
+              .from('boss_timers')
+              .select(`
+                *,
+                users:user_id (
+                  id,
+                  username,
+                  email,
+                  group_id
+                )
+              `)
+              .eq('id', payload.new.id)
+              .eq('users.group_id', group.id)
+              .eq('users.status', 'accepted')
+              .single()
+
+            if (!error && timer) {
+              const transformedTimer = {
+                ...timer,
+                users: Array.isArray(timer.users) ? timer.users[0] : timer.users
+              }
+              
+              switch (payload.eventType) {
+                case 'INSERT':
+                  setTimers((prev) => [...prev, transformedTimer])
+                  break
+                case 'UPDATE':
+                  setTimers((prev) => prev.map(t => t.id === transformedTimer.id ? transformedTimer : t))
+                  break
+              }
+            }
+          } else if (payload.eventType === 'DELETE') {
+            setTimers((prev) => prev.filter(timer => timer.id !== payload.old.id))
           }
         }
       )
@@ -87,7 +114,7 @@ export function BossTimerList() {
     return () => {
       subscription.unsubscribe()
     }
-  }, [supabase, toast])
+  }, [supabase, toast, group])
 
   useEffect(() => {
     const interval = setInterval(() => {

@@ -1,4 +1,4 @@
-export type BossTimer = {
+export interface BossTimer {
   id: string;
   user_id: string;
   group_id: string;
@@ -8,4 +8,10 @@ export type BossTimer = {
   notes?: string;
   created_at: string;
   allLocations?: string[];
-};
+  users?: {
+    id: string;
+    username: string;
+    email: string;
+    group_id: string;
+  };
+}

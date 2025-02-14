@@ -7,7 +7,6 @@ export interface BossTimer {
   time_of_death: string;
   next_spawn: string;
   notes: string | null;
-  group_id: string;
 }
 
 export interface Group {
@@ -22,6 +21,7 @@ export interface User {
   username: string
   email: string
   status: 'pending' | 'accepted'
+  group_id: string | null
 }
 
 export type Database = {
@@ -53,18 +53,53 @@ export type Database = {
           username: string;
           email: string;
           status: "pending" | "accepted";
+          group_id: string | null;
         };
         Insert: {
           id?: string;
           username: string;
           email: string;
           status: "pending" | "accepted";
+          group_id?: string | null;
         };
         Update: {
           id?: string;
           username?: string;
           email?: string;
           status?: "pending" | "accepted";
+          group_id?: string | null;
+        };
+      };
+      boss_timers: {
+        Row: {
+          id: string;
+          created_at: string;
+          user_id: string;
+          boss_name: string;
+          location: string;
+          time_of_death: string;
+          next_spawn: string;
+          notes: string | null;
+        };
+        Insert: {
+          id?: string;
+          created_at?: string;
+          user_id: string;
+          boss_name: string;
+          location: string;
+          time_of_death: string;
+          next_spawn: string;
+          notes?: string | null;
+        };
+        Update: {
+          id?: string;
+          created_at?: string;
+          user_id?: string;
+          boss_name?: string;
+          location?: string;
+          time_of_death?: string;
+          next_spawn?: string;
+          notes?: string | null;
         };
       };
     };
