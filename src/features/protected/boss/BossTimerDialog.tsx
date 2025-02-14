@@ -60,17 +60,30 @@ export function BossTimerDialog({
       tod.setHours(parseInt(hours), parseInt(minutes), 0, 0)
 
       // Get the current user
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) throw new Error("User not authenticated")
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      if (authError || !user) throw new Error("User not authenticated")
+
+
+      // Fetch the user's group_id with debug logging
+      const { data: group_members, error: groupError } = await supabase
+        .from('group_members')
+        .select('group_id') 
+        .eq('user_id', user.id)
+        .single();
+
+
+      if (groupError) throw new Error("Group Fetch Error: " + groupError.message);
+      if (!group_members || !group_members) throw new Error("No group found for the user");
 
       const timerData = {
         boss_name: bossName,
         location,
         time_of_death: tod.toISOString(),
         notes: notes || null,
-        user_id: user.id
+        user_id: user.id,
+        group_id: group_members.group_id
       }
-
+  
       let error
       if (timerId) {
         // Update existing timer
@@ -84,15 +97,19 @@ export function BossTimerDialog({
           .from('boss_timers')
           .insert([timerData]))
       }
-
+  
       if (error) throw error
-
+  
       toast({
         title: timerId ? "Timer updated" : "Timer created",
         description: timerId ? "The timer has been updated successfully" : "The timer has been created successfully",
       })
       onTimerCreated()
     } catch (error: Error | unknown) {
+      console.error('Error details:', {
+        message: error instanceof Error ? error.message : 'Unknown error',
+        fullError: error
+      });
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "An unknown error occurred",
@@ -102,6 +119,7 @@ export function BossTimerDialog({
       setIsLoading(false)
     }
   }
+  
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
