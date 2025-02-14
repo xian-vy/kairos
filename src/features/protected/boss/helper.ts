@@ -26,20 +26,6 @@ export function formatDateTime(date: string | Date): string {
   })
 }
 
-export function formatTimeRemaining(nextSpawn: string): string {
-  const now = new Date()
-  const spawnTime = new Date(nextSpawn)
-  const diff = spawnTime.getTime() - now.getTime()
-  
-  if (diff <= 0) return 'Ready to spawn!'
-  if (isNaN(diff)) return 'Invalid time'
-  
-  const hours = Math.floor(diff / (1000 * 60 * 60))
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
-  
-  return `${hours}h ${minutes}m`
-}
-
 export function formatTimeLeft(
   timeOfDeath: string, 
   respawnInterval: number, 
