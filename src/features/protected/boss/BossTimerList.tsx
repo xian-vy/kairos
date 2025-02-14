@@ -24,6 +24,7 @@ import { BOSSDATA_NIGHTCROWS } from "@/lib/data/presets"
 
 export function BossTimerList() {
   const [timers, setTimers] = useState<BossTimer[]>([])
+  const [userGroupId, setUserGroupId] = useState<string | null>(null)
   const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({})
   const [, forceUpdate] = useState({})
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -34,30 +35,52 @@ export function BossTimerList() {
   const supabase = createClientComponentClient()
 
   useEffect(() => {
-    const fetchTimers = async () => {
-      const { data, error } = await supabase
-        .from('boss_timers')
-        .select('*')
+    const fetchUserGroupAndTimers = async () => {
+      // Get current user's group
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
 
-      if (error) {
-        toast({
-          title: "Error fetching timers",
-          description: error.message,
-          variant: "destructive",
-        })
-      } else {
-        setTimers(data)
-        console.log(data)
+      // Get user's group membership
+      const { data: groupMember } = await supabase
+        .from('group_members')
+        .select('group_id')
+        .eq('user_id', user.id)
+        .single()
+
+      if (groupMember) {
+        setUserGroupId(groupMember.group_id)
+        
+        // Fetch timers for the user's group
+        const { data: timerData, error } = await supabase
+          .from('boss_timers')
+          .select('*')
+          .eq('group_id', groupMember.group_id)
+
+        if (error) {
+          toast({
+            title: "Error fetching timers",
+            description: error.message,
+            variant: "destructive",
+          })
+        } else {
+          setTimers(timerData)
+        }
       }
     }
 
-    fetchTimers()
+    fetchUserGroupAndTimers()
 
+    // Update subscription to filter by group_id
     const subscription = supabase
       .channel('boss_timers')
       .on(
         'postgres_changes',
-        { event: '*', schema: 'public', table: 'boss_timers' },
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'boss_timers',
+          filter: userGroupId ? `group_id=eq.${userGroupId}` : undefined
+        },
         (payload) => {
           switch (payload.eventType) {
             case 'INSERT':
