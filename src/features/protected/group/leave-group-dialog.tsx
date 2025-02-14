@@ -165,7 +165,7 @@ export function LeaveGroupDialog({onLeaveGroup, group}: {onLeaveGroup: () => voi
             </div>
           ) : (
             <AlertDialogDescription className="text-[#B4B7E5]">
-              Are you sure you want to leave this group? You will need to be invited back to rejoin.
+              Are you sure you want to leave this group? You will to rejoin.
             </AlertDialogDescription>
           )}
         </AlertDialogHeader>
