@@ -145,7 +145,7 @@ export function LeaveGroupDialog({onLeaveGroup, group}: {onLeaveGroup: () => voi
             {isAdmin ? "Delete Group" : "Leave Group"}
           </AlertDialogTitle>
           {isAdmin ? (
-            <AlertDialogDescription className="space-y-4">
+            <div className="space-y-4 text-sm">
               <div className="text-red-400">
                 You are the admin of this group. Deleting the group will delete all related data including all boss timers and group members.
               </div>
@@ -162,7 +162,7 @@ export function LeaveGroupDialog({onLeaveGroup, group}: {onLeaveGroup: () => voi
                   className="bg-black/20 border-gray-800 text-white"
                 />
               </div>
-            </AlertDialogDescription>
+            </div>
           ) : (
             <AlertDialogDescription className="text-[#B4B7E5]">
               Are you sure you want to leave this group? You will need to be invited back to rejoin.
