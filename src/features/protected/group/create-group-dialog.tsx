@@ -73,6 +73,13 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
       });
     } finally {
       setIsLoading(false);
+      onGroupCreated();
+      setShowCreateForm(false);
+      setNewGroupName("");
+      toast({
+        title: "Success",
+        description: "Group created successfully",
+      });
     }
   };
 
