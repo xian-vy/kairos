@@ -20,6 +20,13 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Kairos - MMORPG Boss Tracking Tool",
   description: "A flexible boss tracking tool for any MMORPG",
+  keywords: ["MMORPG", "Boss Tracking", "Boss Timer", "Night Crows Boss Tracking", "Kildebat", "MMORPG Boss Tracking Tool", "Kairos"],
+  authors: [{ name: "Kairos", url: "xianvy.vercel.app" }],
+  creator: "Kairos",
+  themeColor: "#0A0C1B",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default async function RootLayout({
