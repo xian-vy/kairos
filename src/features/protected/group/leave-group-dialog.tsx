@@ -9,11 +9,12 @@ import {
   AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import type { Database } from "@/types/database.types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { LogOut, Loader2 } from "lucide-react";
+import { LogOut, Loader2, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -22,8 +23,33 @@ export function LeaveGroupDialog({onLeaveGroup, group}: {onLeaveGroup: () => voi
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [password, setPassword] = useState("");
   const { toast } = useToast();
   const { currentUser } = useCurrentUser();
+  const isAdmin = group?.created_by === currentUser?.id;
+
+  const verifyPassword = async () => {
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: currentUser?.email || '',
+        password: password,
+      });
+
+      if (error) {
+        throw new Error('Invalid password');
+      }
+      setPassword("");
+      return true;
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "Invalid password",
+        variant: "destructive",
+      });
+      return false;
+    }
+  };
 
   const handleLeaveGroup = async () => {
     setIsLoading(true);
@@ -36,6 +62,15 @@ export function LeaveGroupDialog({onLeaveGroup, group}: {onLeaveGroup: () => voi
           variant: "destructive",
         });
         return;
+      }
+
+      // If admin, verify password first
+      if (isAdmin) {
+        const isPasswordValid = await verifyPassword();
+        if (!isPasswordValid) {
+          setIsLoading(false);
+          return;
+        }
       }
 
       // Check if user is admin of the group
@@ -52,15 +87,7 @@ export function LeaveGroupDialog({onLeaveGroup, group}: {onLeaveGroup: () => voi
           .delete()
           .eq('group_id', groupData.id);
 
-        if (deleteTimersError) {
-          console.error(deleteTimersError);
-          toast({
-            title: "Error",
-            description: "Failed to delete group data",
-            variant: "destructive",
-          });
-          return;
-        }
+        if (deleteTimersError) throw deleteTimersError;
 
         // Then delete the group itself
         const { error: deleteError } = await supabase
@@ -68,31 +95,15 @@ export function LeaveGroupDialog({onLeaveGroup, group}: {onLeaveGroup: () => voi
           .delete()
           .eq('created_by', user.id);
 
-        if (deleteError) {
-          console.error(deleteError);
-          toast({
-            title: "Error",
-            description: "Failed to delete group",
-            variant: "destructive",
-          });
-          return;
-        }
+        if (deleteError) throw deleteError;
       } else {
-        // If user is not admin, just remove them from group_members
+        // If user is not admin, just update their group_id to null
         const { error: leaveError } = await supabase
-          .from('group_members')
-          .delete()
-          .eq('user_id', user.id);
+          .from('users')
+          .update({ group_id: null })
+          .eq('id', user.id);
 
-        if (leaveError) {
-          console.error(leaveError);
-          toast({
-            title: "Error",
-            description: "Failed to leave group",
-            variant: "destructive",
-          });
-          return;
-        }
+        if (leaveError) throw leaveError;
       }
 
       // Call onLeaveGroup before other UI updates
@@ -100,6 +111,7 @@ export function LeaveGroupDialog({onLeaveGroup, group}: {onLeaveGroup: () => voi
       
       // Then update UI state
       setOpen(false);
+      setPassword(""); // Clear password
       router.refresh();
       
       toast({
@@ -120,7 +132,6 @@ export function LeaveGroupDialog({onLeaveGroup, group}: {onLeaveGroup: () => voi
     }
   };
 
-
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
@@ -130,31 +141,57 @@ export function LeaveGroupDialog({onLeaveGroup, group}: {onLeaveGroup: () => voi
       </AlertDialogTrigger>
       <AlertDialogContent className="bg-[#0A0C1B] border-gray-800">
         <AlertDialogHeader>
-          <AlertDialogTitle className="text-[#E2E4FF]">{group?.created_by === currentUser?.id ? "Delete Group" : "Leave Group"}</AlertDialogTitle>
-          { group?.created_by === currentUser?.id ? (
-              <AlertDialogDescription className=" text-red-400">
-              You are the admin of this group. Deleting the group will delete all related data including all boss timers and group members.
-              </AlertDialogDescription>
+          <AlertDialogTitle className="text-[#E2E4FF]">
+            {isAdmin ? "Delete Group" : "Leave Group"}
+          </AlertDialogTitle>
+          {isAdmin ? (
+            <AlertDialogDescription className="space-y-4">
+              <div className="text-red-400">
+                You are the admin of this group. Deleting the group will delete all related data including all boss timers and group members.
+              </div>
+              <div className="space-y-3">
+                <label className="text-[#B4B7E5] text-sm flex items-center gap-1">
+                  <Lock className="h-4 w-4" />
+                  Confirm your password to delete
+                </label>
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  className="bg-black/20 border-gray-800 text-white"
+                />
+              </div>
+            </AlertDialogDescription>
           ) : (
             <AlertDialogDescription className="text-[#B4B7E5]">
               Are you sure you want to leave this group? You will need to be invited back to rejoin.
             </AlertDialogDescription>
           )}
-
         </AlertDialogHeader>
         <AlertDialogFooter>
           <Button
             variant="ghost"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              setOpen(false);
+              setPassword(""); // Clear password when canceling
+            }}
             className="text-[#B4B7E5] hover:text-[#E2E4FF] hover:bg-[#1F2137]/50"
           >
             Cancel
           </Button>
           <Button
             onClick={handleLeaveGroup}
+            disabled={isAdmin && !password}
             className="bg-red-700 hover:bg-red-600 text-white border-none"
           >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : group?.created_by === currentUser?.id ? "Delete Group" : "Leave Group"}
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : isAdmin ? (
+              "Delete Group"
+            ) : (
+              "Leave Group"
+            )}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
