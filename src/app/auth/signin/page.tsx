@@ -1,24 +1,23 @@
 'use client'
-
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { Icons } from '@/components/ui/icons'
+import { Input } from '@/components/ui/input'
+import { useToast } from '@/hooks/use-toast'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { Lock, Mail } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Icons } from '@/components/ui/icons'
-
 export default function SignIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
   const router = useRouter()
   const supabase = createClientComponentClient()
+  const {toast} = useToast()
 
   const validatePassword = (password: string) => {
     if (password.length < 8) {
@@ -39,7 +38,6 @@ export default function SignIn() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setIsLoading(true)
-    setError(null)
     setMessage(null)
 
     try {
@@ -56,14 +54,20 @@ export default function SignIn() {
         // Validate password for sign up
         const passwordError = validatePassword(password)
         if (passwordError) {
-          setError(passwordError)
+          toast({
+            title: "Sign In Failed",
+            description: passwordError,
+          })
           setIsLoading(false)
           return
         }
 
         // Check if passwords match
         if (password !== confirmPassword) {
-          setError('Passwords do not match')
+          toast({
+            title: "Sign In Failed",
+            description: 'Passwords do not match',
+          })
           setIsLoading(false)
           return
         }
@@ -81,13 +85,19 @@ export default function SignIn() {
         
         if (signUpError) {
           console.error('Signup error:', signUpError)
-          setError(signUpError.message)
+          toast({
+            title: "Sign In Failed",
+            description: signUpError.message,
+          })
           return
         }
 
         // Check if the response indicates user already exists
         if (data?.user?.identities?.length === 0) {
-          setError('An account with this email already exists. Please sign in instead.')
+          toast({
+            title: "Sign In Failed",
+            description: 'An account with this email already exists. Please sign in instead.',
+          })
           return
         }
 
@@ -104,7 +114,10 @@ export default function SignIn() {
       }
     } catch (error) {
       console.error('Error:', error) // For debugging
-      setError(error instanceof Error ? error.message : 'An error occurred')
+      toast({
+        title: "Sign In Failed",
+        description: error instanceof Error ? error.message : 'An error occurred',
+      })
     } finally {
       setIsLoading(false)
     }
@@ -114,11 +127,11 @@ export default function SignIn() {
     <div className="container flex min-h-screen flex-col items-center justify-center w-full mx-auto">
       <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
         <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
-          <CardHeader className="space-y-1">
+          <CardHeader className="space-y-2 text-center">
             <CardTitle className="text-xl font-bold text-[#E2E4FF]">
               {mode === 'signin' ? 'Sign in' : 'Create an account'}
             </CardTitle>
-            <CardDescription className="text-[#B4B7E5]">
+            <CardDescription className="text-[#B4B7E5] text-[0.8rem]">
               {mode === 'signin'
                 ? 'Enter your credentials to sign in'
                 : 'Enter your details to create an account'}
@@ -126,14 +139,12 @@ export default function SignIn() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit}>
-              <div className="grid gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="email" className="text-[#E2E4FF]">
-                    Email
-                  </Label>
+              <div className="grid gap-6">
+                <div className="grid gap-2 relative">
+                < Mail className='w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#B4B7E5] text-sm' />
                   <Input
                     id="email"
-                    placeholder="name@example.com"
+                    placeholder="Email"
                     type="email"
                     autoCapitalize="none"
                     autoComplete="email"
@@ -141,40 +152,33 @@ export default function SignIn() {
                     disabled={isLoading}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="border-[#1F2137] bg-[#0D0F23] text-[#E2E4FF] placeholder:text-[#B4B7E5]/50"
+                    className="border-[#1F2137] bg-[#0D0F23] text-[#E2E4FF] placeholder:text-[#B4B7E5]/50 pl-10"
                   />
                 </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="password" className="text-[#E2E4FF]">
-                    Password
-                  </Label>
+                <div className="grid gap-2 relative">
+                 <Lock className='w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#B4B7E5] text-sm' />
                   <Input
                     id="password"
                     type="password"
                     disabled={isLoading}
                     value={password}
+                    placeholder="Password"
                     onChange={(e) => setPassword(e.target.value)}
-                    className="border-[#1F2137] bg-[#0D0F23] text-[#E2E4FF]"
+                    className="border-[#1F2137] bg-[#0D0F23] text-[#E2E4FF] placeholder:text-[#B4B7E5]/50 pl-10"
                   />
                 </div>
                 {mode === 'signup' && (
-                  <div className="grid gap-2">
-                    <Label htmlFor="confirmPassword" className="text-[#E2E4FF]">
-                      Confirm Password
-                    </Label>
+                  <div className="grid gap-2 relative">
+                    <Lock className='w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#B4B7E5] text-sm' />
                     <Input
                       id="confirmPassword"
+                      placeholder="Confirm Password"
                       type="password"
                       disabled={isLoading}
                       value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
-                      className="border-[#1F2137] bg-[#0D0F23] text-[#E2E4FF]"
+                      className="border-[#1F2137] bg-[#0D0F23] text-[#E2E4FF] placeholder:text-[#B4B7E5]/50 pl-10"
                     />
-                  </div>
-                )}
-                {error && (
-                  <div className="text-sm text-red-400">
-                    {error}
                   </div>
                 )}
                 {message && (
@@ -200,7 +204,6 @@ export default function SignIn() {
               className="w-full text-xs text-[#B4B7E5] hover:text-[#E2E4FF] hover:bg-[#1F2137]/50"
               onClick={() => {
                 setMode(mode === 'signin' ? 'signup' : 'signin')
-                setError(null)
                 setMessage(null)
                 setEmail('')
                 setPassword('')
