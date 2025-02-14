@@ -6,14 +6,14 @@ import useCurrentUser from './useCurrentUser';
 type UserRow = Database['public']['Tables']['users']['Row'];
 type GroupRow = Database['public']['Tables']['groups']['Row'];
 
-type UserWithPendingGroup = UserRow & {
-  pending_group?: GroupRow;
+type UserWithGroup = UserRow & {
+  group: GroupRow | null;
 };
 
 export const useUser = () => {
   const supabase = createClientComponentClient<Database>();
   const { currentUser } = useCurrentUser();
-  const [user, setUser] = useState<UserWithPendingGroup | null>(null);
+  const [user, setUser] = useState<UserWithGroup | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ export const useUser = () => {
         .from('users')
         .select(`
           *,
-          pending_group:pending_group_id (*)
+          group:groups(*)
         `)
         .eq('id', currentUser.id)
         .single();
@@ -38,7 +38,7 @@ export const useUser = () => {
         return;
       }
 
-      setUser(data);
+      setUser(data as UserWithGroup);
       setIsLoading(false);
     };
 
