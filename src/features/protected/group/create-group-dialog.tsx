@@ -50,11 +50,12 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
       if (createError) throw createError;
 
       if (group) {
-        const { error: memberError } = await supabase
-          .from("group_members")
-          .insert([{ group_id: group.id, user_id: user.id, role: "admin" }]);
+        const { error: userUpdateError } = await supabase
+          .from("users")
+          .update({ group_id: group.id, status: "accepted" })
+          .eq('id', user.id);
 
-        if (memberError) throw memberError;
+        if (userUpdateError) throw userUpdateError;
 
         toast({
           title: "Success",

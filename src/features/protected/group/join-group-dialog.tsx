@@ -41,27 +41,32 @@ export function JoinGroupDialog({ onGroupJoined, variant = "default" }: JoinGrou
         return;
       }
 
-      const { data: existingMembership } = await supabase
-        .from("group_members")
-        .select("id")
-        .eq("group_id", group.id)
-        .eq("user_id", user.id)
+      // Check if user is already in a group
+      const { data: existingUser } = await supabase
+        .from("users")
+        .select("group_id")
+        .eq("id", user.id)
         .single();
 
-      if (existingMembership) {
+      if (existingUser?.group_id) {
         toast({
           variant: "destructive",
           title: "Error",
-          description: "You're already a member of this group",
+          description: "You're already a member of a group",
         });
         return;
       }
 
-      const { error: memberError } = await supabase
-        .from("group_members")
-        .insert([{ group_id: group.id, user_id: user.id, role: "member" }]);
+      // Update user's group_id instead of creating group_member
+      const { error: userUpdateError } = await supabase
+        .from("users")
+        .update({ 
+          group_id: group.id,
+          status: "pending"  // New members start as pending
+        })
+        .eq('id', user.id);
 
-      if (memberError) throw memberError;
+      if (userUpdateError) throw userUpdateError;
 
       toast({
         title: "Success",

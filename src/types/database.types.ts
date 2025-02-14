@@ -10,6 +10,20 @@ export interface BossTimer {
   group_id: string;
 }
 
+export interface Group {
+  id: string
+  name: string
+  created_by: string
+  created_at: string
+}
+
+export interface User {
+  id: string
+  username: string
+  email: string
+  status: 'pending' | 'accepted'
+}
+
 export type Database = {
   public: {
     Tables: {
@@ -33,27 +47,24 @@ export type Database = {
           created_at?: string;
         };
       };
-      group_members: {
+      users: {
         Row: {
           id: string;
-          group_id: string;
-          user_id: string;
-          role: "admin" | "member";
-          joined_at: string;
+          username: string;
+          email: string;
+          status: "pending" | "accepted";
         };
         Insert: {
           id?: string;
-          group_id: string;
-          user_id: string;
-          role: "admin" | "member";
-          joined_at?: string;
+          username: string;
+          email: string;
+          status: "pending" | "accepted";
         };
         Update: {
           id?: string;
-          group_id?: string;
-          user_id?: string;
-          role?: "admin" | "member";
-          joined_at?: string;
+          username?: string;
+          email?: string;
+          status?: "pending" | "accepted";
         };
       };
     };

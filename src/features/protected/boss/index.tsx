@@ -4,8 +4,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { BossList } from "./BossList/BossList"
 import { BossTimerList } from "./BossTimer/BossTimerList"
 import { FaSkull } from "react-icons/fa"
-import { Timer } from "lucide-react"
-
+import { Timer, Users } from "lucide-react"
+import UsersList from "../users"  
 
 export function BossPage() {
   return (
@@ -17,12 +17,18 @@ export function BossPage() {
         <TabsTrigger value="timers" className="flex items-center gap-2">
             <Timer className="h-4 w-4" /> Active Timers
         </TabsTrigger>
+        <TabsTrigger value="users" className="flex items-center gap-2">
+            <Users className="h-4 w-4" /> Users
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="timers" className="mt-4">
         <BossTimerList />
       </TabsContent>
       <TabsContent value="bosses" className="mt-4">
         <BossList />
+      </TabsContent>
+      <TabsContent value="users" className="mt-4">
+        <UsersList />
       </TabsContent>
     </Tabs>
   )
