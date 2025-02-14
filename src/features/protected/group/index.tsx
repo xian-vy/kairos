@@ -63,8 +63,8 @@ export function GroupSelection() {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-xl text-white">Your Groups</CardTitle>
             <div className="flex gap-2">
-              <JoinGroupDialog onGroupJoined={fetchUserGroups} />
-              <CreateGroupDialog onGroupCreated={fetchUserGroups} />
+              <JoinGroupDialog onGroupJoined={fetchUserGroups} variant="welcome" />
+              <CreateGroupDialog onGroupCreated={fetchUserGroups} variant="welcome"/>
             </div>
           </CardHeader>
           <CardContent>
