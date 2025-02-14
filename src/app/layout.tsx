@@ -7,6 +7,7 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { Analytics } from "@vercel/analytics/react"
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
@@ -53,6 +54,7 @@ export default async function RootLayout({
         <Footer />
         <Toaster />
        </body>
+       <Analytics />
     </html>
   );
 }
