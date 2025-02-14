@@ -35,7 +35,7 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
       if (existingGroup) {
         toast({
           variant: "destructive",
-          title: "Error",
+          title: "Failed to create group",
           description: "A group with this name already exists",
         });
         return;

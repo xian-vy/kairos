@@ -35,8 +35,8 @@ export function JoinGroupDialog({ onGroupJoined, variant = "default" }: JoinGrou
       if (!group) {
         toast({
           variant: "destructive",
-          title: "Error",
-          description: "Group not found",
+          title: "Failed to join group",
+          description: "Group Name not found",
         });
         return;
       }
@@ -51,7 +51,7 @@ export function JoinGroupDialog({ onGroupJoined, variant = "default" }: JoinGrou
       if (existingUser?.group_id) {
         toast({
           variant: "destructive",
-          title: "Error",
+          title: "Failed to join group",
           description: "You're already a member of a group",
         });
         return;
