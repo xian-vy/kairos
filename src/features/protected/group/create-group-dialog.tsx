@@ -56,13 +56,11 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
 
         if (memberError) throw memberError;
 
-        onGroupCreated();
-        setShowCreateForm(false);
-        setNewGroupName("");
         toast({
           title: "Success",
           description: "Group created successfully",
         });
+        onGroupCreated();
       }
     } catch (error) {
       console.error("Unexpected error:", error);
@@ -73,13 +71,8 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
       });
     } finally {
       setIsLoading(false);
-      onGroupCreated();
       setShowCreateForm(false);
       setNewGroupName("");
-      toast({
-        title: "Success",
-        description: "Group created successfully",
-      });
     }
   };
 
