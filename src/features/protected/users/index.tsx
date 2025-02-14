@@ -165,7 +165,7 @@ const UsersList = () => {
   )
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 px-4">
       <div className="space-y-2">
         <h2 className="text-lg font-semibold text-[#E2E4FF]">Accepted Members</h2>
         {acceptedMembers.length === 0 ? (
