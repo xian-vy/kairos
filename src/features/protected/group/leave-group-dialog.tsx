@@ -14,7 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import type { Database } from "@/types/database.types";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { LogOut, Loader2, Lock } from "lucide-react";
+import { LogOut, Loader2, Lock, Eye, EyeOff } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -33,6 +33,7 @@ export function LeaveGroupDialog({
   const { toast } = useToast();
   const { currentUser } = useCurrentUser();
   const isAdmin = group?.created_by === currentUser?.id;
+  const [showPassword, setShowPassword] = useState(false);
 
   const verifyPassword = async () => {
     try {
@@ -156,13 +157,26 @@ export function LeaveGroupDialog({
                   <Lock strokeWidth={1.5} className="h-4 w-4" />
                   Confirm your password to delete
                 </label>
-                <Input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
-                  className="bg-black/20 border-gray-800 text-white"
-                />
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter your password"
+                    className="bg-black/20 border-gray-800 text-white pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300"
+                  >
+                    {showPassword ? (
+                      <EyeOff strokeWidth={1.5} className="h-4 w-4" />
+                    ) : (
+                      <Eye strokeWidth={1.5} className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
