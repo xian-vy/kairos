@@ -6,13 +6,19 @@ import { BossTimerList } from "./BossTimer/BossTimerList";
 import { FaSkull } from "react-icons/fa";
 import { Timer, Users } from "lucide-react";
 import UsersList from "../users";
-import { useUserGroup } from "@/hooks/useUserGroup";
 import { CreateGroupDialog } from "../group/create-group-dialog";
 import { JoinGroupDialog } from "../group/join-group-dialog";
 import { LeaveGroupDialog } from "../group/leave-group-dialog";
+import { Group } from "@/types/group";
+import { User } from "@/types/database.types";
 
-export function BossPage() {
-  const { group, refetch, userData } = useUserGroup();
+type BossPageProps = {
+  group: Group;
+  userData: User | undefined;
+  refetch: () => Promise<void>;
+};
+
+export function BossPage({ group, refetch, userData }: BossPageProps) {
   return (
     <div className="w-full relative">
       <Tabs defaultValue="bosses" className="w-full">
