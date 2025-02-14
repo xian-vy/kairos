@@ -26,7 +26,7 @@ export function GroupSelection({ group, isLoading: groupLoading, refetch, userDa
   return (
     <div className="space-y-6 relative">
       {group && userData?.status !== "pending" && (
-        <div className="flex justify-between items-center w-full px-4 py-4 3xl:py-8">
+        <div className="flex justify-between items-center w-full px-4 py-4 3xl:py-8 border-b border-gray-800">
           <h2 className="text-base md:text-lg 3xl:text-xl   font-bold text-center text-[#E2E4FF] font-space-grotesk">
             Welcome to {group.name}!
           </h2>
