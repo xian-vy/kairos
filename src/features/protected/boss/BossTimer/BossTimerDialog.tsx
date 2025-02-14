@@ -64,24 +64,12 @@ export function BossTimerDialog({
       if (authError || !user) throw new Error("User not authenticated")
 
 
-      // Fetch the user's group_id with debug logging
-      const { data: group_members, error: groupError } = await supabase
-        .from('group_members')
-        .select('group_id') 
-        .eq('user_id', user.id)
-        .single();
-
-
-      if (groupError) throw new Error("Group Fetch Error: " + groupError.message);
-      if (!group_members || !group_members) throw new Error("No group found for the user");
-
       const timerData = {
         boss_name: bossName,
         location,
         time_of_death: tod.toISOString(),
         notes: notes || null,
         user_id: user.id,
-        group_id: group_members.group_id
       }
   
       let error
