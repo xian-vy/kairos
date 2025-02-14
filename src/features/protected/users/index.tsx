@@ -153,7 +153,7 @@ const UsersList = () => {
               className={
                 member.users.status === 'accepted'
                   ? 'bg-blue-600 hover:bg-blue-700' 
-                  : 'bg-[#1F2137] hover:bg-[#2A2D4B]'
+                  : 'bg-[#1F2137] hover:bg-[#2A2D4B] text-[#B4B7E5]'
               }
             >
               {member.users.status}
