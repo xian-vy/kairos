@@ -1,15 +1,5 @@
 'use client'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-import { FaDiscord, FaFacebookMessenger, FaGithub } from "react-icons/fa"
-import { useRouter } from 'next/navigation'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import type { User } from '@supabase/auth-helpers-nextjs'
-import { GAMESLIST } from '@/lib/data/utils'
-import Image from 'next/image'
-import { Select, SelectTrigger } from './ui/select'
-import { 
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -19,37 +9,48 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { Button } from '@/components/ui/button'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import useCurrentUser from '@/hooks/useCurrentUser'
+import { GAMESLIST } from '@/lib/data/utils'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { FaDiscord, FaFacebookMessenger, FaGithub, FaUser } from "react-icons/fa"
+import { Select, SelectTrigger } from './ui/select'
+import { Loader2 } from "lucide-react"
 
 const Navigation = () => {
   const router = useRouter()
   const supabase = createClientComponentClient()
-  const [user, setUser] = useState<User | null>(null)
   const [signOutDialogOpen, setSignOutDialogOpen] = useState(false)
-
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession()
-      setUser(session?.user ?? null)
-    }
-
-    getUser()
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-    })
-
-    return () => subscription.unsubscribe()
-  }, [supabase.auth])
+  const [isSigningOut, setIsSigningOut] = useState(false)
+  const { currentUser } = useCurrentUser();
 
   const handleSignOutClick = () => {
     setSignOutDialogOpen(true)
   }
 
   const confirmSignOut = async () => {
-    await supabase.auth.signOut()
-    router.push('/auth/signin')
-    router.refresh()
-    setSignOutDialogOpen(false)
+    try {
+      setIsSigningOut(true)
+      await supabase.auth.signOut()
+      router.push('/auth/signin')
+      router.refresh()
+    } finally {
+      setIsSigningOut(false)
+      setSignOutDialogOpen(false)
+    }
   }
 
   const handleSignIn = () => {
@@ -58,6 +59,12 @@ const Navigation = () => {
 
   return (
     <>
+      {isSigningOut && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
+          <Loader2 className="h-8 w-8 animate-spin text-white" />
+        </div>
+      )}
+      
       <nav className="border-b border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -80,7 +87,7 @@ const Navigation = () => {
                 <FaFacebookMessenger className="h-4 w-4" />
               </Link>
        
-               {!user && (
+               {!currentUser && (
                <Button 
                variant="ghost" 
                className="text-[#E2E4FF] hover:text-black"
@@ -89,29 +96,48 @@ const Navigation = () => {
                <span className="font-space-grotesk">Sign In</span>
              </Button>
               )}
-               {user ? (
-              <div className="ml-2">
-              {GAMESLIST.map((game) => (
-               <Select key={game.slug}>
-                <SelectTrigger className=" hover:bg-[#1F2137] text-white flex items-center  gap-2 ">
-                  <Image src={game.icon} alt={game.name} width={20} height={20} />
-                  <span className="font-space-grotesk text-white">{game.name}</span>
-                </SelectTrigger>
-               </Select>
-              ))}
-              </div>
+               {currentUser ? (
+                <div className="flex items-center gap-4">
+                  <div className="ml-2">
+                    {GAMESLIST.map((game) => (
+                      <Select key={game.slug}>
+                        <SelectTrigger className="hover:bg-[#1F2137] text-white flex items-center gap-2">
+                          <Image src={game.icon} alt={game.name} width={20} height={20} />
+                          <span className="font-space-grotesk text-white">{game.name}</span>
+                        </SelectTrigger>
+                      </Select>
+                    ))}
+                  </div>
+                  
+                  <DropdownMenu>
+                    <DropdownMenuTrigger className="focus:outline-none">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={currentUser.user_metadata?.avatar_url} />
+                        <AvatarFallback className="bg-[#1F2137] uppercase text-[#B4B7E5]">
+                          {currentUser.email?.[0] || <FaUser className="h-4 w-4 text-[#B4B7E5]" />}
+                        </AvatarFallback>
+                      </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56 bg-[#0D0F23] border-[#1F2137]">
+                      <DropdownMenuLabel className="text-[#E2E4FF]">
+                        <div className="flex flex-col">
+                          <span className="font-medium">My Account</span>
+                          <span className="text-xs text-[#B4B7E5]">{currentUser.email}</span>
+                        </div>
+                      </DropdownMenuLabel>
+                      <DropdownMenuSeparator className="bg-[#1F2137]" />
+                      <DropdownMenuItem
+                        className="text-[#E2E4FF] text-xs focus:bg-[#1F2137] focus:text-[#E2E4FF] cursor-pointer"
+                        onClick={handleSignOutClick}
+                      >
+                        Sign Out
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
               ) : (
                 <Button className="bg-[#4B79E4] hover:bg-[#3D63C9] hidden md:block">
                   <span className="font-space-grotesk">Get Started</span>
-                </Button>
-              )}
-             {user && (
-                <Button 
-                  variant="ghost" 
-                  className="text-[#E2E4FF] hover:text-black"
-                  onClick={handleSignOutClick}
-                >
-                  <span className="font-space-grotesk">Sign Out</span>
                 </Button>
               )}
             </div>
@@ -128,14 +154,22 @@ const Navigation = () => {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel className="bg-[#090915] text-[#B4B7E5] hover:bg-[#2A2D4B] hover:text-[#E2E4FF] border-none">
+            <AlertDialogCancel 
+              className="bg-[#090915] text-[#B4B7E5] hover:bg-[#2A2D4B] hover:text-[#E2E4FF] border-none"
+              disabled={isSigningOut}
+            >
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmSignOut}
-              className="bg-red-700 text-white hover:bg-red-600"
+              className="bg-red-700 text-white hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isSigningOut}
             >
-              Sign Out
+              {isSigningOut ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                'Sign Out'
+              )}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
