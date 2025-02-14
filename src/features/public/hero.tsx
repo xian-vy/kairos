@@ -22,6 +22,7 @@ const Hero = () => {
           {/* Main text with gradient */}
           <h1 className="text-5xl relative bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
             Kairos
+            <small className='text-[0.65rem] font-normal text-[#B4B7E5] ml-0.5'>beta</small>
           </h1>
 
           {/* Bottom shine effect */}
