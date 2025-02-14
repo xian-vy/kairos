@@ -8,6 +8,9 @@ module.exports = {
         "space-grotesk": ["var(--font-space-grotesk)"],
         inter: ["var(--font-inter)"],
       },
+      screens: {
+        '3xl': '1700px',
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
