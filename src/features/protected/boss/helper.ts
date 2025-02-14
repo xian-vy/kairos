@@ -1,4 +1,5 @@
 import { BOSSDATA_NIGHTCROWS } from "@/lib/data/presets"
+import { BossTimer } from "@/types/boss"
 import { SupabaseClient } from '@supabase/supabase-js'
 
 export const createDateFromTimeString = (timeStr: string) => {
@@ -145,5 +146,35 @@ export function getKillCountColor(current: number, total: number): string {
     return 'text-yellow-500'
   }
   return 'text-[#B4B7E5]'
+}
+
+export interface TimerWithLocations extends BossTimer {
+  allLocations?: string[];
+}
+
+export const sortTimers = (timers: BossTimer[]) => {
+  return timers.sort((a, b) => {
+    const aSpawnTime = new Date(a.time_of_death).getTime() + (getPresetRespawnInterval(a.boss_name) * 60 * 60 * 1000)
+    const bSpawnTime = new Date(b.time_of_death).getTime() + (getPresetRespawnInterval(b.boss_name) * 60 * 60 * 1000)
+    const now = new Date().getTime()
+    
+    // If both have passed or both haven't passed, sort by time of death (most recent first)
+    if ((aSpawnTime < now && bSpawnTime < now) || (aSpawnTime >= now && bSpawnTime >= now)) {
+      return new Date(b.time_of_death).getTime() - new Date(a.time_of_death).getTime()
+    }
+    
+    // Put respawned ones first
+    return aSpawnTime < now ? -1 : 1
+  })
+}
+
+export const enrichTimerWithLocations = (timer: BossTimer): TimerWithLocations => {
+  const bossData = BOSSDATA_NIGHTCROWS.find(boss => boss.name === timer.boss_name)
+  const allLocations = bossData?.locations || [timer.location]
+  
+  return {
+    ...timer,
+    allLocations
+  }
 }
 
