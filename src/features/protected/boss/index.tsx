@@ -44,11 +44,13 @@ export function BossPage() {
         <>
           {userData?.status === "pending" && (
             <div className="absolute bottom-0 left-0 w-full h-full bg-gradient-to-t from-[#0a0c1b] backdrop-blur-sm to-transparent z-20 ">
-              <div className="flex flex-col h-full items-center justify-center gap-3  p-4 font-space-grotesk">
-                <h1 className="text-white text-2xl font-bold pointer-events-auto max-w-[500px] text-center">
+              <div className="flex flex-col h-full items-center justify-start mt-[50%] lg:mt-[15%] lg:justify-start gap-3  p-4 font-space-grotesk">
+                <h1 className="text-white text-base md:text-2xl font-bold pointer-events-auto max-w-[500px] text-center">
                   Your request to join group{" "}
-                  <span className="underline underline-offset-4 text-2xl font-extrabold">{group.name}</span> is pending
-                  approval
+                  <span className="underline underline-offset-4 text-base md:text-2xl text-blue-500 font-bold">
+                    {group.name}
+                  </span>{" "}
+                  is pending approval
                 </h1>
                 <LeaveGroupDialog onLeaveGroup={refetch} group={group} />
               </div>
@@ -57,9 +59,9 @@ export function BossPage() {
         </>
       ) : (
         <div className="absolute bottom-0 left-0 w-full h-full bg-gradient-to-t from-[#0a0c1b] backdrop-blur-sm to-transparent z-20 ">
-          <div className="flex flex-col h-full items-center justify-center  p-4 font-space-grotesk">
-            <h1 className="text-white text-2xl font-bold pointer-events-auto">You are not in a group!</h1>
-            <p className="text-white text-sm pointer-events-auto">Please create or join a group to continue</p>
+          <div className="flex flex-col h-full items-center justify-start mt-[50%] lg:mt-[15%] lg:justify-start  p-4 font-space-grotesk">
+            <h1 className="text-white text-base md:text-2xl font-bold pointer-events-auto">You are not in a group!</h1>
+            <p className="text-white text-xs pointer-events-auto">Please create or join a group to continue</p>
             <div className="flex gap-4 mt-4 pointer-events-auto">
               <CreateGroupDialog onGroupCreated={refetch} variant="welcome" />
               <JoinGroupDialog onGroupJoined={refetch} variant="welcome" />
