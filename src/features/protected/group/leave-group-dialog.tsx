@@ -80,19 +80,28 @@ export function LeaveGroupDialog({
           setIsLoading(false);
           return;
         }
-      }
 
-      // Check if user is admin of the group
-      const { data: groupData } = await supabase.from("groups").select("id").eq("created_by", user.id).single();
+        // Get all users in the group
+        const { data: groupUsers } = await supabase.from("users").select("id").eq("group_id", group.id);
 
-      if (groupData) {
-        // If user is admin, first delete related boss_timers
-        const { error: deleteTimersError } = await supabase.from("boss_timers").delete().eq("group_id", groupData.id);
+        if (groupUsers) {
+          // Delete boss timers for all users in the group
+          const userIds = groupUsers.map((user) => user.id);
+          const { error: deleteTimersError } = await supabase.from("boss_timers").delete().in("user_id", userIds);
 
-        if (deleteTimersError) throw deleteTimersError;
+          if (deleteTimersError) throw deleteTimersError;
+
+          // Remove all users from the group first
+          const { error: updateUsersError } = await supabase
+            .from("users")
+            .update({ group_id: null })
+            .eq("group_id", group.id);
+
+          if (updateUsersError) throw updateUsersError;
+        }
 
         // Then delete the group itself
-        const { error: deleteError } = await supabase.from("groups").delete().eq("created_by", user.id);
+        const { error: deleteError } = await supabase.from("groups").delete().eq("id", group.id);
 
         if (deleteError) throw deleteError;
       } else {
@@ -111,8 +120,8 @@ export function LeaveGroupDialog({
       router.refresh();
 
       toast({
-        title: groupData ? "Group deleted" : "Group left",
-        description: groupData ? "You have deleted the group and all its data" : "You have left the group",
+        title: group ? "Group deleted" : "Group left",
+        description: group ? "You have deleted the group and all its data" : "You have left the group",
       });
     } catch (error) {
       console.error(error);
