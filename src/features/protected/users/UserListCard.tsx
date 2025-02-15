@@ -9,9 +9,16 @@ interface UserListCardProps {
   isAdmin: boolean;
   currentUserId: string | undefined;
   onUpdateStatus: (userId: string, status: "accepted" | "pending") => void;
+  onCancelRequest?: (userId: string) => void;
 }
 
-export const UserListCard = ({ member, isAdmin, currentUserId, onUpdateStatus }: UserListCardProps) => (
+export const UserListCard = ({
+  member,
+  isAdmin,
+  currentUserId,
+  onUpdateStatus,
+  onCancelRequest,
+}: UserListCardProps) => (
   <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
     <CardContent className="py-3 px-3 sm:px-6">
       <div className="flex items-center justify-between">
@@ -32,14 +39,34 @@ export const UserListCard = ({ member, isAdmin, currentUserId, onUpdateStatus }:
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {isAdmin && member.user_id !== currentUserId && (
+          {isAdmin && member.user_id !== currentUserId && member.users.status === "pending" && (
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onUpdateStatus(member.user_id, member.users.status === "pending" ? "accepted" : "pending")}
-              className="h-8 px-2 text-[#B4B7E5] hover:text-[#E2E4FF]"
+              onClick={() => onUpdateStatus(member.user_id, "accepted")}
+              className="h-8 px-2 text-[#B4B7E5] hover:text-[#E2E4FF] hover:bg-green-700"
             >
-              {member.users.status === "pending" ? <Check className="h-4 w-4" /> : <X className="h-4 w-4" />}
+              <Check className="h-4 w-4" />
+            </Button>
+          )}
+          {isAdmin && member.user_id !== currentUserId && member.users.status === "accepted" && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onUpdateStatus(member.user_id, "pending")}
+              className="h-8 px-2 text-red-400 hover:text-red-300 hover:bg-red-700"
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          )}
+          {member.users.status === "pending" && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => onCancelRequest?.(member.user_id)}
+              className="h-8 px-2 text-red-400 hover:text-red-300 hover:bg-red-700"
+            >
+              <X className="h-4 w-4" />
             </Button>
           )}
           <Badge

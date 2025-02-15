@@ -6,10 +6,14 @@ import { useUserGroup } from "@/hooks/useUserGroup";
 import { UserListCard } from "./UserListCard";
 
 const UsersList = () => {
-  const { members, loading, updateUserStatus } = useGroupMembers();
+  const { members, loading, updateUserStatus, removeUserFromGroup } = useGroupMembers();
   const { currentUser } = useCurrentUser();
   const { group } = useUserGroup();
   const isAdmin = currentUser?.id === group?.created_by;
+
+  const handleCancelRequest = async (userId: string) => {
+    await removeUserFromGroup(userId);
+  };
 
   if (loading) {
     return <div className="flex justify-center p-4">Loading users...</div>;
@@ -49,6 +53,7 @@ const UsersList = () => {
               isAdmin={isAdmin}
               currentUserId={currentUser?.id}
               onUpdateStatus={updateUserStatus}
+              onCancelRequest={handleCancelRequest}
             />
           ))
         )}

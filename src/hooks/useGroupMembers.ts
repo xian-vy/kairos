@@ -90,6 +90,36 @@ export function useGroupMembers() {
     }
   };
 
+  const removeUserFromGroup = async (userId: string) => {
+    try {
+      const { error } = await supabase
+        .from("users")
+        .update({
+          group_id: null,
+          status: "pending",
+        })
+        .eq("id", userId);
+
+      if (error) throw error;
+
+      // Update local state by removing the user
+      setMembers(members.filter((member) => member.user_id !== userId));
+
+      toast({
+        title: "Success",
+        description: `User join request has been denied.`,
+      });
+    } catch (error) {
+      console.error("Error removing user from group:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to remove user from group",
+      });
+      throw error;
+    }
+  };
+
   useEffect(() => {
     fetchGroupMembers();
   }, [group?.id]);
@@ -98,5 +128,6 @@ export function useGroupMembers() {
     members,
     loading,
     updateUserStatus,
+    removeUserFromGroup,
   };
 }
