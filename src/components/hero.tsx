@@ -44,7 +44,7 @@ const Hero = () => {
             <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#4B79E4]/50 to-transparent" />
           </span>
         </h1>
-        <p className="text-sm sm:text-base md:text-lg text-[#B4B7E5]/90 max-w-2xl mx-auto mb-8">
+        <p className="text-sm md:text-base xl:text-lg text-[#B4B7E5]/90 max-w-2xl mx-auto mb-8">
           The ultimate boss tracking tool for any MMORPG
         </p>
         <div className="flex justify-center">
