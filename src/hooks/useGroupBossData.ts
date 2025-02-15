@@ -37,7 +37,7 @@ export function useGroupBossData() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [supabase]);
 
   useEffect(() => {
     refreshBossData();

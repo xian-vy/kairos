@@ -24,7 +24,7 @@ export function BossTimerList() {
   const { toast } = useToast();
   const supabase = createClientComponentClient();
   const [viewMode, setViewMode] = useState<"list" | "group">("list");
-  const { bossData, isLoading :isLoading2, error, refreshBossData } = useGroupBossData();
+  const { bossData, isLoading :isLoading2 } = useGroupBossData();
 
   useEffect(() => {
     const interval = setInterval(() => forceUpdate({}), 1000);
@@ -67,7 +67,7 @@ export function BossTimerList() {
   const handleEdit = useCallback((timer: BossTimer) => {
     setTimerToEdit(enrichTimerWithLocations(timer,bossData));
     setEditDialogOpen(true);
-  }, []);
+  }, [bossData]);
 
   const handleCloseEdit = useCallback(() => {
     setEditDialogOpen(false);

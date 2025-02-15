@@ -1,4 +1,4 @@
-import { BOSSDATA_NIGHTCROWS, BOSSDATA_TYPE } from "@/lib/data/presets"
+import {  BOSSDATA_TYPE } from "@/lib/data/presets"
 import { BossTimer } from "@/types/boss"
 import { SupabaseClient } from '@supabase/supabase-js'
 

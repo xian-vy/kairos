@@ -9,7 +9,6 @@ import { getKillCountColor } from "../helper";
 import { useState } from "react";
 import { EditBossDialog } from "./EditBossDialog";
 import { BOSSDATA_TYPE } from "@/lib/data/presets";
-import { cn } from "@/lib/utils";
 
 interface BossListCardProps {
   boss: BOSSDATA_TYPE;
@@ -17,12 +16,12 @@ interface BossListCardProps {
     current: number;
     total: number;
   } | null;
-  onBossSelect: (name: string, respawnInterval: number, locations: string[]) => void;
+  //onBossSelect: (name: string, respawnInterval: number, locations: string[]) => void;
   onLocationSelect: (name: string, respawnInterval: number, locations: string[], selectedLocation: string) => void;
   onBossUpdated: () => void;
 }
 
-export function BossListCard({ boss, killCount, onBossSelect, onLocationSelect, onBossUpdated }: BossListCardProps) {
+export function BossListCard({ boss, killCount, onLocationSelect, onBossUpdated }: BossListCardProps) {
   const [showEditDialog, setShowEditDialog] = useState(false);
 
   const KillCountDisplay = () => {

@@ -13,7 +13,7 @@ export default function GuidePage() {
           <section className="space-y-2">
             <h2 className="text-xl font-semibold text-[#E2E4FF]">Getting Started</h2>
             <p className='text-sm'>
-              Welcome to Kairos, your ultimate MMORPG boss timer companion! Whether you're a guild leader
+              Welcome to Kairos, your ultimate MMORPG boss timer companion! Whether youre a guild leader
               or a dedicated player, Kairos helps you track boss spawns efficiently and coordinate with
               your team.
             </p>
@@ -22,10 +22,10 @@ export default function GuidePage() {
           <section className="space-y-2">
             <h2 className="text-xl font-semibold text-[#E2E4FF]">Creating Your Account</h2>
             <p className='text-sm'>
-              1. Click "Sign Up" on the sign-in page<br />
+              1. Click Sign Up on the sign-in page<br />
               2. Choose a username that your teammates will recognize<br />
               3. Enter your email and create a secure password<br />
-              4. Verify your email through the confirmation link we'll send you
+              4. Verify your email through the confirmation link we ll send you
             </p>
           </section>
 
@@ -66,7 +66,7 @@ export default function GuidePage() {
           <section className="space-y-2 mt-8 border-t border-[#1F2137] pt-6">
             <h2 className="text-xl font-semibold text-[#E2E4FF]">Need Help?</h2>
             <p>
-              Having issues with Kairos? We're here to help!
+              Having issues with Kairos? Were here to help!
             </p>
             <ul className="list-disc pl-6 space-y-2">
               <li>Email: xianvy0000@gmail.com</li>
