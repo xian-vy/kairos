@@ -1,6 +1,6 @@
 "use client";
 
-import { BossPage } from "@/features/protected/boss";
+import { BossPage } from "@/features/protected";
 import { GroupSelection } from "@/features/protected/group";
 import { useUserGroup } from "@/hooks/useUserGroup";
 

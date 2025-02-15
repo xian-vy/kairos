@@ -1,14 +1,14 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BossList } from "./BossList/BossList";
-import { BossTimerList } from "./BossTimer/BossTimerList";
+import { BossList } from "./boss/BossList/BossList";
+import { BossTimerList } from "./boss/BossTimer/BossTimerList";
 import { FaSkull } from "react-icons/fa";
 import { Timer, Users } from "lucide-react";
-import UsersList from "../users";
-import { CreateGroupDialog } from "../group/create-group-dialog";
-import { JoinGroupDialog } from "../group/join-group-dialog";
-import { LeaveGroupDialog } from "../group/leave-group-dialog";
+import UsersList from "./users";
+import { CreateGroupDialog } from "./group/create-group-dialog";
+import { JoinGroupDialog } from "./group/join-group-dialog";
+import { LeaveGroupDialog } from "./group/leave-group-dialog";
 import { Group } from "@/types/group";
 import { User } from "@/types/database.types";
 
