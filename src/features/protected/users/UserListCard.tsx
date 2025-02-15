@@ -22,8 +22,12 @@ export const UserListCard = ({ member, isAdmin, currentUserId, onUpdateStatus }:
               <h3 className="!text-sm font-semibold text-[#E2E4FF]">{member.users.display_name || "No name"}</h3>
             </div>
             <div className="flex items-center gap-1">
-              {isAdmin && <Crown className="h-3 w-3 fill-yellow-500 text-yellow-600" />}
-              <p className="text-xs text-[#B4B7E5]">{isAdmin ? "Admin" : "Member"}</p>
+              {isAdmin && member.user_id === currentUserId && (
+                <Crown className="h-3 w-3 fill-yellow-500 text-yellow-600" />
+              )}
+              <p className="text-xs text-[#B4B7E5]">
+                {isAdmin && member.user_id === currentUserId ? "Admin" : "Member"}
+              </p>
             </div>
           </div>
         </div>
