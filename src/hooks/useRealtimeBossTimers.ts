@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import type { BossTimer } from "@/types/boss";
 import { useToast } from "./use-toast";
-import { useUserGroup } from "./useUserGroup";
+import { useGroupStore } from "@/stores/groupStore";
 
 export function useRealtimeBossTimers() {
   const [timers, setTimers] = useState<BossTimer[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const supabase = createClientComponentClient();
-  const { group } = useUserGroup();
+  const { group } = useGroupStore();
 
   useEffect(() => {
     const fetchTimers = async () => {

@@ -1,18 +1,10 @@
 "use client";
-
 import { Card, CardContent } from "@/components/ui/card";
 import { LeaveGroupDialog } from "./leave-group-dialog";
-import { User } from "@/types/database.types";
-import { Group } from "@/types/group";
+import { useGroupStore } from "@/stores/groupStore";
 
-type GroupSelectionProps = {
-  group: Group;
-  userData: User | undefined;
-  isLoading: boolean;
-  refetch: () => Promise<void>;
-};
-
-export function GroupSelection({ group, isLoading: groupLoading, refetch, userData }: GroupSelectionProps) {
+export function GroupSelection() {
+  const { group, isLoading: groupLoading,  userData , fetchUserGroup} = useGroupStore();
   if (groupLoading) {
     return (
       <Card className="bg-black/20 border-none">
@@ -36,7 +28,7 @@ export function GroupSelection({ group, isLoading: groupLoading, refetch, userDa
              {group.name}</span> !
           </h2>
 
-          <LeaveGroupDialog onLeaveGroup={refetch} group={group} />
+          <LeaveGroupDialog onLeaveGroup={fetchUserGroup} group={group} />
         </div>
       )}
     </div>

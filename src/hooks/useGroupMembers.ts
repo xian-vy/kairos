@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/database.types";
 import { useToast } from "@/hooks/use-toast";
-import { useUserGroup } from "@/hooks/useUserGroup";
+import { useGroupStore } from "@/stores/groupStore";
 
 export interface GroupMember {
   user_id: string;
@@ -18,7 +18,7 @@ export function useGroupMembers() {
   const [loading, setLoading] = useState(true);
   const supabase = createClientComponentClient<Database>();
   const { toast } = useToast();
-  const { group } = useUserGroup();
+  const { group } = useGroupStore();
 
   const fetchGroupMembers = async () => {
     try {

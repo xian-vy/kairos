@@ -2,14 +2,14 @@
 
 import { useGroupMembers } from "@/hooks/useGroupMembers";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { useUserGroup } from "@/hooks/useUserGroup";
+import { useGroupStore } from "@/stores/groupStore";
 import { UserListCard } from "./UserListCard";
 import { UserListSkeleton } from "./UserListCardSkeleton";
 
 const UsersList = () => {
   const { members, loading, updateUserStatus, removeUserFromGroup } = useGroupMembers();
   const { currentUser } = useCurrentUser();
-  const { group } = useUserGroup();
+  const { group } = useGroupStore();
   const isAdmin = currentUser?.id === group?.created_by;
 
   const handleCancelRequest = async (userId: string) => {

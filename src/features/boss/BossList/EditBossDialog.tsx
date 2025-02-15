@@ -7,7 +7,7 @@ import { Database } from "@/types/database.types";
 import { useToast } from "@/hooks/use-toast";
 import { BOSSDATA_TYPE } from "@/lib/data/presets";
 import useCurrentUser from "@/hooks/useCurrentUser";
-import { useUserGroup } from "@/hooks/useUserGroup";
+import { useGroupStore } from "@/stores/groupStore";
 
 interface EditBossDialogProps {
   isOpen: boolean;
@@ -25,7 +25,7 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
     sortOrder: bossData.sortOrder,
   });
   const { currentUser } = useCurrentUser();
-  const { group } = useUserGroup();
+  const { group } = useGroupStore();
   const isAdmin = group?.created_by === currentUser?.id;
   const supabase = createClientComponentClient<Database>();
   const { toast } = useToast();

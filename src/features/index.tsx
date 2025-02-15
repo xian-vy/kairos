@@ -1,26 +1,19 @@
 "use client";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import { useGroupStore } from "@/stores/groupStore";
+import { Timer, Users } from "lucide-react";
+import { FaSkull } from "react-icons/fa";
 import { BossList } from "./boss/BossList";
 import { BossTimerList } from "./boss/BossTimer";
-import { FaSkull } from "react-icons/fa";
-import { Timer, Users } from "lucide-react";
-import UsersList from "./users";
 import { CreateGroupDialog } from "./group/create-group-dialog";
 import { JoinGroupDialog } from "./group/join-group-dialog";
 import { LeaveGroupDialog } from "./group/leave-group-dialog";
-import { Group } from "@/types/group";
-import { User } from "@/types/database.types";
-import useCurrentUser from "@/hooks/useCurrentUser";
+import UsersList from "./users";
 
-type FeaturesProps = {
-  group: Group;
-  userData: User | undefined;
-  refetch: () => Promise<void>;
-};
-
-export function Features({ group, refetch, userData }: FeaturesProps) {
+export function Features() {
   const { currentUser } = useCurrentUser();
+  const { group, userData, fetchUserGroup } = useGroupStore();
   const isAdmin = group?.created_by === currentUser?.id;
 
   return (
@@ -66,7 +59,7 @@ export function Features({ group, refetch, userData }: FeaturesProps) {
                   </span>{" "}
                   is pending approval
                 </h1>
-                <LeaveGroupDialog onLeaveGroup={refetch} group={group} />
+                <LeaveGroupDialog onLeaveGroup={fetchUserGroup} group={group} />
               </div>
             </div>
           )}
@@ -77,8 +70,8 @@ export function Features({ group, refetch, userData }: FeaturesProps) {
             <h1 className="text-white text-base md:text-2xl font-bold pointer-events-auto">You are not in a group!</h1>
             <p className="text-white text-xs pointer-events-auto">Please create or join a group to continue</p>
             <div className="flex gap-4 mt-4 pointer-events-auto">
-              <CreateGroupDialog onGroupCreated={refetch} variant="welcome" />
-              <JoinGroupDialog onGroupJoined={refetch} variant="welcome" />
+              <CreateGroupDialog onGroupCreated={fetchUserGroup} variant="welcome" />
+              <JoinGroupDialog onGroupJoined={fetchUserGroup} variant="welcome" />
             </div>
           </div>
         </div>
