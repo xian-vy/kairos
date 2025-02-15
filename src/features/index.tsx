@@ -13,7 +13,7 @@ import UsersList from "./users";
 
 export function Features() {
   const { currentUser } = useCurrentUser();
-  const { group, userData, fetchUserGroup } = useGroupStore();
+  const { group, userData, fetchUserGroup,isLoading } = useGroupStore();
   const isAdmin = group?.created_by === currentUser?.id;
 
   return (
@@ -47,7 +47,7 @@ export function Features() {
           </TabsContent>
         )}
       </Tabs>
-      {group ? (
+      {group  ? (
         <>
           {userData?.status === "pending" && (
             <div className="absolute bottom-0 left-0 w-full h-full bg-gradient-to-t from-[#0a0c1b] backdrop-blur-sm to-transparent z-20 ">
@@ -65,6 +65,7 @@ export function Features() {
           )}
         </>
       ) : (
+        !isLoading && (
         <div className="absolute bottom-0 left-0 w-full h-full bg-gradient-to-t from-[#0a0c1b] backdrop-blur-sm to-transparent z-20 ">
           <div className="flex flex-col h-full items-center justify-start mt-[50%] lg:mt-[15%] lg:justify-start  p-4 font-space-grotesk">
             <h1 className="text-white text-base md:text-2xl font-bold pointer-events-auto">You are not in a group!</h1>
@@ -75,6 +76,7 @@ export function Features() {
             </div>
           </div>
         </div>
+        )
       )}
     </div>
   );
