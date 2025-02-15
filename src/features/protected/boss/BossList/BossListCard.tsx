@@ -56,7 +56,7 @@ export function BossListCard({ boss, killCount, onBossSelect, onLocationSelect, 
                 setShowEditDialog(true);
               }}
             >
-              <Pencil className="h-3.5 w-3.5 text-[#B4B7E5]" />
+              <Pencil className="h-4 w-4 text-[#B4B7E5] p-0.5" />
             </div>
           </div>
         </CardTitle>
