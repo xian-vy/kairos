@@ -20,6 +20,7 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
     respawnInterval: bossData.respawnInterval,
     respawnCount: bossData.respawnCount,
     respawnIntervalDelay: bossData.respawnIntervalDelay,
+    sortOrder: bossData.sortOrder,
   });
 
   const supabase = createClientComponentClient<Database>();
@@ -76,6 +77,16 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
           <DialogTitle className="text-xl text-white">Edit {bossData.name}</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 pt-4">
+          <div className="space-y-2">
+            <label className="text-sm text-[#B4B7E5]">Sort Order</label>
+            <Input
+              type="number"
+              value={formData.sortOrder}
+              onChange={(e) => setFormData({ ...formData, sortOrder: Number(e.target.value) })}
+              className="bg-black/20 border-gray-800 text-white"
+              min={1}
+            />
+          </div>
           <div className="space-y-2">
             <label className="text-sm text-[#B4B7E5]">Respawn Interval (hours)</label>
             <Input

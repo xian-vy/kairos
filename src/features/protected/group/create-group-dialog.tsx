@@ -62,6 +62,7 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
           boss_name: bossData.name,
           data: bossData,
           group_id: group.id,
+          sortOrder: bossData.sortOrder,
         }));
 
         const { error: bossDataError } = await supabase.from("boss_data").insert(bossDataInserts);
