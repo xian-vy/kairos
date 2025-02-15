@@ -73,7 +73,7 @@ const Navigation = () => {
               <span onClick={() => router.push('/')} className="cursor-pointer font-space-grotesk mb-0.5 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
                 Kairos
               </span>
-              <Button variant="ghost" className="ml-3 text-[#E2E4FF] hover:text-black hidden md:block">
+              <Button onClick={() => router.push('/guide')} variant="ghost" className="ml-3 text-[#E2E4FF] hover:text-black hidden md:block">
                 <span className="font-space-grotesk">Guide</span>
               </Button>
             </div>

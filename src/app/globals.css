@@ -75,6 +75,9 @@ body {
   p {
     @apply text-[0.8rem];
   } 
+  li {
+    @apply text-sm
+  }
 }
 
 .text-base,
