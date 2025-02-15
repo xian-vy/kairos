@@ -57,8 +57,8 @@ const Hero = () => {
             px-8 py-5 text-base font-medium rounded-lg
             shadow-lg hover:shadow-xl overflow-hidden"
           >
-            <span className="relative z-10">Get Started</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white opacity-30 animate-shine" />
+            <span className="relative z-10 xl:text-[0.8rem]">Get Started</span>
+            {/* <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white opacity-30 animate-shine" /> */}
           </Button>
         </div>
       </div>
