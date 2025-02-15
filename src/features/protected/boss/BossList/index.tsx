@@ -11,6 +11,7 @@ import { BossListCardSkeleton } from "./BossListCardSkeleton";
 import { redirect } from "next/navigation";
 
 export function BossList() {
+
   const [selectedBoss, setSelectedBoss] = useState<{
     name: string;
     respawnInterval: number;
@@ -35,7 +36,7 @@ export function BossList() {
     const counts: Record<string, { current: number; total: number }> = {};
 
     for (const boss of bossData) {
-      const count = await getBossKillCount(boss.name, supabase);
+      const count = await getBossKillCount(boss.name, supabase,bossData);
       counts[boss.name] = {
         current: count.currentKills,
         total: count.totalRequired,

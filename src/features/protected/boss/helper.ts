@@ -1,4 +1,4 @@
-import { BOSSDATA_NIGHTCROWS } from "@/lib/data/presets"
+import { BOSSDATA_NIGHTCROWS, BOSSDATA_TYPE } from "@/lib/data/presets"
 import { BossTimer } from "@/types/boss"
 import { SupabaseClient } from '@supabase/supabase-js'
 
@@ -60,8 +60,8 @@ export function formatTimeLeft(
     : `${hours}h ${minutes}m`
 }
 
-export const getPresetRespawnInterval = (bossName: string) => {
-  const preset = BOSSDATA_NIGHTCROWS.find(
+export const getPresetRespawnInterval = (bossName: string, bossData: BOSSDATA_TYPE[]) => {
+  const preset = bossData.find(
     boss => boss.name === bossName
   )
   return preset?.respawnInterval || 12 // fallback to 12 if not found
@@ -105,10 +105,11 @@ interface BossKillCount {
 
 export async function getBossKillCount(
   bossName: string, 
-  supabase: SupabaseClient
+  supabase: SupabaseClient,
+  bossData: BOSSDATA_TYPE[]
 ): Promise<BossKillCount> {
   // Get the preset data for this boss
-  const preset = BOSSDATA_NIGHTCROWS.find(boss => boss.name === bossName)
+  const preset = bossData.find(boss => boss.name === bossName)
   const totalRequired = preset?.respawnCount || 1
 
   // Get today's date at midnight
@@ -152,10 +153,10 @@ export interface TimerWithLocations extends BossTimer {
   allLocations?: string[];
 }
 
-export const sortTimers = (timers: BossTimer[]) => {
+export const sortTimers = (timers: BossTimer[], bossData: BOSSDATA_TYPE[]) => {
   return timers.sort((a, b) => {
-    const aSpawnTime = new Date(a.time_of_death).getTime() + (getPresetRespawnInterval(a.boss_name) * 60 * 60 * 1000)
-    const bSpawnTime = new Date(b.time_of_death).getTime() + (getPresetRespawnInterval(b.boss_name) * 60 * 60 * 1000)
+    const aSpawnTime = new Date(a.time_of_death).getTime() + (getPresetRespawnInterval(a.boss_name, bossData) * 60 * 60 * 1000)
+    const bSpawnTime = new Date(b.time_of_death).getTime() + (getPresetRespawnInterval(b.boss_name, bossData) * 60 * 60 * 1000)
     const now = new Date().getTime()
     
     // If both have passed or both haven't passed, sort by time of death (most recent first)
@@ -168,9 +169,9 @@ export const sortTimers = (timers: BossTimer[]) => {
   })
 }
 
-export const enrichTimerWithLocations = (timer: BossTimer): TimerWithLocations => {
-  const bossData = BOSSDATA_NIGHTCROWS.find(boss => boss.name === timer.boss_name)
-  const allLocations = bossData?.locations || [timer.location]
+export const enrichTimerWithLocations = (timer: BossTimer, bossData: BOSSDATA_TYPE[]): TimerWithLocations => {
+  const bossPreset = bossData.find(boss => boss.name === timer.boss_name)
+  const allLocations = bossPreset?.locations || [timer.location]
   
   return {
     ...timer,

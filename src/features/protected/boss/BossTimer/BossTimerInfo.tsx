@@ -3,14 +3,16 @@ import type { BossTimer } from "@/types/boss"
 import { Timer } from "lucide-react"
 import { FaSkullCrossbones } from "react-icons/fa"
 import { formatTimeLeft, getPresetRespawnInterval } from "../helper"
+import { BOSSDATA_TYPE } from "@/lib/data/presets"
 
 interface TimerInfoProps {
   timer: BossTimer
+  bossData : BOSSDATA_TYPE[]
 }
 
-export const TimerInfo = ({ timer }: TimerInfoProps) => {
+export const TimerInfo = ({ timer ,bossData}: TimerInfoProps) => {
   const respawnTime = new Date(timer.time_of_death).getTime() + 
-    (getPresetRespawnInterval(timer.boss_name) * 60 * 60 * 1000)
+    (getPresetRespawnInterval(timer.boss_name,bossData) * 60 * 60 * 1000)
   const hasRespawned = new Date().getTime() > respawnTime
 
   return (
@@ -23,7 +25,7 @@ export const TimerInfo = ({ timer }: TimerInfoProps) => {
         <span>
           {formatTimeLeft(
             timer.time_of_death, 
-            getPresetRespawnInterval(timer.boss_name),
+            getPresetRespawnInterval(timer.boss_name,bossData),
             true
           )}
         </span>

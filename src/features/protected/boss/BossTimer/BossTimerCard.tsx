@@ -7,6 +7,7 @@ import { ChevronDown, Circle, MapPin, NotebookPen } from "lucide-react";
 import { TimerInfo } from "./BossTimerInfo";
 import { ExpandedContent } from "./BossTimerExpandedContent";
 import { getPresetRespawnInterval, getTimerColor } from "../helper";
+import { BOSSDATA_TYPE } from "@/lib/data/presets";
 
 interface TimerCardProps {
   timer: BossTimer;
@@ -14,9 +15,10 @@ interface TimerCardProps {
   onToggle: () => void;
   onEdit: (timer: BossTimer) => void;
   onDelete: (id: string) => void;
+  bossData : BOSSDATA_TYPE[]
 }
 
-export const TimerCard = ({ timer, isExpanded, onToggle, onEdit, onDelete }: TimerCardProps) => (
+export const TimerCard = ({ timer, isExpanded, onToggle, onEdit, onDelete,bossData }: TimerCardProps) => (
   <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
     <CardContent className="py-3 px-3 sm:px-6">
       <div className="flex items-center justify-between cursor-pointer" onClick={onToggle}>
@@ -26,7 +28,7 @@ export const TimerCard = ({ timer, isExpanded, onToggle, onEdit, onDelete }: Tim
               <Circle
                 className={`h-3 w-3 text-[#E2E4FF] ${getTimerColor(
                   timer.time_of_death,
-                  getPresetRespawnInterval(timer.boss_name)
+                  getPresetRespawnInterval(timer.boss_name,bossData)
                 )}`}
               />
               <h3 className="!text-sm font-semibold text-[#E2E4FF]">{timer.boss_name}</h3>
@@ -42,7 +44,7 @@ export const TimerCard = ({ timer, isExpanded, onToggle, onEdit, onDelete }: Tim
         </div>
 
         <div className="flex items-center gap-4">
-          <TimerInfo timer={timer} />
+          <TimerInfo timer={timer} bossData={bossData} />
           <ChevronDown
             className={cn("h-4 w-4 text-[#B4B7E5] transition-transform", isExpanded && "transform rotate-180")}
           />

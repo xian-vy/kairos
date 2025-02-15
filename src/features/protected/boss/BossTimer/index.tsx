@@ -11,6 +11,7 @@ import { TimerCard } from "./BossTimerCard";
 import { DeleteDialog } from "./BossTimerDeleteDialog";
 import { BossTimerDialog } from "./BossTimerDialog";
 import { BossTimerListSkeleton } from "./BossTimerSkeleton";
+import { useGroupBossData } from "@/hooks/useGroupBossData";
 
 export function BossTimerList() {
   const { timers, isLoading } = useRealtimeBossTimers();
@@ -23,6 +24,7 @@ export function BossTimerList() {
   const { toast } = useToast();
   const supabase = createClientComponentClient();
   const [viewMode, setViewMode] = useState<"list" | "group">("list");
+  const { bossData, isLoading :isLoading2, error, refreshBossData } = useGroupBossData();
 
   useEffect(() => {
     const interval = setInterval(() => forceUpdate({}), 1000);
@@ -63,7 +65,7 @@ export function BossTimerList() {
   }, [timerToDelete, supabase, toast]);
 
   const handleEdit = useCallback((timer: BossTimer) => {
-    setTimerToEdit(enrichTimerWithLocations(timer));
+    setTimerToEdit(enrichTimerWithLocations(timer,bossData));
     setEditDialogOpen(true);
   }, []);
 
@@ -83,10 +85,10 @@ export function BossTimerList() {
     }, {} as Record<string, BossTimer[]>);
   }, []);
 
-  const activeTimers = sortTimers(timers);
+  const activeTimers = sortTimers(timers,bossData);
   const groupedTimers = getGroupedTimers(activeTimers);
 
-  if (isLoading) {
+  if (isLoading || isLoading2) {
     return <BossTimerListSkeleton />;
   }
 
@@ -125,6 +127,7 @@ export function BossTimerList() {
               onToggle={() => toggleCard(timer.id)}
               onEdit={handleEdit}
               onDelete={handleDelete}
+              bossData={bossData}
             />
           ))
         ) : (
@@ -140,6 +143,7 @@ export function BossTimerList() {
                     onToggle={() => toggleCard(timer.id)}
                     onEdit={handleEdit}
                     onDelete={handleDelete}
+                    bossData={bossData}
                   />
                 ))}
               </div>
