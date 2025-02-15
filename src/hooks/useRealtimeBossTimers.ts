@@ -6,44 +6,51 @@ import { useUserGroup } from "./useUserGroup";
 
 export function useRealtimeBossTimers() {
   const [timers, setTimers] = useState<BossTimer[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
   const supabase = createClientComponentClient();
   const { group } = useUserGroup();
 
   useEffect(() => {
     const fetchTimers = async () => {
-      if (!group?.id) return;
-
-      const { data: timerData, error } = await supabase
-        .from("boss_timers")
-        .select(
-          `
-          *,
-          users:user_id (
-            id,
-            username,
-            email,
-            group_id
-          )
-        `
-        )
-        .eq("users.group_id", group.id)
-        .eq("users.status", "accepted");
-
-      if (error) {
-        toast({
-          title: "Error fetching timers",
-          description: error.message,
-          variant: "destructive",
-        });
+      if (!group?.id) {
         return;
       }
 
-      const transformedTimers = timerData.map((timer) => ({
-        ...timer,
-        users: Array.isArray(timer.users) ? timer.users[0] : timer.users,
-      }));
-      setTimers(transformedTimers);
+      try {
+        const { data: timerData, error } = await supabase
+          .from("boss_timers")
+          .select(
+            `
+            *,
+            users:user_id (
+              id,
+              username,
+              email,
+              group_id
+            )
+          `
+          )
+          .eq("users.group_id", group.id)
+          .eq("users.status", "accepted");
+
+        if (error) {
+          toast({
+            title: "Error fetching timers",
+            description: error.message,
+            variant: "destructive",
+          });
+          return;
+        }
+
+        const transformedTimers = timerData.map((timer) => ({
+          ...timer,
+          users: Array.isArray(timer.users) ? timer.users[0] : timer.users,
+        }));
+        setTimers(transformedTimers);
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchTimers();
@@ -96,5 +103,5 @@ export function useRealtimeBossTimers() {
     };
   }, [supabase, toast, group]);
 
-  return { timers, setTimers };
+  return { timers, setTimers, isLoading };
 }

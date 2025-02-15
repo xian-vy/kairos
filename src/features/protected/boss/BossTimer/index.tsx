@@ -10,9 +10,10 @@ import { enrichTimerWithLocations, sortTimers } from "../helper";
 import { TimerCard } from "./BossTimerCard";
 import { DeleteDialog } from "./BossTimerDeleteDialog";
 import { BossTimerDialog } from "./BossTimerDialog";
+import { BossTimerListSkeleton } from "./BossTimerSkeleton";
 
 export function BossTimerList() {
-  const { timers } = useRealtimeBossTimers();
+  const { timers, isLoading } = useRealtimeBossTimers();
   const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
   const [, forceUpdate] = useState({});
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -84,6 +85,10 @@ export function BossTimerList() {
 
   const activeTimers = sortTimers(timers);
   const groupedTimers = getGroupedTimers(activeTimers);
+
+  if (isLoading) {
+    return <BossTimerListSkeleton />;
+  }
 
   return (
     <>
