@@ -13,13 +13,13 @@ import { Group } from "@/types/group";
 import { User } from "@/types/database.types";
 import useCurrentUser from "@/hooks/useCurrentUser";
 
-type BossPageProps = {
+type FeaturesProps = {
   group: Group;
   userData: User | undefined;
   refetch: () => Promise<void>;
 };
 
-export function BossPage({ group, refetch, userData }: BossPageProps) {
+export function Features({ group, refetch, userData }: FeaturesProps) {
   const { currentUser } = useCurrentUser();
   const isAdmin = group?.created_by === currentUser?.id;
 

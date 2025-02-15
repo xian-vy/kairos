@@ -1,6 +1,5 @@
 "use client";
-
-import { BossPage } from "@/features";
+import { Features } from "@/features";
 import { GroupSelection } from "@/features/group";
 import { useUserGroup } from "@/hooks/useUserGroup";
 
@@ -10,7 +9,7 @@ export default function AppPage() {
   return (
     <div className="min-h-screen p-5 bg-[#0A0C1B] text-white max-w-screen-xl mx-auto">
       <GroupSelection {...userGroupData} />
-      <BossPage {...userGroupData} />
+      <Features {...userGroupData} />
     </div>
   );
 }
