@@ -25,7 +25,7 @@ export function BossList() {
       {
         current: number;
         total: number;
-      }
+      } | null
     >
   >({});
 
@@ -39,6 +39,13 @@ export function BossList() {
 
   useEffect(() => {
     if (bossData.length > 0) {
+      // Initialize all boss kill counts as null to show loading state
+      const initialCounts = bossData.reduce((acc, boss) => {
+        acc[boss.name] = null;
+        return acc;
+      }, {} as Record<string, { current: number; total: number } | null>);
+      
+      setKillCounts(initialCounts);
       updateKillCounts();
     }
   }, [bossData]);

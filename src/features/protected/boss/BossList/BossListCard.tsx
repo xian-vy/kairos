@@ -9,13 +9,14 @@ import { getKillCountColor } from "../helper";
 import { useState } from "react";
 import { EditBossDialog } from "./EditBossDialog";
 import { BOSSDATA_TYPE } from "@/lib/data/presets";
+import { cn } from "@/lib/utils";
 
 interface BossListCardProps {
   boss: BOSSDATA_TYPE;
   killCount?: {
     current: number;
     total: number;
-  };
+  } | null;
   onBossSelect: (name: string, respawnInterval: number, locations: string[]) => void;
   onLocationSelect: (name: string, respawnInterval: number, locations: string[], selectedLocation: string) => void;
   onBossUpdated: () => void;
@@ -23,6 +24,23 @@ interface BossListCardProps {
 
 export function BossListCard({ boss, killCount, onBossSelect, onLocationSelect, onBossUpdated }: BossListCardProps) {
   const [showEditDialog, setShowEditDialog] = useState(false);
+
+  const KillCountDisplay = () => {
+    if (killCount === null) {
+      return (
+        <div className="h-4 w-8 bg-[#1F2137] animate-pulse rounded" />
+      );
+    }
+
+    return (
+      <span className={`text-xs ${getKillCountColor(
+        killCount?.current || 0,
+        killCount?.total || boss.respawnCount
+      )}`}>
+        ({killCount?.current || 0}/{killCount?.total || boss.respawnCount})
+      </span>
+    );
+  };
 
   return (
     <Card
@@ -35,14 +53,7 @@ export function BossListCard({ boss, killCount, onBossSelect, onLocationSelect, 
             <FaSkull className="h-4 w-4 fill-red-800" />
             <div className="flex items-center gap-2">
               {boss.name}
-              <span
-                className={`text-xs ${getKillCountColor(
-                  killCount?.current || 0,
-                  killCount?.total || boss.respawnCount
-                )}`}
-              >
-                ({killCount?.current || 0}/{killCount?.total || boss.respawnCount})
-              </span>
+              <KillCountDisplay />
             </div>
           </span>
           <div className="flex items-center gap-2">

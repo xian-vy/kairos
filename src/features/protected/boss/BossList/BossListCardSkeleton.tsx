@@ -15,7 +15,7 @@ export function BossListCardSkeleton() {
           {/* Badge and edit button */}
           <div className="flex items-center gap-2">
             <Skeleton className="h-5 w-[40px] bg-[#1F2937] rounded-full" /> {/* Hours badge */}
-            <Skeleton className="h-6 w-6 bg-[#1F2937]" /> {/* Edit button */}
+            <Skeleton className="h-5 w-6 bg-[#1F2937]" /> {/* Edit button */}
           </div>
         </div>
 
