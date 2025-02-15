@@ -30,7 +30,7 @@ export function BossList() {
   >({});
 
   const supabase = createClientComponentClient();
-  const { bossData, isLoading, error, refreshBossData } = useGroupBossData();
+  const { bossData, isLoading, refreshBossData } = useGroupBossData();
 
   const updateKillCounts = async () => {
     const counts = await refreshKillCounts(bossData, supabase);
@@ -72,9 +72,7 @@ export function BossList() {
     );
   }
 
-  if (error) {
-    return redirect("/error");
-  }
+
 
   return (
     <div className="p-4 space-y-6">
