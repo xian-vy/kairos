@@ -3,12 +3,12 @@
 import { useGroupBossData } from "@/hooks/useGroupBossData";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Info } from "lucide-react";
+import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
 import { BossTimerDialog } from "../BossTimer/BossTimerDialog";
-import { getBossKillCount } from "../helper";
+import { refreshKillCounts } from "../helper";
 import { BossListCard } from "./BossListCard";
 import { BossListCardSkeleton } from "./BossListCardSkeleton";
-import { redirect } from "next/navigation";
 
 export function BossList() {
 
@@ -32,30 +32,21 @@ export function BossList() {
   const supabase = createClientComponentClient();
   const { bossData, isLoading, error, refreshBossData } = useGroupBossData();
 
-  const refreshKillCounts = async () => {
-    const counts: Record<string, { current: number; total: number }> = {};
-
-    for (const boss of bossData) {
-      const count = await getBossKillCount(boss.name, supabase,bossData);
-      counts[boss.name] = {
-        current: count.currentKills,
-        total: count.totalRequired,
-      };
-    }
-
+  const updateKillCounts = async () => {
+    const counts = await refreshKillCounts(bossData, supabase);
     setKillCounts(counts);
   };
 
   useEffect(() => {
     if (bossData.length > 0) {
-      refreshKillCounts();
+      updateKillCounts();
     }
   }, [bossData]);
 
   useEffect(() => {
-    window.addEventListener("bossTimerCreated", refreshKillCounts);
+    window.addEventListener("bossTimerCreated", updateKillCounts);
     return () => {
-      window.removeEventListener("bossTimerCreated", refreshKillCounts);
+      window.removeEventListener("bossTimerCreated", updateKillCounts);
     };
   }, []);
 
@@ -109,7 +100,7 @@ export function BossList() {
         onTimerCreated={() => {
           const event = new Event("bossTimerCreated");
           window.dispatchEvent(event);
-          refreshKillCounts();
+          updateKillCounts();
           setSelectedBoss(null);
         }}
       />

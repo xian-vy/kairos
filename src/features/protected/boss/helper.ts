@@ -179,3 +179,20 @@ export const enrichTimerWithLocations = (timer: BossTimer, bossData: BOSSDATA_TY
   }
 }
 
+export async function refreshKillCounts(
+  bossData: BOSSDATA_TYPE[],
+  supabase: SupabaseClient
+): Promise<Record<string, { current: number; total: number }>> {
+  const counts: Record<string, { current: number; total: number }> = {};
+
+  for (const boss of bossData) {
+    const count = await getBossKillCount(boss.name, supabase, bossData);
+    counts[boss.name] = {
+      current: count.currentKills,
+      total: count.totalRequired,
+    };
+  }
+
+  return counts;
+}
+
