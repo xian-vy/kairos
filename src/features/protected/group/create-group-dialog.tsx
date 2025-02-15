@@ -6,6 +6,7 @@ import { PlusCircle } from "lucide-react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/database.types";
 import { useToast } from "@/hooks/use-toast";
+import { BOSSDATA_NIGHTCROWS } from "@/lib/data/presets";
 
 interface CreateGroupDialogProps {
   onGroupCreated: () => void;
@@ -53,9 +54,19 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
         const { error: userUpdateError } = await supabase
           .from("users")
           .update({ group_id: group.id, status: "accepted" })
-          .eq('id', user.id);
+          .eq("id", user.id);
 
         if (userUpdateError) throw userUpdateError;
+
+        const bossDataInserts = BOSSDATA_NIGHTCROWS.map((bossData) => ({
+          boss_name: bossData.name,
+          data: bossData,
+          group_id: group.id,
+        }));
+
+        const { error: bossDataError } = await supabase.from("boss_data").insert(bossDataInserts);
+
+        if (bossDataError) throw bossDataError;
 
         toast({
           title: "Success",

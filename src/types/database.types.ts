@@ -1,3 +1,5 @@
+import { BOSSDATA_TYPE } from "@/lib/data/presets";
+
 export interface BossTimer {
   id: string;
   created_at: string;
@@ -10,18 +12,18 @@ export interface BossTimer {
 }
 
 export interface Group {
-  id: string
-  name: string
-  created_by: string
-  created_at: string
+  id: string;
+  name: string;
+  created_by: string;
+  created_at: string;
 }
 
 export interface User {
-  id: string
-  username: string
-  email: string
-  status: 'pending' | 'accepted'
-  group_id: string | null
+  id: string;
+  username: string;
+  email: string;
+  status: "pending" | "accepted";
+  group_id: string | null;
 }
 
 export type Database = {
@@ -100,6 +102,29 @@ export type Database = {
           time_of_death?: string;
           next_spawn?: string;
           notes?: string | null;
+        };
+      };
+      boss_data: {
+        Row: {
+          id: string;
+          boss_name: string;
+          data: BOSSDATA_TYPE;
+          group_id: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          boss_name: string;
+          data: BOSSDATA_TYPE;
+          group_id: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          boss_name?: string;
+          data?: BOSSDATA_TYPE;
+          group_id?: string;
+          created_at?: string;
         };
       };
     };
