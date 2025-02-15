@@ -88,8 +88,8 @@ const Navigation = () => {
                       </Link>
                       </>
                 )}
-              <Button onClick={() => router.push('/guide')} variant="ghost" className=" text-[#E2E4FF] hover:text-black hidden md:block">
-                <span className="font-space-grotesk">Guide</span>
+              <Button onClick={() => router.push('/guide')} variant="ghost" className=" text-[#E2E4FF] hover:text-black !px-2">
+                <span className="font-space-grotesk 3xl:text-sm">Guide</span>
               </Button>
                {currentUser && (
                 <div className="flex items-center gap-4">
