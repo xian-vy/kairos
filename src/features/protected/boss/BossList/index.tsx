@@ -1,13 +1,13 @@
 "use client";
 
+import { useGroupBossData } from "@/hooks/useGroupBossData";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Info } from "lucide-react";
 import { useEffect, useState } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { BossTimerDialog } from "../BossTimer/BossTimerDialog";
 import { getBossKillCount } from "../helper";
 import { BossListCard } from "./BossListCard";
-import { useGroupBossData } from "@/hooks/useGroupBossData";
-import { Loader2 } from "lucide-react";
+import { BossListCardSkeleton } from "./BossListCardSkeleton";
 import { redirect } from "next/navigation";
 
 export function BossList() {
@@ -60,8 +60,15 @@ export function BossList() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+      <div className="p-4 space-y-6">
+        <p className="text-[#B4B7E5] text-xs flex items-center gap-1.5 ">
+          <Info className="h-4 w-4" /> Click on a boss to create a timer for their next spawn
+        </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {Array.from({ length: 8 }).map((_, index) => (
+            <BossListCardSkeleton key={index} />
+          ))}
+        </div>
       </div>
     );
   }
