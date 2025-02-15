@@ -9,6 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -18,17 +19,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import useCurrentUser from '@/hooks/useCurrentUser'
-import { GAMESLIST } from '@/lib/data/utils'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import Image from 'next/image'
+import { Loader2 } from "lucide-react"
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { FaDiscord, FaFacebookMessenger, FaGithub, FaUser } from "react-icons/fa"
-import { Select, SelectTrigger } from './ui/select'
-import { Loader2 } from "lucide-react"
 
 const Navigation = () => {
   const router = useRouter()
@@ -88,7 +85,7 @@ const Navigation = () => {
               </Button>
                {currentUser && (
                 <div className="flex items-center gap-4">
-                  <div>
+                  {/* <div>
                     {GAMESLIST.map((game) => (
                       <Select key={game.slug}>
                         <SelectTrigger className="hover:bg-[#1F2137] text-white flex items-center gap-2">
@@ -97,7 +94,7 @@ const Navigation = () => {
                         </SelectTrigger>
                       </Select>
                     ))}
-                  </div>
+                  </div> */}
                   
                   <DropdownMenu>
                     <DropdownMenuTrigger className="focus:outline-none">
