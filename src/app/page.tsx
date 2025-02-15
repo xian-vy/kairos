@@ -1,5 +1,5 @@
-import Features from "@/features/public/features";
-import Hero from "@/features/public/hero";
+import Features from "@/components/features";
+import Hero from "@/components/hero";
 
 export default function Home() {
   return (

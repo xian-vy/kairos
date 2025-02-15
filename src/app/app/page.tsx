@@ -1,7 +1,7 @@
 "use client";
 
-import { BossPage } from "@/features/protected";
-import { GroupSelection } from "@/features/protected/group";
+import { BossPage } from "@/features";
+import { GroupSelection } from "@/features/group";
 import { useUserGroup } from "@/hooks/useUserGroup";
 
 export default function AppPage() {
