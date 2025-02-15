@@ -13,7 +13,7 @@ const Footer = () => {
       </div>
 
       <div className="flex justify-center space-x-8 mb-12">
-        <Link href="#features" className="text-[#B4B7E5] hover:text-white transition-colors duration-200 text-sm">
+        <Link href="/features" className="text-[#B4B7E5] hover:text-white transition-colors duration-200 text-sm">
           Features
         </Link>
         <Link href="/guide" className="text-[#B4B7E5] hover:text-white transition-colors duration-200 text-sm">
@@ -25,7 +25,7 @@ const Footer = () => {
       </div>
 
       <div className="text-center text-[#B4B7E5]/60 text-sm">
-        <small>© 2024 Kairos. All rights reserved.</small>
+        <small>© {new Date().getFullYear()} Kairos. All rights reserved.</small>
       </div>
     </div>
   </footer>
