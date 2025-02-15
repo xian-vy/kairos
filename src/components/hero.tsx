@@ -23,7 +23,7 @@ const Hero = () => {
   return (
     <div className="relative min-h-[400px] 2xl:min-h-[550px] flex items-center justify-center overflow-hidden">
       {/* Glowing circle gradient */}
-      <div className="absolute w-[800px] h-[800px] md:w-[900px] md:h-[900px] opacity-25">
+      <div className="absolute w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] lg:w-[700px] lg:h-[900px] opacity-25">
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#4B79E4] via-[#9D68E4] to-[#E45A68] blur-3xl" />
       </div>
 
