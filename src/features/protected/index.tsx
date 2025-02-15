@@ -1,8 +1,8 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BossList } from "./boss/BossList/BossList";
-import { BossTimerList } from "./boss/BossTimer/BossTimerList";
+import { BossList } from "./boss/BossList";
+import { BossTimerList } from "./boss/BossTimer";
 import { FaSkull } from "react-icons/fa";
 import { Timer, Users } from "lucide-react";
 import UsersList from "./users";
