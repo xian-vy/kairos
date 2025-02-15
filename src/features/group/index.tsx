@@ -3,8 +3,14 @@ import { Card, CardContent } from "@/components/ui/card";
 import { LeaveGroupDialog } from "./leave-group-dialog";
 import { useGroupStore } from "@/stores/groupStore";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useEffect } from "react";
+import { useBossDataStore } from "@/stores/bossDataStore";
 export function GroupSelection() {
   const { group, isLoading: groupLoading,  userData , fetchUserGroup} = useGroupStore();
+  const { refreshBossData} = useBossDataStore();
+  useEffect(() => {
+    fetchUserGroup().then(() => refreshBossData());
+  }, []);
   if (groupLoading) {
     return (
       <Card className=" bg-[#0D0F23]/30 backdrop-blur-sm border-none ">
