@@ -3,7 +3,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { BossTimer } from "@/types/boss";
-import { ChevronDown, Circle, MapPin, NotebookPen, Star } from "lucide-react";
+import { ChevronDown, Circle, MapPin, NotebookPen } from "lucide-react";
 import { TimerInfo } from "./BossTimerInfo";
 import { ExpandedContent } from "./BossTimerExpandedContent";
 import { getPresetRespawnInterval, getTimerColor } from "../helper";
