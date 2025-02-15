@@ -69,14 +69,10 @@ const Navigation = () => {
       <nav className="border-b border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
               <span onClick={() => router.push('/')} className="cursor-pointer font-space-grotesk mb-0.5 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
                 Kairos
               </span>
-              <Button onClick={() => router.push('/guide')} variant="ghost" className="ml-3 text-[#E2E4FF] hover:text-black hidden md:block">
-                <span className="font-space-grotesk">Guide</span>
-              </Button>
-            </div>
+         
            
             <div className="flex items-center gap-4">
                {!currentUser && (
@@ -92,18 +88,12 @@ const Navigation = () => {
                       </Link>
                       </>
                 )}
-                {!currentUser && pathname !== '/auth/signin' && (
-                    <Button 
-                    variant="ghost" 
-                    className="text-[#E2E4FF] hover:text-black"
-                    onClick={handleSignIn}
-                      >
-                    <span className="font-space-grotesk">Sign In</span>
-                  </Button>
-                )}
-               {currentUser ? (
+              <Button onClick={() => router.push('/guide')} variant="ghost" className=" text-[#E2E4FF] hover:text-black hidden md:block">
+                <span className="font-space-grotesk">Guide</span>
+              </Button>
+               {currentUser && (
                 <div className="flex items-center gap-4">
-                  <div className="ml-2">
+                  <div>
                     {GAMESLIST.map((game) => (
                       <Select key={game.slug}>
                         <SelectTrigger className="hover:bg-[#1F2137] text-white flex items-center gap-2">
@@ -140,13 +130,8 @@ const Navigation = () => {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-              ) : (
-                pathname !== '/auth/signin' && (
-                <Button className="bg-[#4B79E4] hover:bg-[#3D63C9] hidden md:block">
-                  <span className="font-space-grotesk">Get Started</span>
-                </Button>
-                )
               )}
+
             </div>
           </div>
         </div>
