@@ -8,6 +8,8 @@ import { enrichTimerWithLocations, sortTimers } from "../helper";
 import { TimerCard } from "./BossTimerCard";
 import { DeleteDialog } from "./BossTimerDeleteDialog";
 import { BossTimerDialog } from "./BossTimerDialog";
+import { Button } from "@/components/ui/button";
+import { LayoutGrid, List } from "lucide-react";
 
 export function BossTimerList() {
   const { timers } = useRealtimeBossTimers();
@@ -19,6 +21,7 @@ export function BossTimerList() {
   const [timerToEdit, setTimerToEdit] = useState<BossTimer | null>(null);
   const { toast } = useToast();
   const supabase = createClientComponentClient();
+  const [viewMode, setViewMode] = useState<"list" | "group">("list");
 
   useEffect(() => {
     const interval = setInterval(() => forceUpdate({}), 1000);
@@ -68,14 +71,47 @@ export function BossTimerList() {
     setTimerToEdit(null);
   }, []);
 
+  const getGroupedTimers = useCallback((timers: BossTimer[]) => {
+    return timers.reduce((groups, timer) => {
+      const bossName = timer.boss_name;
+      if (!groups[bossName]) {
+        groups[bossName] = [];
+      }
+      groups[bossName].push(timer);
+      return groups;
+    }, {} as Record<string, BossTimer[]>);
+  }, []);
+
   const activeTimers = sortTimers(timers);
+  const groupedTimers = getGroupedTimers(activeTimers);
 
   return (
     <>
+      <div className="mb-4 flex justify-end">
+        <div className="flex space-x-2 bg-[#0D0F23] rounded-lg p-1">
+          <Button
+            variant={viewMode === "list" ? "secondary" : "ghost"}
+            size="sm"
+            onClick={() => setViewMode("list")}
+            className="h-7 "
+          >
+            <List className="h-4 w-4" />
+          </Button>
+          <Button
+            variant={viewMode === "group" ? "secondary" : "ghost"}
+            size="sm"
+            onClick={() => setViewMode("group")}
+            className="h-7"
+          >
+            <LayoutGrid className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+
       <div className="space-y-2">
         {activeTimers.length === 0 ? (
           <p className="text-center text-[#B4B7E5] py-4">No active timers</p>
-        ) : (
+        ) : viewMode === "list" ? (
           activeTimers.map((timer) => (
             <TimerCard
               key={timer.id}
@@ -85,6 +121,24 @@ export function BossTimerList() {
               onEdit={handleEdit}
               onDelete={handleDelete}
             />
+          ))
+        ) : (
+          Object.entries(groupedTimers).map(([bossName, bossTimers]) => (
+            <div key={bossName} className="space-y-2">
+              <h3 className="text-base font-semibold text-[#B4B7E5] px-2">{bossName}</h3>
+              <div className="space-y-2 pl-4">
+                {bossTimers.map((timer) => (
+                  <TimerCard
+                    key={timer.id}
+                    timer={timer}
+                    isExpanded={expandedCards[timer.id] || false}
+                    onToggle={() => toggleCard(timer.id)}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                  />
+                ))}
+              </div>
+            </div>
           ))
         )}
       </div>

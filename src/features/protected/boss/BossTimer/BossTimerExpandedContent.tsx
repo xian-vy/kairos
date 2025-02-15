@@ -9,11 +9,10 @@ interface ExpandedContentProps {
 
 export const ExpandedContent = ({ timer, onEdit, onDelete }: ExpandedContentProps) => (
   <div className="mt-4 flex items-center justify-between w-full">
-    {timer.notes && (
-      <p className="text-sm text-[#B4B7E5] flex items-center gap-1.5">
-        <NotebookPen className="w-4 h-4" /> {timer.notes}
-      </p>
-    )}
+    <div className="flex items-center gap-2">
+      <NotebookPen className="w-4 h-4 text-[#B4B7E5]" />
+      {timer.notes && <p className="text-sm text-[#B4B7E5]">{timer.notes}</p>}
+    </div>
     <div className="flex justify-end gap-2">
       <button
         onClick={(e) => {
