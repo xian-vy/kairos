@@ -115,6 +115,7 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
             onChange={(e) => setNewGroupName(e.target.value)}
             placeholder="Group Name"
             className="bg-black/20 border-gray-800 text-white"
+            maxLength={25}
           />
           <div className="flex justify-end gap-2">
             <Button
