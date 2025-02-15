@@ -158,7 +158,7 @@ export default function SignIn() {
 
   return (
     <div className="container flex min-h-screen flex-col items-center justify-center w-full mx-auto">
-      <div className="mx-auto flex flex-col justify-center space-y-6 w-11/12 sm:w-[350px]">
+      <div className="mx-auto flex flex-col justify-center space-y-6 w-11/12 sm:w-[360px] px-4">
         <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
           <CardHeader className="space-y-2 text-center">
             <CardTitle className="text-xl font-bold text-[#E2E4FF]">
@@ -177,6 +177,7 @@ export default function SignIn() {
                   <div className="grid gap-2 relative">
                     <User className='w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#B4B7E5] text-sm' />
                     <Input
+                      maxLength={20}
                       id="username"
                       placeholder="Username"
                       type="text"
@@ -190,6 +191,7 @@ export default function SignIn() {
                 <div className="grid gap-2 relative">
                 < Mail className='w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#B4B7E5] text-sm' />
                   <Input
+                    maxLength={40}
                     id="email"
                     placeholder="Email"
                     type="email"
@@ -205,6 +207,7 @@ export default function SignIn() {
                 <div className="grid gap-2 relative">
                  <Lock className='w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#B4B7E5] text-sm' />
                   <Input
+                    maxLength={40}
                     id="password"
                     type="password"
                     disabled={isLoading}
@@ -218,6 +221,7 @@ export default function SignIn() {
                   <div className="grid gap-2 relative">
                     <Lock className='w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#B4B7E5] text-sm' />
                     <Input
+                      maxLength={40}
                       id="confirmPassword"
                       placeholder="Confirm Password"
                       type="password"
