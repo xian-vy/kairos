@@ -6,6 +6,8 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/database.types";
 import { useToast } from "@/hooks/use-toast";
 import { BOSSDATA_TYPE } from "@/lib/data/presets";
+import useCurrentUser from "@/hooks/useCurrentUser";
+import { useUserGroup } from "@/hooks/useUserGroup";
 
 interface EditBossDialogProps {
   isOpen: boolean;
@@ -22,18 +24,19 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
     respawnIntervalDelay: bossData.respawnIntervalDelay,
     sortOrder: bossData.sortOrder,
   });
-
+  const { currentUser } = useCurrentUser();
+  const { group } = useUserGroup();
+  const isAdmin = group?.created_by === currentUser?.id;
   const supabase = createClientComponentClient<Database>();
   const { toast } = useToast();
 
   const handleSubmit = async () => {
     try {
       setIsLoading(true);
+      if (!isAdmin) throw new Error("Only Admin can update boss data.");
+      if (!currentUser) throw new Error("No user found");
 
-      const { data: userData } = await supabase.auth.getUser();
-      if (!userData.user) throw new Error("No user found");
-
-      const { data: userGroup } = await supabase.from("users").select("group_id").eq("id", userData.user.id).single();
+      const { data: userGroup } = await supabase.from("users").select("group_id").eq("id", currentUser.id).single();
 
       if (!userGroup?.group_id) throw new Error("No group found");
 
@@ -122,7 +125,11 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
             >
               Cancel
             </Button>
-            <Button onClick={handleSubmit} className="bg-blue-600 hover:bg-blue-700 text-white" disabled={isLoading}>
+            <Button
+              onClick={handleSubmit}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+              disabled={isLoading || !isAdmin}
+            >
               {isLoading ? (
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
               ) : (
