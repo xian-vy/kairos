@@ -2,14 +2,15 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { LeaveGroupDialog } from "./leave-group-dialog";
 import { useGroupStore } from "@/stores/groupStore";
-
+import { Skeleton } from "@/components/ui/skeleton";
 export function GroupSelection() {
   const { group, isLoading: groupLoading,  userData , fetchUserGroup} = useGroupStore();
   if (groupLoading) {
     return (
-      <Card className="bg-black/20 border-none">
-        <CardContent className="flex justify-center items-center min-h-[200px]">
-          <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white" />
+      <Card className=" bg-[#0D0F23]/30 backdrop-blur-sm border-none ">
+        <CardContent className="flex justify-between items-center min-h-[95px] gap-5 pt-10 border-b border-[#1F2137]">
+          <Skeleton className="h-7 w-[220px] rounded-md" />
+          <Skeleton className="h-7 w-[150px] rounded-md" />
         </CardContent>
       </Card>
     );
