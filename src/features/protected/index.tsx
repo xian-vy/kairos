@@ -11,6 +11,7 @@ import { JoinGroupDialog } from "./group/join-group-dialog";
 import { LeaveGroupDialog } from "./group/leave-group-dialog";
 import { Group } from "@/types/group";
 import { User } from "@/types/database.types";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 type BossPageProps = {
   group: Group;
@@ -19,6 +20,9 @@ type BossPageProps = {
 };
 
 export function BossPage({ group, refetch, userData }: BossPageProps) {
+  const { currentUser } = useCurrentUser();
+  const isAdmin = group?.created_by === currentUser?.id;
+
   return (
     <div className="w-full relative">
       <Tabs defaultValue="bosses" className="w-full">
@@ -29,9 +33,11 @@ export function BossPage({ group, refetch, userData }: BossPageProps) {
           <TabsTrigger value="timers" className="flex items-center gap-2" disabled={!group}>
             <Timer className="h-4 w-4" /> Active Timers
           </TabsTrigger>
-          <TabsTrigger value="users" className="flex items-center gap-2" disabled={!group}>
-            <Users className="h-4 w-4" /> Users
-          </TabsTrigger>
+          {isAdmin && (
+            <TabsTrigger value="users" className="flex items-center gap-2" disabled={!group}>
+              <Users className="h-4 w-4" /> Users
+            </TabsTrigger>
+          )}
         </TabsList>
         <TabsContent value="timers" className="mt-4 relative">
           <BossTimerList />
@@ -41,10 +47,12 @@ export function BossPage({ group, refetch, userData }: BossPageProps) {
           <BossList />
           {!group && <div className="absolute inset-0" />}
         </TabsContent>
-        <TabsContent value="users" className="mt-4 relative">
-          <UsersList />
-          {!group && <div className="absolute inset-0" />}
-        </TabsContent>
+        {isAdmin && (
+          <TabsContent value="users" className="mt-4 relative">
+            <UsersList />
+            {!group && <div className="absolute inset-0" />}
+          </TabsContent>
+        )}
       </Tabs>
       {group ? (
         <>
