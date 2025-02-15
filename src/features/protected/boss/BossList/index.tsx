@@ -1,69 +1,91 @@
-'use client'
+"use client";
 
-import { BOSSDATA_NIGHTCROWS } from "@/lib/data/presets"
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { Info } from "lucide-react"
-import { useEffect, useState } from 'react'
-import { BossTimerDialog } from '../BossTimer/BossTimerDialog'
-import { getBossKillCount } from '../helper'
-import { BossListCard } from './BossListCard'
+import { Info } from "lucide-react";
+import { useEffect, useState } from "react";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { BossTimerDialog } from "../BossTimer/BossTimerDialog";
+import { getBossKillCount } from "../helper";
+import { BossListCard } from "./BossListCard";
+import { useGroupBossData } from "@/hooks/useGroupBossData";
+import { Loader2 } from "lucide-react";
+import { redirect } from "next/navigation";
 
 export function BossList() {
-  const [selectedBoss, setSelectedBoss] = useState<{ 
-    name: string; 
+  const [selectedBoss, setSelectedBoss] = useState<{
+    name: string;
     respawnInterval: number;
     locations: string[];
     selectedLocation?: string;
-  } | null>(null)
-  
-  const [killCounts, setKillCounts] = useState<Record<string, { 
-    current: number, 
-    total: number 
-  }>>({})
-  
-  const supabase = createClientComponentClient()
+  } | null>(null);
+
+  const [killCounts, setKillCounts] = useState<
+    Record<
+      string,
+      {
+        current: number;
+        total: number;
+      }
+    >
+  >({});
+
+  const supabase = createClientComponentClient();
+  const { bossData, isLoading, error, refreshBossData } = useGroupBossData();
 
   const refreshKillCounts = async () => {
-    const counts: Record<string, { current: number, total: number }> = {}
-    
-    for (const boss of BOSSDATA_NIGHTCROWS) {
-      const count = await getBossKillCount(boss.name, supabase)
+    const counts: Record<string, { current: number; total: number }> = {};
+
+    for (const boss of bossData) {
+      const count = await getBossKillCount(boss.name, supabase);
       counts[boss.name] = {
         current: count.currentKills,
-        total: count.totalRequired
-      }
+        total: count.totalRequired,
+      };
     }
-    
-    setKillCounts(counts)
-  }
+
+    setKillCounts(counts);
+  };
 
   useEffect(() => {
-    refreshKillCounts()
-    
-    // Refresh kill counts when a new timer is created
-    window.addEventListener('bossTimerCreated', refreshKillCounts)
-    return () => {
-      window.removeEventListener('bossTimerCreated', refreshKillCounts)
+    if (bossData.length > 0) {
+      refreshKillCounts();
     }
-  }, [])
+  }, [bossData]);
+
+  useEffect(() => {
+    window.addEventListener("bossTimerCreated", refreshKillCounts);
+    return () => {
+      window.removeEventListener("bossTimerCreated", refreshKillCounts);
+    };
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return redirect("/error");
+  }
 
   return (
     <div className="p-4 space-y-6">
-        <p className="text-[#B4B7E5] text-xs flex items-center gap-1.5 ">
-            <Info className="h-4 w-4" /> Click on a boss to create a timer for their next spawn      
-        </p>
+      <p className="text-[#B4B7E5] text-xs flex items-center gap-1.5 ">
+        <Info className="h-4 w-4" /> Click on a boss to create a timer for their next spawn
+      </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {BOSSDATA_NIGHTCROWS.map((boss) => (
+        {bossData.map((boss) => (
           <BossListCard
             key={boss.name}
             boss={boss}
             killCount={killCounts[boss.name]}
-            onBossSelect={(name, respawnInterval, locations) => 
-              setSelectedBoss({ name, respawnInterval, locations })
-            }
+            onBossSelect={(name, respawnInterval, locations) => setSelectedBoss({ name, respawnInterval, locations })}
             onLocationSelect={(name, respawnInterval, locations, selectedLocation) =>
               setSelectedBoss({ name, respawnInterval, locations, selectedLocation })
             }
+            onBossUpdated={refreshBossData}
           />
         ))}
       </div>
@@ -71,16 +93,16 @@ export function BossList() {
       <BossTimerDialog
         isOpen={!!selectedBoss}
         onClose={() => setSelectedBoss(null)}
-        bossName={selectedBoss?.name ?? ''}
+        bossName={selectedBoss?.name ?? ""}
         locations={selectedBoss?.locations ?? []}
         selectedLocation={selectedBoss?.selectedLocation}
         onTimerCreated={() => {
-          const event = new Event('bossTimerCreated')
-          window.dispatchEvent(event)
-          refreshKillCounts()
-          setSelectedBoss(null)
+          const event = new Event("bossTimerCreated");
+          window.dispatchEvent(event);
+          refreshKillCounts();
+          setSelectedBoss(null);
         }}
       />
     </div>
-  )
-} 
+  );
+}
