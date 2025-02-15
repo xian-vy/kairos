@@ -24,7 +24,7 @@ import { GAMESLIST } from '@/lib/data/utils'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { FaDiscord, FaFacebookMessenger, FaGithub, FaUser } from "react-icons/fa"
 import { Select, SelectTrigger } from './ui/select'
@@ -32,7 +32,6 @@ import { Loader2 } from "lucide-react"
 
 const Navigation = () => {
   const router = useRouter()
-  const pathname = usePathname()
   const supabase = createClientComponentClient()
   const [signOutDialogOpen, setSignOutDialogOpen] = useState(false)
   const [isSigningOut, setIsSigningOut] = useState(false)
@@ -52,10 +51,6 @@ const Navigation = () => {
       setIsSigningOut(false)
       setSignOutDialogOpen(false)
     }
-  }
-
-  const handleSignIn = () => {
-    router.push('/auth/signin')
   }
 
   return (
