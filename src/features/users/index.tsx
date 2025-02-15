@@ -4,6 +4,7 @@ import { useGroupMembers } from "@/hooks/useGroupMembers";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { useUserGroup } from "@/hooks/useUserGroup";
 import { UserListCard } from "./UserListCard";
+import { UserListSkeleton } from "./UserListCardSkeleton";
 
 const UsersList = () => {
   const { members, loading, updateUserStatus, removeUserFromGroup } = useGroupMembers();
@@ -15,13 +16,12 @@ const UsersList = () => {
     await removeUserFromGroup(userId);
   };
 
-  if (loading) {
-    return <div className="flex justify-center p-4">Loading users...</div>;
-  }
-
   const pendingMembers = members.filter((member) => member.users.status === "pending");
   const acceptedMembers = members.filter((member) => member.users.status === "accepted");
 
+  if (loading ||  acceptedMembers.length ===0 ) {
+    return <UserListSkeleton />;
+  }
   return (
     <div className="space-y-6 px-4">
       <div className="space-y-2">
