@@ -1,15 +1,15 @@
 "use client";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useRealtimeBossTimers } from "@/hooks/useRealtimeBossTimers";
 import type { BossTimer } from "@/types/boss";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { LayoutGrid, ListChecks } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { enrichTimerWithLocations, sortTimers } from "../helper";
 import { TimerCard } from "./BossTimerCard";
 import { DeleteDialog } from "./BossTimerDeleteDialog";
 import { BossTimerDialog } from "./BossTimerDialog";
-import { Button } from "@/components/ui/button";
-import { LayoutGrid, List } from "lucide-react";
 
 export function BossTimerList() {
   const { timers } = useRealtimeBossTimers();
@@ -95,7 +95,7 @@ export function BossTimerList() {
             onClick={() => setViewMode("list")}
             className="h-7 "
           >
-            <List className="h-4 w-4" />
+            <ListChecks className="h-4 w-4" />
           </Button>
           <Button
             variant={viewMode === "group" ? "secondary" : "ghost"}
