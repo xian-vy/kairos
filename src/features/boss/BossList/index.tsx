@@ -1,7 +1,6 @@
 "use client";
 
 import { useBossDataStore } from "@/stores/bossDataStore";
-import { useGroupStore } from "@/stores/groupStore";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Info } from "lucide-react";
 import { useEffect, useState } from "react";
