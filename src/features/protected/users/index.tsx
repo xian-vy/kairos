@@ -21,9 +21,9 @@ const UsersList = () => {
   return (
     <div className="space-y-6 px-4">
       <div className="space-y-2">
-        <h2 className="text-lg font-semibold text-[#E2E4FF]">Accepted Members</h2>
+        <h2 className="text-lg font-semibold text-[#E2E4FF]">Current Members</h2>
         {acceptedMembers.length === 0 ? (
-          <p className="text-center text-[#B4B7E5] py-4">No accepted members</p>
+          <p className="text-center text-[#B4B7E5] py-4">No current members</p>
         ) : (
           acceptedMembers.map((member) => (
             <UserListCard
