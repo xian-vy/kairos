@@ -138,8 +138,8 @@ export function LeaveGroupDialog({
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild>
-        <Button variant="ghost" className="text-xs text-[#B4B7E5] hover:bg-red-500 hover:text-white">
+      <AlertDialogTrigger asChild className="px-0">
+        <Button variant="ghost" className="text-xs text-[#B4B7E5] hover:bg-red-500 hover:text-white px-2">
           Leave Group <LogOut strokeWidth={1.5} className="h-3 w-3" />
         </Button>
       </AlertDialogTrigger>
