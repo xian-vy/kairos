@@ -7,6 +7,9 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/database.types";
 import { useToast } from "@/hooks/use-toast";
 import { BOSSDATA_NIGHTCROWS } from "@/lib/data/presets";
+import { useBossDataStore } from "@/stores/bossDataStore";
+import { useGroupStore } from "@/stores/groupStore";
+import useCurrentUser from "@/hooks/useCurrentUser";
 
 interface CreateGroupDialogProps {
   onGroupCreated: () => void;
@@ -19,19 +22,24 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
   const supabase = createClientComponentClient<Database>();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const { setBossData } = useBossDataStore();
+  const { fetchUserGroup } = useGroupStore();
+  const { currentUser } = useCurrentUser();
 
   const createGroup = async () => {
     try {
       setIsLoading(true);
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
+     
+      if (!currentUser) {
         console.error("No user found");
         return;
       }
 
-      const { data: existingGroup } = await supabase.from("groups").select("id").eq("name", newGroupName).single();
+      const { data: existingGroup } = await supabase
+        .from("groups")
+        .select("id")
+        .eq("name", newGroupName)
+        .single();
 
       if (existingGroup) {
         toast({
@@ -44,17 +52,20 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
 
       const { data: group, error: createError } = await supabase
         .from("groups")
-        .insert([{ name: newGroupName, created_by: user.id }])
+        .insert([{ name: newGroupName, created_by: currentUser.id }])
         .select()
         .single();
 
-      if (createError) throw createError;
+      if (createError) {
+        console.error("create group error:", createError);
+        throw createError;
+      }
 
       if (group) {
         const { error: userUpdateError } = await supabase
           .from("users")
           .update({ group_id: group.id, status: "accepted" })
-          .eq("id", user.id);
+          .eq("id", currentUser.id);
 
         if (userUpdateError) throw userUpdateError;
 
@@ -65,7 +76,9 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
           sortOrder: bossData.sortOrder,
         }));
 
-        const { error: bossDataError } = await supabase.from("boss_data").insert(bossDataInserts);
+        const { error: bossDataError } = await supabase
+          .from("boss_data")
+          .insert(bossDataInserts);
 
         if (bossDataError) throw bossDataError;
 
@@ -73,6 +86,9 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
           title: "Success",
           description: "Group created successfully",
         });
+        
+        setBossData(BOSSDATA_NIGHTCROWS);
+        await fetchUserGroup(); // Fetch updated group data
         onGroupCreated();
       }
     } catch (error) {

@@ -11,7 +11,7 @@ import { TimerCard } from "./BossTimerCard";
 import { DeleteDialog } from "./BossTimerDeleteDialog";
 import { BossTimerDialog } from "./BossTimerDialog";
 import { BossTimerListSkeleton } from "./BossTimerSkeleton";
-import { useGroupBossData } from "@/hooks/useGroupBossData";
+import { useBossDataStore } from "@/stores/bossDataStore";
 
 export function BossTimerList() {
   const { timers, isLoading } = useRealtimeBossTimers();
@@ -24,7 +24,7 @@ export function BossTimerList() {
   const { toast } = useToast();
   const supabase = createClientComponentClient();
   const [viewMode, setViewMode] = useState<"list" | "group">("list");
-  const { bossData, isLoading :isLoading2 } = useGroupBossData();
+  const { bossData, isLoading:isLoading2 } = useBossDataStore();
 
   useEffect(() => {
     const interval = setInterval(() => forceUpdate({}), 1000);

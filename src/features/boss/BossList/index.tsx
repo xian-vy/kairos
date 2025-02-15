@@ -1,6 +1,7 @@
 "use client";
 
-import { useGroupBossData } from "@/hooks/useGroupBossData";
+import { useBossDataStore } from "@/stores/bossDataStore";
+import { useGroupStore } from "@/stores/groupStore";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Info } from "lucide-react";
 import { redirect } from "next/navigation";
@@ -30,12 +31,17 @@ export function BossList() {
   >({});
 
   const supabase = createClientComponentClient();
-  const { bossData, isLoading, refreshBossData } = useGroupBossData();
+  const { bossData, isLoading, refreshBossData } = useBossDataStore();
+  const { fetchUserGroup } = useGroupStore();
 
   const updateKillCounts = async () => {
     const counts = await refreshKillCounts(bossData, supabase);
     setKillCounts(counts);
   };
+
+  useEffect(() => {
+    fetchUserGroup().then(() => refreshBossData());
+  }, []);
 
   useEffect(() => {
     if (bossData.length > 0) {
