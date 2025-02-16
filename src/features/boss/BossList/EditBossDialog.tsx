@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/database.types";
 import { useToast } from "@/hooks/use-toast";
-import { BOSSDATA_TYPE } from "@/lib/data/presets";
+import { BOSS_NAMES_NIGHTCROWS, BOSSDATA_TYPE } from "@/lib/data/presets";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { useGroupStore } from "@/stores/groupStore";
 import { X } from "lucide-react";
@@ -23,6 +23,7 @@ interface EditBossDialogProps {
 export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: EditBossDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
+    name: bossData.name,
     respawnInterval: bossData.respawnInterval,
     respawnCount: bossData.respawnCount,
     respawnIntervalDelay: bossData.respawnIntervalDelay,
@@ -88,6 +89,7 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
       if (updateError) throw updateError;
 
       toast({
+        variant: "success",
         title: "Success",
         description: "Boss data updated successfully",
       });
@@ -120,41 +122,54 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
           <TabsContent value="info">
             <div className="space-y-1 pt-2">
               <div className="space-y-2">
-                <label className=" text-[#B4B7E5]">Sort Order</label>
+                <label className=" text-[#B4B7E5]">Boss Name</label>
                 <Input
-                  type="number"
-                  value={formData.sortOrder}
-                  onChange={(e) => setFormData({ ...formData, sortOrder: Number(e.target.value) })}
-                  className="bg-black/20 border-gray-800 text-white"
-                  min={1}
-                />
-              </div>
-              <div className="space-y-2">
-                <label className=" text-[#B4B7E5]">Respawn Interval (hours)</label>
-                <Input
-                  type="number"
-                  value={formData.respawnInterval}
-                  onChange={(e) => setFormData({ ...formData, respawnInterval: Number(e.target.value) })}
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value as BOSS_NAMES_NIGHTCROWS })}
                   className="bg-black/20 border-gray-800 text-white"
                 />
               </div>
-              <div className="space-y-2">
-                <label className=" text-[#B4B7E5]">Respawn Count</label>
-                <Input
-                  type="number"
-                  value={formData.respawnCount}
-                  onChange={(e) => setFormData({ ...formData, respawnCount: Number(e.target.value) })}
-                  className="bg-black/20 border-gray-800 text-white"
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <label className=" text-[#B4B7E5]">Sort Order</label>
+                      <Input
+                        type="number"
+                        value={formData.sortOrder}
+                        onChange={(e) => setFormData({ ...formData, sortOrder: Number(e.target.value) })}
+                        className="bg-black/20 border-gray-800 text-white"
+                        min={1}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className=" text-[#B4B7E5]">Respawn Interval (hrs)</label>
+                      <Input
+                        type="number"
+                        value={formData.respawnInterval}
+                        onChange={(e) => setFormData({ ...formData, respawnInterval: Number(e.target.value) })}
+                        className="bg-black/20 border-gray-800 text-white"
+                      />
+                    </div>
               </div>
-              <div className="space-y-2">
-                <label className=" text-[#B4B7E5]">Respawn Interval Delay (hours)</label>
-                <Input
-                  type="number"
-                  value={formData.respawnIntervalDelay}
-                  onChange={(e) => setFormData({ ...formData, respawnIntervalDelay: Number(e.target.value) })}
-                  className="bg-black/20 border-gray-800 text-white"
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <label className=" text-[#B4B7E5]">Respawn Count</label>
+                      <Input
+                        type="number"
+                        value={formData.respawnCount}
+                        onChange={(e) => setFormData({ ...formData, respawnCount: Number(e.target.value) })}
+                        className="bg-black/20 border-gray-800 text-white"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <label className=" text-[#B4B7E5]">Interval Delay (hrs)</label>
+                      <Input
+                        type="number"
+                        value={formData.respawnIntervalDelay}
+                        onChange={(e) => setFormData({ ...formData, respawnIntervalDelay: Number(e.target.value) })}
+                        className="bg-black/20 border-gray-800 text-white"
+                      />
+                    </div>
               </div>
             </div>
           </TabsContent>
@@ -165,7 +180,7 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
                   value={newLocation}
                   onChange={(e) => setNewLocation(e.target.value)}
                   placeholder="Enter New Location"
-                  className="border-[#1F2137] bg-[#0D0F23] text-[#E2E4FF] placeholder:text-[#B4B7E5]/50 text-xs sm:text-sm"
+                  className="border-[#1F2137] bg-black/20 text-[#E2E4FF] placeholder:text-[#B4B7E5]/50 text-xs sm:text-sm"
 
                 />
                 <Button onClick={handleAddLocation} className="bg-[#1F2137] ">Add</Button>
@@ -181,7 +196,7 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
             </div>
           </TabsContent>
         </Tabs>
-        <DialogFooter>
+        <DialogFooter className="mt-2">
         <div className="flex justify-end gap-2">
             <Button
               variant="ghost"

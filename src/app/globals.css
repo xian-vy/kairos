@@ -79,7 +79,7 @@ body {
     @apply text-xs sm:text-sm
   }
   label {
-    @apply text-xs sm:text-sm;
+    @apply text-xs ;
   }
 }
 input[type="time"]::-webkit-calendar-picker-indicator {
