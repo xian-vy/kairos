@@ -93,7 +93,7 @@ export function LeaveGroupDialog({
             </AlertDialogDescription>
           )}
         </AlertDialogHeader>
-        <AlertDialogFooter>
+        <AlertDialogFooter className="gap-2">
           <Button
             variant="ghost"
             onClick={() => {

@@ -80,7 +80,7 @@ useEffect(() => {
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           
-          <p className="text-[#E2E4FF]">{newTimer.location}</p>
+          <p className="text-[#E2E4FF] md:text-sm">{newTimer.location}</p>
           <div className="space-y-2">
             <Label htmlFor="timeOfDeath" className="text-[#E2E4FF]">
               Time of Death <span className="text-red-500">*</span>
