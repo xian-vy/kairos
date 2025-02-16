@@ -10,13 +10,16 @@ import { CreateGroupDialog } from "./group/create-group-dialog";
 import { JoinGroupDialog } from "./group/join-group-dialog";
 import { LeaveGroupDialog } from "./group/leave-group-dialog";
 import UsersList from "./users";
+import useRealtimeTimers from "@/hooks/useRealtimeTimers";
 
 export function Features() {
   const { currentUser } = useCurrentUser();
   const { group, userData, fetchUserGroup,isLoading } = useGroupStore();
   const isAdmin = group?.created_by === currentUser?.id;
+  const  RealtimeTimerListener = useRealtimeTimers();
 
   return (
+    <>
     <div className="w-full relative">
       <Tabs defaultValue="bosses" className="w-full">
         <TabsList className="flex justify-center mt-2 xl:mt-5">
@@ -79,5 +82,7 @@ export function Features() {
         )
       )}
     </div>
+    {RealtimeTimerListener}
+    </>
   );
 }

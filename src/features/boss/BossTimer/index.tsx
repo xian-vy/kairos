@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import useRealtimeTimers from "@/hooks/useRealtimeTimers";
 import { useBossDataStore } from "@/stores/bossDataStore";
 import { useBossTimersStore } from "@/stores/bossTimersStore";
 import type { BossTimer } from "@/types/database.types";
@@ -23,7 +22,6 @@ export function BossTimerList() {
   const { toast } = useToast();
   const [viewMode, setViewMode] = useState<"list" | "group">("list");
   const { bossData, isLoading: isLoading2 } = useBossDataStore();
-  const  RealtimeTimerListener = useRealtimeTimers();
 
 
   const toggleCard = useCallback((id: string) => {
@@ -146,7 +144,6 @@ export function BossTimerList() {
           onTimerCreated={handleCloseEdit}
         />
       )}    
-      {RealtimeTimerListener}
     </>
   );
 }
