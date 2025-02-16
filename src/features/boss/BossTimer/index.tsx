@@ -5,12 +5,13 @@ import { useBossDataStore } from "@/stores/bossDataStore";
 import { useBossTimersStore } from "@/stores/bossTimersStore";
 import type { BossTimer } from "@/types/database.types";
 import { LayoutGrid, ListChecks } from "lucide-react";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { sortTimers } from "../helper";
 import { TimerCard } from "./BossTimerCard";
 import { DeleteDialog } from "./BossTimerDeleteDialog";
 import { BossTimerDialog } from "./BossTimerDialog";
 import { BossTimerListSkeleton } from "./BossTimerSkeleton";
+import useRealtimeTimers from "@/hooks/useRealtimeTimers";
 
 export function BossTimerList() {
   const { timers, isLoading, deleteTimer } = useBossTimersStore();
@@ -22,11 +23,8 @@ export function BossTimerList() {
   const { toast } = useToast();
   const [viewMode, setViewMode] = useState<"list" | "group">("list");
   const { bossData, isLoading: isLoading2 } = useBossDataStore();
+  const  RealtimeTimerListener = useRealtimeTimers();
 
-  // useEffect(() => {
-  //   const interval = setInterval(() => forceUpdate({}), 1000);
-  //   return () => clearInterval(interval);
-  // }, []);
 
   const toggleCard = useCallback((id: string) => {
     setExpandedCards((prev) => ({
@@ -147,7 +145,8 @@ export function BossTimerList() {
           bossTimer={timerToEdit}
           onTimerCreated={handleCloseEdit}
         />
-      )}
+      )}    
+      {RealtimeTimerListener}
     </>
   );
 }
