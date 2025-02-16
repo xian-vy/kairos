@@ -23,7 +23,7 @@ export function GroupSelection() {
   if (groupLoading || membersLoading) {
     return (
       <Card className=" bg-[#0D0F23]/30 backdrop-blur-sm border-none ">
-        <CardContent className="flex justify-between items-center min-h-[95px] gap-5 pt-10 border-b border-[#1F2137]">
+        <CardContent className="flex justify-between items-center min-h-[100px] gap-5 pt-10 border-b border-[#1F2137]">
           <Skeleton className="h-7 w-[220px] rounded-md" />
           <Skeleton className="h-7 w-[150px] rounded-md" />
         </CardContent>

@@ -26,7 +26,7 @@ export function Features() {
           <TabsTrigger value="timers" className="flex items-center gap-2" disabled={!group}>
             <Timer className="h-4 w-4" /> Active Timers
           </TabsTrigger>
-          {isAdmin && (
+          {isAdmin && !isLoading &&(
             <TabsTrigger value="users" className="flex items-center gap-2" disabled={!group}>
               <Users className="h-4 w-4" /> Users
             </TabsTrigger>
