@@ -57,15 +57,29 @@ export function BossTimerList() {
   }, []);
 
   const getGroupedTimers = useCallback((timers: BossTimer[]) => {
-    return timers.reduce((groups, timer) => {
+    const sortOrder = bossData.reduce((acc, boss) => {
+      acc[boss.name] = boss.sortOrder;
+      return acc;
+    }, {} as Record<string, number>);
+  
+    const groups = timers.reduce((acc, timer) => {
       const bossName = timer.boss_name;
-      if (!groups[bossName]) {
-        groups[bossName] = [];
+      if (!acc[bossName]) {
+        acc[bossName] = [];
       }
-      groups[bossName].push(timer);
-      return groups;
+      acc[bossName].push(timer);
+      return acc;
     }, {} as Record<string, BossTimer[]>);
-  }, []);
+  
+    const sortedGroups = Object.keys(groups)
+      .sort((a, b) => (sortOrder[a] ?? 0) - (sortOrder[b] ?? 0))
+      .reduce((acc, key) => {
+        acc[key] = groups[key];
+        return acc;
+      }, {} as Record<string, BossTimer[]>);
+  
+    return sortedGroups;
+  }, [bossData]);
 
   const activeTimers = sortTimers(timers, bossData);
   const groupedTimers = getGroupedTimers(activeTimers);
