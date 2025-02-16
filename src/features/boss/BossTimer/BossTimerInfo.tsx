@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils"
 import type { BossTimer } from "@/types/database.types"
 import { Timer } from "lucide-react"
 import { FaSkullCrossbones } from "react-icons/fa"
-import { formatTimeLeft, getPresetRespawnInterval } from "../helper"
+import { formatTimeLeft, getNextRespawnTimes, getPresetRespawnInterval, getRespawnDelay } from "../helper"
 import { BOSSDATA_TYPE } from "@/lib/data/presets"
 
 interface TimerInfoProps {
@@ -11,9 +11,13 @@ interface TimerInfoProps {
 }
 
 export const TimerInfo = ({ timer ,bossData}: TimerInfoProps) => {
-  const respawnTime = new Date(timer.time_of_death).getTime() + 
-    (getPresetRespawnInterval(timer.boss_name,bossData) * 60 * 60 * 1000)
-  const hasRespawned = new Date().getTime() > respawnTime
+  const respawnInterval = getPresetRespawnInterval(timer.boss_name, bossData);
+  const respawnDelay = getRespawnDelay(timer.boss_name, bossData);
+  const respawnTime = new Date(timer.time_of_death).getTime() + (respawnInterval * 60 * 60 * 1000);
+  const hasRespawned = new Date().getTime() > respawnTime;
+
+  const nextRespawnRange = getNextRespawnTimes(timer.time_of_death, respawnInterval, respawnDelay);
+
 
   return (
     <div className="text-right shrink-0">
@@ -23,14 +27,10 @@ export const TimerInfo = ({ timer ,bossData}: TimerInfoProps) => {
       )}>
         <Timer className="h-3 w-3" />
         <span>
-          {formatTimeLeft(
-            timer.time_of_death, 
-            getPresetRespawnInterval(timer.boss_name,bossData),
-            true
-          )}
+          {nextRespawnRange}
         </span>
       </div>
-      <div className="flex items-center gap-2 text-xs text-[#B4B7E5] mt-1 min-w-[95px]">
+      <div className="flex items-center gap-2 text-xs text-[#B4B7E5] mt-1 ">
         <FaSkullCrossbones className="h-3 w-3" />
         <span>
           {new Date(timer.time_of_death).toLocaleString(undefined, {
@@ -42,4 +42,4 @@ export const TimerInfo = ({ timer ,bossData}: TimerInfoProps) => {
       </div>
     </div>
   )
-} 
+}

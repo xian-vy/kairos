@@ -26,8 +26,8 @@ export const TimerCard = ({ timer, isExpanded, onToggle, onEdit, onDelete,bossDa
   const user  = members.find((user) => user.id === timer.user_id);
   return(
   <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
-    <CardContent className="py-3 px-3 sm:px-6">
-      <div className="flex items-center justify-between cursor-pointer" onClick={onToggle}>
+    <CardContent className="py-3 px-5 sm:px-6">
+      <div className="flex flex-col gap-1 items-start justify-start sm:flex-row sm:items-center sm:justify-between cursor-pointer w-full" onClick={onToggle}>
         <div className="flex items-center gap-4">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
@@ -49,7 +49,7 @@ export const TimerCard = ({ timer, isExpanded, onToggle, onEdit, onDelete,bossDa
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center justify-between w-full sm:w-auto sm:justify-start gap-4">
           <TimerInfo timer={timer} bossData={bossData} />
           <ChevronDown
             className={cn("h-4 w-4 text-[#B4B7E5] transition-transform", isExpanded && "transform rotate-180")}

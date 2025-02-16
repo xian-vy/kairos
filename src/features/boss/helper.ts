@@ -53,18 +53,51 @@ export function formatTimeLeft(
   
   const hours = Math.floor(timeUntilSpawn / (1000 * 60 * 60))
   const minutes = Math.floor((timeUntilSpawn % (1000 * 60 * 60)) / (1000 * 60))
-  const seconds = Math.floor((timeUntilSpawn % (1000 * 60)) / 1000)
+ // const seconds = Math.floor((timeUntilSpawn % (1000 * 60)) / 1000)
   
   return includeSeconds 
-    ? `${hours}h ${minutes}m ${seconds}s`
+    ? `${hours}h ${minutes}m `
     : `${hours}h ${minutes}m`
 }
+
+export const getNextRespawnTimes = (timeOfDeath: string, respawnInterval: number, respawnDelay: number) => {
+  const minRespawnTime = new Date(timeOfDeath).getTime() + (respawnInterval * 60 * 60 * 1000);
+  const maxRespawnTime = minRespawnTime + (respawnDelay * 60 * 60 * 1000);
+
+  const minRespawnDate = new Date(minRespawnTime);
+  const maxRespawnDate = new Date(maxRespawnTime);
+
+  const minRespawnFormatted = formatTimeLeft(timeOfDeath, respawnInterval, true);
+  const maxRespawnFormatted = formatTimeLeft(timeOfDeath, respawnInterval + respawnDelay, true);
+
+  const minRespawnLocalTime = minRespawnDate.toLocaleTimeString(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  });
+
+  const maxRespawnLocalTime = maxRespawnDate.toLocaleTimeString(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  });
+
+  return `${minRespawnFormatted} - ${maxRespawnFormatted} (${minRespawnLocalTime} - ${maxRespawnLocalTime})`;
+}
+
 
 export const getPresetRespawnInterval = (bossName: string, bossData: BOSSDATA_TYPE[]) => {
   const preset = bossData.find(
     boss => boss.name === bossName
   )
   return preset?.respawnInterval || 12 // fallback to 12 if not found
+}
+
+export const getRespawnDelay = (bossName: string, bossData: BOSSDATA_TYPE[]) => {
+  const preset = bossData.find(
+    boss => boss.name === bossName
+  )
+  return preset?.respawnIntervalDelay || 3 
 }
 
 export const getTimerColor = (timeOfDeath: string, respawnInterval: number) => {
