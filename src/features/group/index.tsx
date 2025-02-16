@@ -44,7 +44,7 @@ export function GroupSelection() {
              {group.name}</span> !
           </h2>
 
-          <LeaveGroupDialog onLeaveGroup={fetchUserGroup} group={group} />
+          <LeaveGroupDialog group={group} />
         </div>
       )}
     </div>

@@ -20,7 +20,7 @@ interface GroupMembersState {
   updateUserRealtime: (member : User) => void;
 }
 
-export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
+export const useGroupMembersStore = create<GroupMembersState>((set) => {
   const supabase = createClientComponentClient<Database>();
 
   const fetchGroupMembers = async () => {
