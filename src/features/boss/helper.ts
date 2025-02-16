@@ -153,21 +153,33 @@ export interface TimerWithLocations extends BossTimer {
   allLocations?: string[];
 }
 
+// export const sortTimers = (timers: BossTimer[], bossData: BOSSDATA_TYPE[]) => {
+//   return timers.sort((a, b) => {
+//     const aSpawnTime = new Date(a.time_of_death).getTime() + (getPresetRespawnInterval(a.boss_name, bossData) * 60 * 60 * 1000)
+//     const bSpawnTime = new Date(b.time_of_death).getTime() + (getPresetRespawnInterval(b.boss_name, bossData) * 60 * 60 * 1000)
+//     const now = new Date().getTime()
+    
+//     // If both have passed or both haven't passed, sort by time of death (most recent first)
+//     if ((aSpawnTime < now && bSpawnTime < now) || (aSpawnTime >= now && bSpawnTime >= now)) {
+//       return new Date(b.time_of_death).getTime() - new Date(a.time_of_death).getTime()
+//     }
+    
+//     // Put respawned ones first
+//     return aSpawnTime < now ? -1 : 1
+//   })
+// }
 export const sortTimers = (timers: BossTimer[], bossData: BOSSDATA_TYPE[]) => {
-  return timers.sort((a, b) => {
-    const aSpawnTime = new Date(a.time_of_death).getTime() + (getPresetRespawnInterval(a.boss_name, bossData) * 60 * 60 * 1000)
-    const bSpawnTime = new Date(b.time_of_death).getTime() + (getPresetRespawnInterval(b.boss_name, bossData) * 60 * 60 * 1000)
-    const now = new Date().getTime()
-    
-    // If both have passed or both haven't passed, sort by time of death (most recent first)
-    if ((aSpawnTime < now && bSpawnTime < now) || (aSpawnTime >= now && bSpawnTime >= now)) {
-      return new Date(b.time_of_death).getTime() - new Date(a.time_of_death).getTime()
-    }
-    
-    // Put respawned ones first
-    return aSpawnTime < now ? -1 : 1
-  })
-}
+  return [...timers].sort((a, b) => {
+    const aDeathTime = new Date(a.time_of_death).getTime();
+    const bDeathTime = new Date(b.time_of_death).getTime();
+
+    const aSpawnTime = aDeathTime + (getPresetRespawnInterval(a.boss_name, bossData) ?? 0) * 60 * 60 * 1000;
+    const bSpawnTime = bDeathTime + (getPresetRespawnInterval(b.boss_name, bossData) ?? 0) * 60 * 60 * 1000;
+
+    return aSpawnTime - bSpawnTime; // Sort by nearest respawn time
+  });
+};
+
 
 export const enrichTimerWithLocations = (timer: BossTimer, bossData: BOSSDATA_TYPE[]): TimerWithLocations => {
   const bossPreset = bossData.find(boss => boss.name === timer.boss_name)
