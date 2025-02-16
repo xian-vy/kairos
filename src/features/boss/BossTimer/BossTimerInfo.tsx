@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils"
 import type { BossTimer } from "@/types/database.types"
 import { Timer } from "lucide-react"
 import { FaSkullCrossbones } from "react-icons/fa"
-import { formatTimeLeft, getNextRespawnTimes, getPresetRespawnInterval, getRespawnDelay } from "../helper"
+import {  getNextRespawnTimes, getPresetRespawnInterval, getRespawnDelay } from "../helper"
 import { BOSSDATA_TYPE } from "@/lib/data/presets"
 
 interface TimerInfoProps {
