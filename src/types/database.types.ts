@@ -1,5 +1,10 @@
 import { BOSSDATA_TYPE } from "@/lib/data/presets";
-
+export enum SCHEMA_TABLES {
+  "boss_timers",
+  "groups",
+  "users",
+  "boss_data"
+}
 export interface BossTimer {
   id?: string;
   created_at: string;
