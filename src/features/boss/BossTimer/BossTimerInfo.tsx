@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import type { BossTimer } from "@/types/boss"
+import type { BossTimer } from "@/types/database.types"
 import { Timer } from "lucide-react"
 import { FaSkullCrossbones } from "react-icons/fa"
 import { formatTimeLeft, getPresetRespawnInterval } from "../helper"

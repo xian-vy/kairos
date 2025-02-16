@@ -1,13 +1,12 @@
 import { BOSSDATA_TYPE } from "@/lib/data/presets";
 
 export interface BossTimer {
-  id: string;
+  id?: string;
   created_at: string;
   user_id: string;
   boss_name: string;
   location: string;
   time_of_death: string;
-  next_spawn: string;
   notes: string | null;
 }
 

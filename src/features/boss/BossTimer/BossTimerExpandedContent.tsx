@@ -1,4 +1,4 @@
-import type { BossTimer } from "@/types/boss";
+import { BossTimer } from "@/types/database.types";
 import { NotebookPen, Pencil, Trash2 } from "lucide-react";
 
 interface ExpandedContentProps {

@@ -21,8 +21,8 @@ const UsersList = () => {
     await updateUserStatus(userId, status, (options) => toast({ ...options, variant: options.variant as "default" | "destructive" }));
   }
 
-  const pendingMembers = members.filter((member) => member.users.status === "pending");
-  const acceptedMembers = members.filter((member) => member.users.status === "accepted");
+  const pendingMembers = members.filter((member) => member.status === "pending");
+  const acceptedMembers = members.filter((member) => member.status === "accepted");
 
   if (loading ||  acceptedMembers.length ===0 ) {
     return <UserListSkeleton />;
@@ -36,7 +36,7 @@ const UsersList = () => {
         ) : (
           acceptedMembers.map((member) => (
             <UserListCard
-              key={member.user_id}
+              key={member.id}
               member={member}
               isAdmin={isAdmin}
               currentUserId={currentUser?.id}
@@ -53,7 +53,7 @@ const UsersList = () => {
         ) : (
           pendingMembers.map((member) => (
             <UserListCard
-              key={member.user_id}
+              key={member.id}
               member={member}
               isAdmin={isAdmin}
               currentUserId={currentUser?.id}

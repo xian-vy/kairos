@@ -1,29 +1,19 @@
 import { useGroupStore } from "@/stores/groupStore";
-import { Database } from "@/types/database.types";
+import { Database, User } from "@/types/database.types";
+import { ToastOptions } from "@/types/utils";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { create } from "zustand";
 
-export interface GroupMember {
-  user_id: string;
-  users: {
-    email: string;
-    display_name: string | null;
-    status: Database["public"]["Tables"]["users"]["Row"]["status"];
-  };
-}
-export interface ToastOptions {
-    variant: "default" | "destructive" | "success";
-    title: string;
-    description: string;
-  }
+
+
 
 interface GroupMembersState {
-  members: GroupMember[];
+  members: User[];
   loading: boolean;
   fetchGroupMembers: () => Promise<void>;
-  updateUserStatus: (userId: string, newStatus: "accepted" | "pending", toast: (options: { variant: string; title: string; description: string }) => void) => Promise<void>;
-  removeUserFromGroup: (userId: string, toast: (options: { variant: string; title: string; description: string }) => void) => Promise<void>;
-  addUserToGroup: (joinGroupName: string, onGroupJoined: () => void, toast: (options: { variant: string; title: string; description: string }) => void) => Promise<void>;
+  updateUserStatus: (userId: string, newStatus: "accepted" | "pending", toast: (options: ToastOptions) => void) => Promise<void>;
+  removeUserFromGroup: (userId: string, toast: (options: ToastOptions) => void) => Promise<void>;
+  addUserToGroup: (joinGroupName: string, onGroupJoined: () => void, toast: (options: ToastOptions) => void) => Promise<void>;
   leaveGroup: (group: Database["public"]["Tables"]["groups"]["Row"], onLeaveGroup: () => void, password: string, setPassword: (password: string) => void, setIsLoading: (isLoading: boolean) => void, isAdmin: boolean, toast: (options: { variant: string; title: string; description: string }) => void) => Promise<void>;
 }
 
@@ -44,27 +34,14 @@ export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
       const { data: users, error: membersError } = await supabase
         .from("users")
         .select(
-          `
-          id,
-          username,
-          email,
-          status
-        `
+         `*`
         )
         .eq("group_id", group.id);
 
       if (membersError) throw membersError;
 
-      const transformedMembers = users.map((user) => ({
-        user_id: user.id,
-        users: {
-          email: user.email,
-          display_name: user.username,
-          status: user.status,
-        },
-      }));
 
-      set({ members: transformedMembers, loading: false });
+      set({ members: users, loading: false });
       console.log("Group members fetched");
 
     } catch (error) {
@@ -91,7 +68,7 @@ export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
 
       set({
         members: get().members.map((member) =>
-          member.user_id === userId ? { ...member, users: { ...member.users, status: newStatus } } : member
+            member.id === userId ? { ...member, status: newStatus } : member
         ),
       });
 
@@ -123,7 +100,7 @@ export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
       if (error) throw error;
 
       set({
-        members: get().members.filter((member) => member.user_id !== userId),
+        members: get().members.filter((member) => member.id !== userId),
       });
 
       toast({

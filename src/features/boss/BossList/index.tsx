@@ -8,15 +8,11 @@ import { BossTimerDialog } from "../BossTimer/BossTimerDialog";
 import { refreshKillCounts } from "../helper";
 import { BossListCard } from "./BossListCard";
 import { BossListCardSkeleton } from "./BossListCardSkeleton";
+import { BossTimer } from "@/types/database.types";
 
 export function BossList() {
 
-  const [selectedBoss, setSelectedBoss] = useState<{
-    name: string;
-    respawnInterval: number;
-    locations: string[];
-    selectedLocation?: string;
-  } | null>(null);
+  const [selectedBoss, setSelectedBoss] = useState<BossTimer | null>(null);
 
   const [killCounts, setKillCounts] = useState<
     Record<
@@ -72,6 +68,17 @@ export function BossList() {
     );
   }
 
+  const handleSelectBoss = (name: string, respawnInterval: number, location: string) => {
+    setSelectedBoss({
+      user_id: "",
+      created_at: new Date().toISOString(),
+      boss_name: name,
+      location: location,
+      time_of_death: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false }),
+      notes: "",
+    });
+  };
+
 
 
   return (
@@ -88,9 +95,7 @@ export function BossList() {
               boss={boss}
               killCount={killCounts[boss.name]}
               //onBossSelect={(name, respawnInterval, locations) => setSelectedBoss({ name, respawnInterval, locations })}
-              onLocationSelect={(name, respawnInterval, locations, selectedLocation) =>
-                setSelectedBoss({ name, respawnInterval, locations, selectedLocation })
-              }
+              onLocationSelect={handleSelectBoss}
               onBossUpdated={refreshBossData}
             />
           ))}
@@ -99,9 +104,7 @@ export function BossList() {
       <BossTimerDialog
         isOpen={!!selectedBoss}
         onClose={() => setSelectedBoss(null)}
-        bossName={selectedBoss?.name ?? ""}
-        locations={selectedBoss?.locations ?? []}
-        selectedLocation={selectedBoss?.selectedLocation}
+        bossTimer={selectedBoss}
         onTimerCreated={() => {
           const event = new Event("bossTimerCreated");
           window.dispatchEvent(event);

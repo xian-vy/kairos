@@ -6,15 +6,17 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from "react";
 import { useBossDataStore } from "@/stores/bossDataStore";
 import { useGroupMembersStore } from "@/stores/groupMembersStore";
+import { useBossTimersStore } from "@/stores/bossTimersStore";
 export function GroupSelection() {
   const { group, isLoading: groupLoading,  userData , fetchUserGroup} = useGroupStore();
   const { refreshBossData} = useBossDataStore();
   const { fetchGroupMembers, loading : membersLoading } = useGroupMembersStore();
-  
+  const { fetchTimers } = useBossTimersStore();
   useEffect(() => {
     fetchUserGroup().then(() => {
       refreshBossData();
       fetchGroupMembers();
+      fetchTimers();
   });
   }, []);
 

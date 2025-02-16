@@ -17,7 +17,7 @@ interface BossListCardProps {
     total: number;
   } | null;
   //onBossSelect: (name: string, respawnInterval: number, locations: string[]) => void;
-  onLocationSelect: (name: string, respawnInterval: number, locations: string[], selectedLocation: string) => void;
+  onLocationSelect: (name: string, respawnInterval: number, locations: string, selectedLocation: string) => void;
   onBossUpdated: () => void;
 }
 
@@ -86,7 +86,7 @@ export function BossListCard({ boss, killCount, onLocationSelect, onBossUpdated 
                 className="flex hover:underline items-center gap-2 text-sm text-[#B4B7E5] group-hover:text-[#E2E4FF] transition-colors cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
-                  onLocationSelect(boss.name, boss.respawnInterval, boss.locations, location);
+                  onLocationSelect(boss.name, boss.respawnInterval, location, location);
                 }}
               >
                 <MapPin className="h-3.5 w-3.5" />

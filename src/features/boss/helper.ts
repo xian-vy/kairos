@@ -1,5 +1,5 @@
 import {  BOSSDATA_TYPE } from "@/lib/data/presets"
-import { BossTimer } from "@/types/boss"
+import { BossTimer } from "@/types/database.types"
 import { SupabaseClient } from '@supabase/supabase-js'
 
 export const createDateFromTimeString = (timeStr: string) => {

@@ -1,13 +1,14 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { cn } from "@/lib/utils";
-import type { BossTimer } from "@/types/boss";
-import { ChevronDown, Circle, MapPin, NotebookPen } from "lucide-react";
-import { TimerInfo } from "./BossTimerInfo";
-import { ExpandedContent } from "./BossTimerExpandedContent";
-import { getPresetRespawnInterval, getTimerColor } from "../helper";
 import { BOSSDATA_TYPE } from "@/lib/data/presets";
+import { cn } from "@/lib/utils";
+import { useGroupMembersStore } from "@/stores/groupMembersStore";
+import type { BossTimer } from "@/types/database.types";
+import { ChevronDown, Circle, MapPin, NotebookPen } from "lucide-react";
+import { getPresetRespawnInterval, getTimerColor } from "../helper";
+import { ExpandedContent } from "./BossTimerExpandedContent";
+import { TimerInfo } from "./BossTimerInfo";
 
 interface TimerCardProps {
   timer: BossTimer;
@@ -18,7 +19,12 @@ interface TimerCardProps {
   bossData : BOSSDATA_TYPE[]
 }
 
-export const TimerCard = ({ timer, isExpanded, onToggle, onEdit, onDelete,bossData }: TimerCardProps) => (
+export const TimerCard = ({ timer, isExpanded, onToggle, onEdit, onDelete,bossData }: TimerCardProps) => {
+
+  const {members} = useGroupMembersStore();
+
+  const user  = members.find((user) => user.id === timer.user_id);
+  return(
   <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
     <CardContent className="py-3 px-3 sm:px-6">
       <div className="flex items-center justify-between cursor-pointer" onClick={onToggle}>
@@ -32,8 +38,8 @@ export const TimerCard = ({ timer, isExpanded, onToggle, onEdit, onDelete,bossDa
                 )}`}
               />
               <h3 className="!text-sm font-semibold text-[#E2E4FF]">{timer.boss_name}</h3>
-              {timer.users?.username && (
-                <span className="text-xs text-[#B4B7E5] flex items-center gap-1">• by {timer.users.username}</span>
+              {user && (
+                <span className="text-xs text-[#B4B7E5] flex items-center gap-1">• by {user.username}</span>
               )}
               {timer.notes && <NotebookPen strokeWidth={1.5} className="h-3.5 w-3.5 text-[#E2E4FF]" />}
             </div>
@@ -51,7 +57,7 @@ export const TimerCard = ({ timer, isExpanded, onToggle, onEdit, onDelete,bossDa
         </div>
       </div>
 
-      {isExpanded && <ExpandedContent timer={timer} onEdit={() => onEdit(timer)} onDelete={() => onDelete(timer.id)} />}
+      {isExpanded && <ExpandedContent timer={timer} onEdit={() => onEdit(timer)} onDelete={() => onDelete(timer.id!)} />}
     </CardContent>
   </Card>
-);
+)};

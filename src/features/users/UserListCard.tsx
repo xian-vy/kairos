@@ -2,10 +2,10 @@ import { User, Check, X, Crown } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { GroupMember } from "@/stores/groupMembersStore";
+import { User as MemberType } from "@/types/database.types";
 
 interface UserListCardProps {
-  member: GroupMember;
+  member: MemberType;
   isAdmin: boolean;
   currentUserId: string | undefined;
   onUpdateStatus: (userId: string, status: "accepted" | "pending") => void;
@@ -26,58 +26,58 @@ export const UserListCard = ({
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-1.5">
               <User className="h-3.5 w-3.5 text-[#E2E4FF]" />
-              <h3 className="!text-sm font-semibold text-[#E2E4FF]">{member.users.display_name || "No name"}</h3>
+              <h3 className="!text-sm font-semibold text-[#E2E4FF]">{member.username || "No name"}</h3>
             </div>
             <div className="flex items-center gap-1">
-              {isAdmin && member.user_id === currentUserId && (
+              {isAdmin && member.id === currentUserId && (
                 <Crown className="h-3 w-3 fill-yellow-500 text-yellow-600" />
               )}
               <p className="text-xs text-[#B4B7E5]">
-                {isAdmin && member.user_id === currentUserId ? "Admin" : "Member"}
+                {isAdmin && member.id === currentUserId ? "Admin" : "Member"}
               </p>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {isAdmin && member.user_id !== currentUserId && member.users.status === "pending" && (
+          {isAdmin && member.id !== currentUserId && member.status === "pending" && (
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onUpdateStatus(member.user_id, "accepted")}
+              onClick={() => onUpdateStatus(member.id, "accepted")}
               className="h-8 px-2 text-[#B4B7E5] hover:text-[#E2E4FF] hover:bg-green-700"
             >
               <Check className="h-4 w-4" />
             </Button>
           )}
-          {isAdmin && member.user_id !== currentUserId && member.users.status === "accepted" && (
+          {isAdmin && member.id !== currentUserId && member.status === "accepted" && (
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onUpdateStatus(member.user_id, "pending")}
+              onClick={() => onUpdateStatus(member.id, "pending")}
               className="h-8 px-2 text-red-400 hover:text-red-300 hover:bg-red-700"
             >
               <X className="h-4 w-4" />
             </Button>
           )}
-          {member.users.status === "pending" && (
+          {member.status === "pending" && (
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onCancelRequest?.(member.user_id)}
+              onClick={() => onCancelRequest?.(member.id)}
               className="h-8 px-2 text-red-400 hover:text-red-300 hover:bg-red-700"
             >
               <X className="h-4 w-4" />
             </Button>
           )}
           <Badge
-            variant={member.users.status === "accepted" ? "default" : "secondary"}
+            variant={member.status === "accepted" ? "default" : "secondary"}
             className={
-              member.users.status === "accepted"
+              member.status === "accepted"
                 ? "bg-blue-600 hover:bg-blue-700"
                 : "bg-[#1F2137] hover:bg-[#2A2D4B] text-[#B4B7E5]"
             }
           >
-            {member.users.status}
+            {member.status}
           </Badge>
         </div>
       </div>
