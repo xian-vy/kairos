@@ -45,10 +45,9 @@ export const useBossTimersStore = create<BossTimersState>((set, get) => {
         return;
       }
 
-      const transformedTimers = timerData.map((timer) => ({
-        ...timer,
-        users: Array.isArray(timer.users) ? timer.users[0] : timer.users,
-      }));
+      //remove users from the timer data 
+      const transformedTimers = timerData.map(({ users, ...rest }) => rest);
+
       set({ timers: transformedTimers });
     } finally {
       set({ isLoading: false });
