@@ -21,14 +21,14 @@ export function Features() {
       <Tabs defaultValue="bosses" className="w-full">
         <TabsList className="flex justify-center mt-2 xl:mt-5">
           <TabsTrigger value="bosses" className="flex items-center gap-2" disabled={!group}>
-            <FaSkull className="h-4 w-4 fill-red-800" /> Boss List
+            <FaSkull className="h-4 w-4 fill-red-800" /> Bosses
           </TabsTrigger>
           <TabsTrigger value="timers" className="flex items-center gap-2" disabled={!group}>
-            <Timer className="h-4 w-4" /> Active Timers
+            <Timer className="h-4 w-4" />  Timers
           </TabsTrigger>
           {isAdmin && !isLoading &&(
             <TabsTrigger value="users" className="flex items-center gap-2" disabled={!group}>
-              <Users className="h-4 w-4" /> Users
+              <Users className="h-4 w-4" /> Group
             </TabsTrigger>
           )}
         </TabsList>
