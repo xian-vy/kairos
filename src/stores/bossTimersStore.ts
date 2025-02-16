@@ -15,7 +15,7 @@ interface BossTimersState {
   updateTimerRealtime: (timer: BossTimer) => void;
 }
 
-export const useBossTimersStore = create<BossTimersState>((set, get) => {
+export const useBossTimersStore = create<BossTimersState>((set) => {
   const supabase = createClientComponentClient();
 
   const fetchTimers = async () => {
@@ -69,7 +69,6 @@ export const useBossTimersStore = create<BossTimersState>((set, get) => {
 
       timerData.user_id = user.id;
       let error;
-      let newID = "";
       
       if (editMode) {
         ({ error } = await supabase
@@ -77,17 +76,14 @@ export const useBossTimersStore = create<BossTimersState>((set, get) => {
           .update(timerData)
           .eq('id', timerData.id));
       } else {
-        const { data, error: insertError } = await supabase
+        const { error: insertError } = await supabase
           .from('boss_timers')
           .insert([timerData])
-          .select('id') // Ensure you get the newly inserted ID
           .single();
       
         if (insertError) {
           error = insertError;
-        } else {
-          newID = data?.id;
-        }
+        } 
       }
       
       if (error) throw error;

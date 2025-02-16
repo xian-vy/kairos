@@ -2,7 +2,7 @@ import { useBossTimersStore } from '@/stores/bossTimersStore';
 import { useGroupStore } from '@/stores/groupStore';
 import { BossTimer } from '@/types/database.types';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import React, { useEffect } from 'react'
+import { useEffect } from 'react';
 
 const useRealtimeTimers = () => {
     const supabase = createClientComponentClient();

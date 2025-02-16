@@ -1,17 +1,17 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import useRealtimeTimers from "@/hooks/useRealtimeTimers";
 import { useBossDataStore } from "@/stores/bossDataStore";
 import { useBossTimersStore } from "@/stores/bossTimersStore";
 import type { BossTimer } from "@/types/database.types";
 import { LayoutGrid, ListChecks } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { sortTimers } from "../helper";
 import { TimerCard } from "./BossTimerCard";
 import { DeleteDialog } from "./BossTimerDeleteDialog";
 import { BossTimerDialog } from "./BossTimerDialog";
 import { BossTimerListSkeleton } from "./BossTimerSkeleton";
-import useRealtimeTimers from "@/hooks/useRealtimeTimers";
 
 export function BossTimerList() {
   const { timers, isLoading, deleteTimer } = useBossTimersStore();
