@@ -5,13 +5,19 @@ import { useGroupStore } from "@/stores/groupStore";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useEffect } from "react";
 import { useBossDataStore } from "@/stores/bossDataStore";
+import { useGroupMembersStore } from "@/stores/groupMembersStore";
 export function GroupSelection() {
   const { group, isLoading: groupLoading,  userData , fetchUserGroup} = useGroupStore();
   const { refreshBossData} = useBossDataStore();
+  const { fetchGroupMembers, loading : membersLoading } = useGroupMembersStore();
   useEffect(() => {
     fetchUserGroup().then(() => refreshBossData());
+    fetchGroupMembers();
   }, []);
-  if (groupLoading) {
+  useEffect(() => {
+    fetchGroupMembers();
+  }, []);
+  if (groupLoading || membersLoading) {
     return (
       <Card className=" bg-[#0D0F23]/30 backdrop-blur-sm border-none ">
         <CardContent className="flex justify-between items-center min-h-[95px] gap-5 pt-10 border-b border-[#1F2137]">

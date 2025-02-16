@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useGroupMembersStore } from "@/stores/groupMembersStore";
 import { UserPlus } from "lucide-react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "@/types/database.types";
+import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 interface JoinGroupDialogProps {
@@ -15,76 +14,16 @@ interface JoinGroupDialogProps {
 export function JoinGroupDialog({ onGroupJoined, variant = "default" }: JoinGroupDialogProps) {
   const [showJoinForm, setShowJoinForm] = useState(false);
   const [joinGroupName, setJoinGroupName] = useState("");
-  const supabase = createClientComponentClient<Database>();
+  const { addUserToGroup } = useGroupMembersStore();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
   const joinGroup = async () => {
-    try {
-      setIsLoading(true);
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        console.error("No user found");
-        return;
-      }
-
-      const { data: group } = await supabase.from("groups").select("id").eq("name", joinGroupName).single();
-
-      if (!group) {
-        toast({
-          variant: "destructive",
-          title: "Failed to join group",
-          description: "Group Name not found",
-        });
-        return;
-      }
-
-      // Check if user is already in a group
-      const { data: existingUser } = await supabase
-        .from("users")
-        .select("group_id")
-        .eq("id", user.id)
-        .single();
-
-      if (existingUser?.group_id) {
-        toast({
-          variant: "destructive",
-          title: "Failed to join group",
-          description: "You're already a member of a group",
-        });
-        return;
-      }
-
-      // Update user's group_id instead of creating group_member
-      const { error: userUpdateError } = await supabase
-        .from("users")
-        .update({ 
-          group_id: group.id,
-          status: "pending"  // New members start as pending
-        })
-        .eq('id', user.id);
-
-      if (userUpdateError) throw userUpdateError;
-
-      toast({
-        title: "Success",
-        description: "Joined group successfully",
-      });
-      onGroupJoined();
-    } catch (error) {
-      console.error("Unexpected error:", error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "An unexpected error occurred",
-      });
-    } finally {
-      setIsLoading(false);
-      setShowJoinForm(false);
-      setJoinGroupName("");
-    }
+    setIsLoading(true);
+    await addUserToGroup(joinGroupName, onGroupJoined, (options) => toast({ ...options, variant: options.variant as "default" | "destructive" }));
+    setIsLoading(false);
+    setShowJoinForm(false);
+    setJoinGroupName("");
   };
 
   return (

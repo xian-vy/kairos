@@ -1,20 +1,25 @@
 "use client";
-
-import { useGroupMembers } from "@/hooks/useGroupMembers";
+import { useToast } from "@/hooks/use-toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { useGroupMembersStore } from "@/stores/groupMembersStore";
 import { useGroupStore } from "@/stores/groupStore";
 import { UserListCard } from "./UserListCard";
 import { UserListSkeleton } from "./UserListCardSkeleton";
 
 const UsersList = () => {
-  const { members, loading, updateUserStatus, removeUserFromGroup } = useGroupMembers();
+  const { members,removeUserFromGroup, loading, updateUserStatus } = useGroupMembersStore();
   const { currentUser } = useCurrentUser();
   const { group } = useGroupStore();
   const isAdmin = currentUser?.id === group?.created_by;
+  const {toast }= useToast();
 
   const handleCancelRequest = async (userId: string) => {
-    await removeUserFromGroup(userId);
+    await removeUserFromGroup(userId, (options) => toast({ ...options, variant: options.variant as "default" | "destructive" }));
   };
+
+  const updateStatus = async (userId: string, status: "accepted" | "pending") => {
+    await updateUserStatus(userId, status, (options) => toast({ ...options, variant: options.variant as "default" | "destructive" }));
+  }
 
   const pendingMembers = members.filter((member) => member.users.status === "pending");
   const acceptedMembers = members.filter((member) => member.users.status === "accepted");
@@ -35,7 +40,7 @@ const UsersList = () => {
               member={member}
               isAdmin={isAdmin}
               currentUserId={currentUser?.id}
-              onUpdateStatus={updateUserStatus}
+              onUpdateStatus={updateStatus}
             />
           ))
         )}
@@ -52,7 +57,7 @@ const UsersList = () => {
               member={member}
               isAdmin={isAdmin}
               currentUserId={currentUser?.id}
-              onUpdateStatus={updateUserStatus}
+              onUpdateStatus={updateStatus}
               onCancelRequest={handleCancelRequest}
             />
           ))

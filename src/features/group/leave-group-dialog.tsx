@@ -12,9 +12,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { useBossDataStore } from "@/stores/bossDataStore";
+import { useGroupMembersStore } from "@/stores/groupMembersStore";
 import type { Database } from "@/types/database.types";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { LogOut, Loader2, Lock, Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -25,7 +26,6 @@ export function LeaveGroupDialog({
   onLeaveGroup: () => void;
   group: Database["public"]["Tables"]["groups"]["Row"];
 }) {
-  const supabase = createClientComponentClient<Database>();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,106 +34,13 @@ export function LeaveGroupDialog({
   const { currentUser } = useCurrentUser();
   const isAdmin = group?.created_by === currentUser?.id;
   const [showPassword, setShowPassword] = useState(false);
-
-  const verifyPassword = async () => {
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: currentUser?.email || "",
-        password: password,
-      });
-
-      if (error) {
-        throw new Error("Invalid password");
-      }
-      setPassword("");
-      return true;
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: "Error",
-        description: "Invalid password",
-        variant: "destructive",
-      });
-      return false;
-    }
-  };
+  const { leaveGroup } = useGroupMembersStore();
+  const {setBossData} = useBossDataStore();
 
   const handleLeaveGroup = async () => {
-    setIsLoading(true);
-    try {
-      const {
-        data: { user },
-        error,
-      } = await supabase.auth.getUser();
-      if (error || !user) {
-        toast({
-          title: "Error",
-          description: "Failed to verify user",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      // If admin, verify password first
-      if (isAdmin) {
-        const isPasswordValid = await verifyPassword();
-        if (!isPasswordValid) {
-          setIsLoading(false);
-          return;
-        }
-
-        // Get all users in the group
-        const { data: groupUsers } = await supabase.from("users").select("id").eq("group_id", group.id);
-
-        if (groupUsers) {
-          // Delete boss timers for all users in the group
-          const userIds = groupUsers.map((user) => user.id);
-          const { error: deleteTimersError } = await supabase.from("boss_timers").delete().in("user_id", userIds);
-
-          if (deleteTimersError) throw deleteTimersError;
-
-          // Remove all users from the group first
-          const { error: updateUsersError } = await supabase
-            .from("users")
-            .update({ group_id: null })
-            .eq("group_id", group.id);
-
-          if (updateUsersError) throw updateUsersError;
-        }
-
-        // Then delete the group itself
-        const { error: deleteError } = await supabase.from("groups").delete().eq("id", group.id);
-
-        if (deleteError) throw deleteError;
-      } else {
-        // If user is not admin, just update their group_id to null
-        const { error: leaveError } = await supabase.from("users").update({ group_id: null }).eq("id", user.id);
-
-        if (leaveError) throw leaveError;
-      }
-
-      // Call onLeaveGroup before other UI updates
-      onLeaveGroup();
-
-      // Then update UI state
-      setOpen(false);
-      setPassword(""); // Clear password
-      router.refresh();
-
-      toast({
-        title: group ? "Group deleted" : "Group left",
-        description: group ? "You have deleted the group and all its data" : "You have left the group",
-      });
-    } catch (error) {
-      console.error(error);
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
+    await leaveGroup(group, onLeaveGroup, password, setPassword, setIsLoading, isAdmin,(options) => toast({ ...options, variant: options.variant as "default" | "destructive" }));
+    router.refresh();
+    setBossData([]);
   };
 
   return (
