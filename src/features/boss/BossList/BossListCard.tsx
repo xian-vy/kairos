@@ -48,7 +48,7 @@ export function BossListCard({ boss, killCount, onLocationSelect, onBossUpdated 
     >
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center justify-between text-[#E2E4FF]">
-          <span className="group-hover:text-[#4B79E4] transition-colors text-base flex items-center gap-2">
+          <span className=" transition-colors text-base flex items-center gap-2">
             <FaSkull className="h-4 w-4 fill-red-800" />
             <div className="flex items-center gap-2">
               {boss.name}
@@ -83,7 +83,7 @@ export function BossListCard({ boss, killCount, onLocationSelect, onBossUpdated 
             {boss.locations.map((location) => (
               <div
                 key={location}
-                className="flex hover:underline items-center gap-2 text-sm text-[#B4B7E5] group-hover:text-[#E2E4FF] transition-colors cursor-pointer"
+                className="flex hover:underline underline-offset-4 items-center gap-2 text-sm text-[#B4B7E5] transition-colors cursor-pointer"
                 onClick={(e) => {
                   e.stopPropagation();
                   onLocationSelect(boss.name, boss.respawnInterval, location, location);
