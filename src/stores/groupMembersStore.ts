@@ -29,11 +29,17 @@ interface GroupMembersState {
 
 export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
   const supabase = createClientComponentClient<Database>();
-  const { group } = useGroupStore.getState();
 
   const fetchGroupMembers = async () => {
     try {
-      if (!group?.id) return;
+        console.log("fetching group members");
+        const group = useGroupStore.getState().group;
+
+      if (!group?.id) {
+        set({loading:false}) 
+        console.error("Group Members Store : No group found");
+        return
+     };
 
       const { data: users, error: membersError } = await supabase
         .from("users")
@@ -59,6 +65,8 @@ export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
       }));
 
       set({ members: transformedMembers, loading: false });
+      console.log("Group members fetched");
+
     } catch (error) {
       console.error("Error fetching group members:", error);
       set({ loading: false });
@@ -67,6 +75,12 @@ export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
 
   const updateUserStatus = async (userId: string, newStatus: "accepted" | "pending", toast: (options: ToastOptions) => void) => {
     try {
+        const group = useGroupStore.getState().group;
+        if (!group?.id) {   
+            console.error("Group Members Store : No group found");
+            return
+        }
+
       const { error } = await supabase
         .from("users")
         .update({ status: newStatus })

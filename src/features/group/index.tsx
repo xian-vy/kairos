@@ -10,13 +10,14 @@ export function GroupSelection() {
   const { group, isLoading: groupLoading,  userData , fetchUserGroup} = useGroupStore();
   const { refreshBossData} = useBossDataStore();
   const { fetchGroupMembers, loading : membersLoading } = useGroupMembersStore();
+  
   useEffect(() => {
-    fetchUserGroup().then(() => refreshBossData());
-    fetchGroupMembers();
+    fetchUserGroup().then(() => {
+      refreshBossData();
+      fetchGroupMembers();
+  });
   }, []);
-  useEffect(() => {
-    fetchGroupMembers();
-  }, []);
+
   if (groupLoading || membersLoading) {
     return (
       <Card className=" bg-[#0D0F23]/30 backdrop-blur-sm border-none ">

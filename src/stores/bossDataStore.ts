@@ -19,7 +19,7 @@ export const useBossDataStore = create<BossDataState>((set) => ({
   setBossData: (data) => set({ bossData: data }),
   refreshBossData: async () => {
     try {
-      set({ isLoading: true, error: null });
+      console.log("fetching boss data");
       
       const group = useGroupStore.getState().group;
       if (!group?.id) {
@@ -37,6 +37,7 @@ export const useBossDataStore = create<BossDataState>((set) => ({
 
       if (data) {
         set({ bossData: data.map((item) => item.data) });
+        console.log("Boss data fetched");
       }
     } catch (err) {
       set({ error: err instanceof Error ? err.message : "An error occurred" });
