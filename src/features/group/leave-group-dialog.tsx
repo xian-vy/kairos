@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import useScreenSize from "@/hooks/useScreensize";
 import { useBossDataStore } from "@/stores/bossDataStore";
 import { useGroupMembersStore } from "@/stores/groupMembersStore";
 import type { Database } from "@/types/database.types";
@@ -36,7 +37,7 @@ export function LeaveGroupDialog({
   const [showPassword, setShowPassword] = useState(false);
   const { leaveGroup } = useGroupMembersStore();
   const {setBossData} = useBossDataStore();
-
+ const screenSize = useScreenSize();
   const handleLeaveGroup = async () => {
     await leaveGroup(group, onLeaveGroup, password, setPassword, setIsLoading, isAdmin,(options) => toast({ ...options, variant: options.variant as "default" | "destructive" }));
     router.refresh();
@@ -47,7 +48,7 @@ export function LeaveGroupDialog({
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild className="px-0">
         <Button variant="ghost" className="text-xs text-[#B4B7E5] hover:bg-red-500 hover:text-white px-2">
-          Leave Group <LogOut strokeWidth={1.5} className="h-3 w-3" />
+          {screenSize === "desktop" && "Leave Group"} <LogOut strokeWidth={1.5} className="h-3 w-3" />
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent className="bg-[#0A0C1B] border-gray-800">
