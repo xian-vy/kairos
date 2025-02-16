@@ -38,14 +38,28 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
   const [newLocation, setNewLocation] = useState("");
 
   const handleAddLocation = () => {
-    if (newLocation.trim() !== "") {
+    if (newLocation.trim() !== "" && locations.length < 15) {
       setLocations([...locations, newLocation.trim()]);
       setNewLocation("");
+    } else if (locations.length >= 15) {
+      toast({
+        variant: "destructive",
+        title: "Add Failed",
+        description: "You can only add up to 15 locations",
+      });
     }
   };
 
   const handleRemoveLocation = (location: string) => {
-    setLocations(locations.filter((loc) => loc !== location));
+    if (locations.length > 1) {
+      setLocations(locations.filter((loc) => loc !== location));
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Remove Failed",
+        description: "At least one location must remain",
+      });
+    }
   };
 
   const handleSubmit = async () => {
@@ -62,6 +76,7 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
       const updatedBossData: BOSSDATA_TYPE = {
         ...bossData,
         ...formData,
+        locations, 
       };
 
       const { error: updateError } = await supabase
