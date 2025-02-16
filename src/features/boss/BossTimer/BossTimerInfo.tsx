@@ -20,7 +20,7 @@ export const TimerInfo = ({ timer ,bossData}: TimerInfoProps) => {
 
 
   return (
-    <div className="text-right shrink-0">
+    <div className="text-right shrink-0 sm:space-y-2">
       <div className={cn(
         "flex items-center gap-2",
         hasRespawned ? "text-green-500" : "text-[#B4B7E5]"
