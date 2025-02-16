@@ -76,7 +76,10 @@ body {
     @apply text-[0.8rem];
   } 
   li {
-    @apply text-sm
+    @apply text-xs sm:text-sm
+  }
+  label {
+    @apply text-xs sm:text-sm;
   }
 }
 

@@ -1,13 +1,17 @@
+"use client";
+
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"; // Import Tabs components
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Database } from "@/types/database.types";
 import { useToast } from "@/hooks/use-toast";
 import { BOSSDATA_TYPE } from "@/lib/data/presets";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { useGroupStore } from "@/stores/groupStore";
+import { X } from "lucide-react";
 
 interface EditBossDialogProps {
   isOpen: boolean;
@@ -29,6 +33,20 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
   const isAdmin = group?.created_by === currentUser?.id;
   const supabase = createClientComponentClient<Database>();
   const { toast } = useToast();
+
+  const [locations, setLocations] = useState(bossData.locations);
+  const [newLocation, setNewLocation] = useState("");
+
+  const handleAddLocation = () => {
+    if (newLocation.trim() !== "") {
+      setLocations([...locations, newLocation.trim()]);
+      setNewLocation("");
+    }
+  };
+
+  const handleRemoveLocation = (location: string) => {
+    setLocations(locations.filter((loc) => loc !== location));
+  };
 
   const handleSubmit = async () => {
     try {
@@ -79,45 +97,77 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
         <DialogHeader>
           <DialogTitle className="text-xl text-white">Edit {bossData.name}</DialogTitle>
         </DialogHeader>
-        <div className="space-y-4 pt-4">
-          <div className="space-y-2">
-            <label className="text-sm text-[#B4B7E5]">Sort Order</label>
-            <Input
-              type="number"
-              value={formData.sortOrder}
-              onChange={(e) => setFormData({ ...formData, sortOrder: Number(e.target.value) })}
-              className="bg-black/20 border-gray-800 text-white"
-              min={1}
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm text-[#B4B7E5]">Respawn Interval (hours)</label>
-            <Input
-              type="number"
-              value={formData.respawnInterval}
-              onChange={(e) => setFormData({ ...formData, respawnInterval: Number(e.target.value) })}
-              className="bg-black/20 border-gray-800 text-white"
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm text-[#B4B7E5]">Respawn Count</label>
-            <Input
-              type="number"
-              value={formData.respawnCount}
-              onChange={(e) => setFormData({ ...formData, respawnCount: Number(e.target.value) })}
-              className="bg-black/20 border-gray-800 text-white"
-            />
-          </div>
-          <div className="space-y-2">
-            <label className="text-sm text-[#B4B7E5]">Respawn Interval Delay (hours)</label>
-            <Input
-              type="number"
-              value={formData.respawnIntervalDelay}
-              onChange={(e) => setFormData({ ...formData, respawnIntervalDelay: Number(e.target.value) })}
-              className="bg-black/20 border-gray-800 text-white"
-            />
-          </div>
-          <div className="flex justify-end gap-2">
+        <Tabs defaultValue="info">
+          <TabsList className="flex gap-2  justify-center">
+            <TabsTrigger value="info">Info</TabsTrigger>
+            <TabsTrigger value="locations">Locations</TabsTrigger>
+          </TabsList>
+          <TabsContent value="info">
+            <div className="space-y-1 pt-2">
+              <div className="space-y-2">
+                <label className=" text-[#B4B7E5]">Sort Order</label>
+                <Input
+                  type="number"
+                  value={formData.sortOrder}
+                  onChange={(e) => setFormData({ ...formData, sortOrder: Number(e.target.value) })}
+                  className="bg-black/20 border-gray-800 text-white"
+                  min={1}
+                />
+              </div>
+              <div className="space-y-2">
+                <label className=" text-[#B4B7E5]">Respawn Interval (hours)</label>
+                <Input
+                  type="number"
+                  value={formData.respawnInterval}
+                  onChange={(e) => setFormData({ ...formData, respawnInterval: Number(e.target.value) })}
+                  className="bg-black/20 border-gray-800 text-white"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className=" text-[#B4B7E5]">Respawn Count</label>
+                <Input
+                  type="number"
+                  value={formData.respawnCount}
+                  onChange={(e) => setFormData({ ...formData, respawnCount: Number(e.target.value) })}
+                  className="bg-black/20 border-gray-800 text-white"
+                />
+              </div>
+              <div className="space-y-2">
+                <label className=" text-[#B4B7E5]">Respawn Interval Delay (hours)</label>
+                <Input
+                  type="number"
+                  value={formData.respawnIntervalDelay}
+                  onChange={(e) => setFormData({ ...formData, respawnIntervalDelay: Number(e.target.value) })}
+                  className="bg-black/20 border-gray-800 text-white"
+                />
+              </div>
+            </div>
+          </TabsContent>
+          <TabsContent value="locations">
+            <div className="space-y-5 pt-2">
+              <div className="flex items-center gap-2">
+                <Input
+                  value={newLocation}
+                  onChange={(e) => setNewLocation(e.target.value)}
+                  placeholder="Enter New Location"
+                  className="border-[#1F2137] bg-[#0D0F23] text-[#E2E4FF] placeholder:text-[#B4B7E5]/50 text-xs sm:text-sm"
+
+                />
+                <Button onClick={handleAddLocation} className="bg-[#1F2137] ">Add</Button>
+              </div>
+              <div className="space-y-3">
+                {locations.map((location) => (
+                  <div key={location} className="flex items-center justify-between">
+                    <span className="text-xs sm:text-sm text-[#B4B7E5]">{location}</span>
+                    <X  onClick={() => handleRemoveLocation(location)} className="h-4 w-4 text-[#B4B7E5] cursor-pointer" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+        <DialogFooter>
+        <div className="flex justify-end gap-2">
             <Button
               variant="ghost"
               onClick={onClose}
@@ -137,7 +187,7 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
               )}
             </Button>
           </div>
-        </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );
