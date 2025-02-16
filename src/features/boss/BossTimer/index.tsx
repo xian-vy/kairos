@@ -47,13 +47,13 @@ export function BossTimerList() {
 
     setDeleteDialogOpen(false);
     setTimerToDelete(null);
-  }, [timerToDelete, deleteTimer]);
+  }, [timerToDelete, deleteTimer,toast]);
 
   const handleEdit = useCallback((timer: BossTimer) => {
     //setTimerToEdit(enrichTimerWithLocations(timer, bossData));
     setTimerToEdit(timer);
     setEditDialogOpen(true);
-  }, [bossData]);
+  }, []);
 
   const handleCloseEdit = useCallback(() => {
     setEditDialogOpen(false);

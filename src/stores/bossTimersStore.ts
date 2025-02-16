@@ -47,7 +47,7 @@ export const useBossTimersStore = create<BossTimersState>((set, get) => {
 
       //remove users from the timer data 
       const transformedTimers = timerData.map(
-        ({ users, ...rest }) => rest // eslint-disable-line no-unused-vars
+        ({ users: _users, ...rest }) => rest
       );
       
       set({ timers: transformedTimers });
