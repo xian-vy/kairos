@@ -37,7 +37,17 @@ export function BossTimerDialog({
 
 useEffect(() => {
   if (bossTimer) {
-    setNewTimer(bossTimer)
+    if (bossTimer.id) {
+      setNewTimer({
+        ...bossTimer,
+        time_of_death: new Date(bossTimer.time_of_death).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
+      })
+    } else {
+    setNewTimer({
+      ...bossTimer,
+      time_of_death: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })
+    })
+  }
   }
 }, [isOpen,bossTimer])
 

@@ -1,21 +1,20 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useBossDataStore } from "@/stores/bossDataStore";
 import { useBossTimersStore } from "@/stores/bossTimersStore";
 import type { BossTimer } from "@/types/database.types";
 import { LayoutGrid, ListChecks } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
-import { enrichTimerWithLocations, sortTimers } from "../helper";
+import { useCallback, useState } from "react";
+import { sortTimers } from "../helper";
 import { TimerCard } from "./BossTimerCard";
 import { DeleteDialog } from "./BossTimerDeleteDialog";
 import { BossTimerDialog } from "./BossTimerDialog";
 import { BossTimerListSkeleton } from "./BossTimerSkeleton";
-import { useBossDataStore } from "@/stores/bossDataStore";
 
 export function BossTimerList() {
   const { timers, isLoading, deleteTimer } = useBossTimersStore();
   const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
-  const [, forceUpdate] = useState({});
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [timerToDelete, setTimerToDelete] = useState<string | null>(null);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -24,10 +23,10 @@ export function BossTimerList() {
   const [viewMode, setViewMode] = useState<"list" | "group">("list");
   const { bossData, isLoading: isLoading2 } = useBossDataStore();
 
-  useEffect(() => {
-    const interval = setInterval(() => forceUpdate({}), 1000);
-    return () => clearInterval(interval);
-  }, []);
+  // useEffect(() => {
+  //   const interval = setInterval(() => forceUpdate({}), 1000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const toggleCard = useCallback((id: string) => {
     setExpandedCards((prev) => ({
@@ -51,7 +50,8 @@ export function BossTimerList() {
   }, [timerToDelete, deleteTimer]);
 
   const handleEdit = useCallback((timer: BossTimer) => {
-    setTimerToEdit(enrichTimerWithLocations(timer, bossData));
+    //setTimerToEdit(enrichTimerWithLocations(timer, bossData));
+    setTimerToEdit(timer);
     setEditDialogOpen(true);
   }, [bossData]);
 
