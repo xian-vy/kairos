@@ -148,6 +148,20 @@ export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
         return;
       }
 
+      const { count: userCount } = await supabase
+        .from("users")
+        .select("id", { count: "exact" })
+        .eq("group_id", group.id);
+      
+      if (userCount !== null && userCount >= 5) {
+        toast({
+          variant: "destructive",
+          title: "Failed to join group",
+          description: "Group already has the maximum of 5 users",
+        });
+        return;
+      }
+
       const { error: userUpdateError } = await supabase
         .from("users")
         .update({
