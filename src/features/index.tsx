@@ -10,13 +10,11 @@ import { CreateGroupDialog } from "./group/create-group-dialog";
 import { JoinGroupDialog } from "./group/join-group-dialog";
 import { LeaveGroupDialog } from "./group/leave-group-dialog";
 import UsersList from "./users";
-import useRealtimeTimers from "@/hooks/useRealtimeTimers";
 
 export function Features() {
   const { currentUser } = useCurrentUser();
   const { group, userData, fetchUserGroup,isLoading } = useGroupStore();
   const isAdmin = group?.created_by === currentUser?.id;
-  const  RealtimeTimerListener = useRealtimeTimers();
 
   return (
     <>
@@ -62,7 +60,7 @@ export function Features() {
                   </span>{" "}
                   is pending approval
                 </h1>
-                <LeaveGroupDialog onLeaveGroup={fetchUserGroup} group={group} />
+                <LeaveGroupDialog  group={group} />
               </div>
             </div>
           )}
@@ -75,14 +73,13 @@ export function Features() {
             <p className="text-white text-xs pointer-events-auto">Please create or join a group to continue</p>
             <div className="flex gap-4 mt-4 pointer-events-auto">
               <CreateGroupDialog onGroupCreated={fetchUserGroup} variant="welcome" />
-              <JoinGroupDialog onGroupJoined={fetchUserGroup} variant="welcome" />
+              <JoinGroupDialog  variant="welcome" />
             </div>
           </div>
         </div>
         )
       )}
     </div>
-    {RealtimeTimerListener}
     </>
   );
 }

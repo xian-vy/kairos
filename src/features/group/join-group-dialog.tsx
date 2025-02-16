@@ -7,11 +7,10 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 
 interface JoinGroupDialogProps {
-  onGroupJoined: () => void;
   variant?: "default" | "welcome";
 }
 
-export function JoinGroupDialog({ onGroupJoined, variant = "default" }: JoinGroupDialogProps) {
+export function JoinGroupDialog({  variant = "default" }: JoinGroupDialogProps) {
   const [showJoinForm, setShowJoinForm] = useState(false);
   const [joinGroupName, setJoinGroupName] = useState("");
   const { addUserToGroup } = useGroupMembersStore();
@@ -20,7 +19,7 @@ export function JoinGroupDialog({ onGroupJoined, variant = "default" }: JoinGrou
 
   const joinGroup = async () => {
     setIsLoading(true);
-    await addUserToGroup(joinGroupName, onGroupJoined, (options) => toast({ ...options, variant: options.variant as "default" | "destructive" }));
+    await addUserToGroup(joinGroupName,  (options) => toast({ ...options, variant: options.variant as "default" | "destructive" }));
     setIsLoading(false);
     setShowJoinForm(false);
     setJoinGroupName("");

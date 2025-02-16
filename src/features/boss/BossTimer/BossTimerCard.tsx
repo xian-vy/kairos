@@ -5,7 +5,7 @@ import { BOSSDATA_TYPE } from "@/lib/data/presets";
 import { cn } from "@/lib/utils";
 import { useGroupMembersStore } from "@/stores/groupMembersStore";
 import type { BossTimer } from "@/types/database.types";
-import { ChevronDown, Circle, MapPin, NotebookPen } from "lucide-react";
+import { ChevronDown, Circle, MapPin, Star } from "lucide-react";
 import { getPresetRespawnInterval, getTimerColor } from "../helper";
 import { ExpandedContent } from "./BossTimerExpandedContent";
 import { TimerInfo } from "./BossTimerInfo";
@@ -41,7 +41,7 @@ export const TimerCard = ({ timer, isExpanded, onToggle, onEdit, onDelete,bossDa
               {user && (
                 <span className="text-xs text-[#B4B7E5] flex items-center gap-1">• by {user.username}</span>
               )}
-              {timer.notes && <NotebookPen strokeWidth={1.5} className="h-3.5 w-3.5 text-[#E2E4FF]" />}
+              {timer.notes && <Star strokeWidth={1.5} className="h-3.5 w-3.5 fill-yellow-500" />}
             </div>
             <p className="text-xs text-[#B4B7E5] flex items-center gap-1.5">
               <MapPin className="h-3 w-3" /> {timer.location}

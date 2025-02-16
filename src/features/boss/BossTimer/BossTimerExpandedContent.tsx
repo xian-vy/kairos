@@ -1,5 +1,5 @@
 import { BossTimer } from "@/types/database.types";
-import { NotebookPen, Pencil, Trash2 } from "lucide-react";
+import {  Pencil, Star, Trash2 } from "lucide-react";
 
 interface ExpandedContentProps {
   timer: BossTimer;
@@ -10,7 +10,7 @@ interface ExpandedContentProps {
 export const ExpandedContent = ({ timer, onEdit, onDelete }: ExpandedContentProps) => (
   <div className="mt-4 flex items-center justify-between w-full">
     <div className="flex items-center gap-2">
-      <NotebookPen className="w-4 h-4 text-[#B4B7E5]" />
+      <Star className="w-4 h-4 fill-yellow-500" />
       {timer.notes && <p className="text-sm text-[#B4B7E5]">{timer.notes}</p>}
     </div>
     <div className="flex justify-end gap-2">

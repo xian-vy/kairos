@@ -5,6 +5,7 @@ import { useGroupMembersStore } from "@/stores/groupMembersStore";
 import { useGroupStore } from "@/stores/groupStore";
 import { UserListCard } from "./UserListCard";
 import { UserListSkeleton } from "./UserListCardSkeleton";
+import useRealtimeMembers from "@/hooks/useRealtimeMembers";
 
 const UsersList = () => {
   const { members,removeUserFromGroup, loading, updateUserStatus } = useGroupMembersStore();
@@ -12,6 +13,7 @@ const UsersList = () => {
   const { group } = useGroupStore();
   const isAdmin = currentUser?.id === group?.created_by;
   const {toast }= useToast();
+  const  RealtimeMembersListener = useRealtimeMembers();
 
   const handleCancelRequest = async (userId: string) => {
     await removeUserFromGroup(userId, (options) => toast({ ...options, variant: options.variant as "default" | "destructive" }));
@@ -28,6 +30,7 @@ const UsersList = () => {
     return <UserListSkeleton />;
   }
   return (
+    <>
     <div className="space-y-6 px-4">
       <div className="space-y-2">
         <h2 className="text-lg font-semibold text-[#E2E4FF]">Current Members</h2>
@@ -64,6 +67,8 @@ const UsersList = () => {
         )}
       </div>
     </div>
+    {RealtimeMembersListener}
+    </>
   );
 };
 

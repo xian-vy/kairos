@@ -11,6 +11,7 @@ import { TimerCard } from "./BossTimerCard";
 import { DeleteDialog } from "./BossTimerDeleteDialog";
 import { BossTimerDialog } from "./BossTimerDialog";
 import { BossTimerListSkeleton } from "./BossTimerSkeleton";
+import useRealtimeTimers from "@/hooks/useRealtimeTimers";
 
 export function BossTimerList() {
   const { timers, isLoading, deleteTimer } = useBossTimersStore();
@@ -22,6 +23,7 @@ export function BossTimerList() {
   const { toast } = useToast();
   const [viewMode, setViewMode] = useState<"list" | "group">("list");
   const { bossData, isLoading: isLoading2 } = useBossDataStore();
+  const RealtimeTimerListener  = useRealtimeTimers();
 
 
   const toggleCard = useCallback((id: string) => {
@@ -158,6 +160,7 @@ export function BossTimerList() {
           onTimerCreated={handleCloseEdit}
         />
       )}    
+      {RealtimeTimerListener}
     </>
   );
 }

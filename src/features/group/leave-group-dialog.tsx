@@ -21,10 +21,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function LeaveGroupDialog({
-  onLeaveGroup,
   group,
 }: {
-  onLeaveGroup: () => void;
   group: Database["public"]["Tables"]["groups"]["Row"];
 }) {
   const router = useRouter();
@@ -39,7 +37,7 @@ export function LeaveGroupDialog({
   const {setBossData} = useBossDataStore();
  const screenSize = useScreenSize();
   const handleLeaveGroup = async () => {
-    await leaveGroup(group, onLeaveGroup, password, setPassword, setIsLoading, isAdmin,(options) => toast({ ...options, variant: options.variant as "default" | "destructive" }));
+    await leaveGroup(group,  password, setPassword, setIsLoading, isAdmin,(options) => toast({ ...options, variant: options.variant as "default" | "destructive" }));
     router.refresh();
     setBossData([]);
   };

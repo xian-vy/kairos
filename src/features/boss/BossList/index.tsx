@@ -9,11 +9,12 @@ import { refreshKillCounts } from "../helper";
 import { BossListCard } from "./BossListCard";
 import { BossListCardSkeleton } from "./BossListCardSkeleton";
 import { BossTimer } from "@/types/database.types";
+import useRealtimeTimers from "@/hooks/useRealtimeTimers";
 
 export function BossList() {
 
   const [selectedBoss, setSelectedBoss] = useState<BossTimer | null>(null);
-
+  const RealtimeTimerListener  = useRealtimeTimers();
   const [killCounts, setKillCounts] = useState<
     Record<
       string,
@@ -82,6 +83,7 @@ export function BossList() {
 
 
   return (
+    <>
     <div className="p-4 space-y-6">
       <p className="text-[#B4B7E5] text-xs flex items-center gap-1.5 ">
         <Info className="h-4 w-4" /> Select kill location to create a timer for next spawn
@@ -113,5 +115,7 @@ export function BossList() {
         }}
       />
     </div>
+    {RealtimeTimerListener}
+    </>
   );
 }

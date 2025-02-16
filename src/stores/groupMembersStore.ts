@@ -13,8 +13,11 @@ interface GroupMembersState {
   fetchGroupMembers: () => Promise<void>;
   updateUserStatus: (userId: string, newStatus: "accepted" | "pending", toast: (options: ToastOptions) => void) => Promise<void>;
   removeUserFromGroup: (userId: string, toast: (options: ToastOptions) => void) => Promise<void>;
-  addUserToGroup: (joinGroupName: string, onGroupJoined: () => void, toast: (options: ToastOptions) => void) => Promise<void>;
-  leaveGroup: (group: Database["public"]["Tables"]["groups"]["Row"], onLeaveGroup: () => void, password: string, setPassword: (password: string) => void, setIsLoading: (isLoading: boolean) => void, isAdmin: boolean, toast: (options: { variant: string; title: string; description: string }) => void) => Promise<void>;
+  addUserToGroup: (joinGroupName: string, toast: (options: ToastOptions) => void) => Promise<void>;
+  leaveGroup: (group: Database["public"]["Tables"]["groups"]["Row"],  password: string, setPassword: (password: string) => void, setIsLoading: (isLoading: boolean) => void, isAdmin: boolean, toast: (options: { variant: string; title: string; description: string }) => void) => Promise<void>;
+  addUserRealtime: (member : User) => void;
+  removeUserRealtime: (timerId: string) => void;
+  updateUserRealtime: (member : User) => void;
 }
 
 export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
@@ -66,12 +69,6 @@ export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
 
       if (error) throw error;
 
-      set({
-        members: get().members.map((member) =>
-            member.id === userId ? { ...member, status: newStatus } : member
-        ),
-      });
-
       toast({
         variant: "success",
         title: "Success",
@@ -99,10 +96,6 @@ export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
 
       if (error) throw error;
 
-      set({
-        members: get().members.filter((member) => member.id !== userId),
-      });
-
       toast({
         variant: "success",
         title: "Success",
@@ -119,7 +112,7 @@ export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
     }
   };
 
-  const addUserToGroup = async (joinGroupName: string, onGroupJoined: () => void, toast: (options: ToastOptions) => void) => {
+  const addUserToGroup = async (joinGroupName: string,  toast: (options: ToastOptions) => void) => {
     try {
       const {
         data: { user },
@@ -170,7 +163,6 @@ export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
         title: "Success",
         description: "Joined group successfully",
       });
-      onGroupJoined();
     } catch (error) {
       console.error("Unexpected error:", error);
       toast({
@@ -181,7 +173,7 @@ export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
     }
   };
 
-  const leaveGroup = async (group: Database["public"]["Tables"]["groups"]["Row"], onLeaveGroup: () => void, password: string, setPassword: (password: string) => void, setIsLoading: (isLoading: boolean) => void, isAdmin: boolean, toast: (options: ToastOptions) => void) => {
+  const leaveGroup = async (group: Database["public"]["Tables"]["groups"]["Row"], password: string, setPassword: (password: string) => void, setIsLoading: (isLoading: boolean) => void, isAdmin: boolean, toast: (options: ToastOptions) => void) => {
     setIsLoading(true);
     try {
       const {
@@ -256,8 +248,7 @@ export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
         await removeUserFromGroup(user.id, toast);
       }
 
-      // Call onLeaveGroup before other UI updates
-      onLeaveGroup();
+
 
       // Then update UI state
       setPassword(""); // Clear password
@@ -287,5 +278,11 @@ export const useGroupMembersStore = create<GroupMembersState>((set, get) => {
     removeUserFromGroup,
     addUserToGroup,
     leaveGroup,
+    addUserRealtime: (member: User) => set((state) => ({ members: [...state.members, member] })),
+      removeUserRealtime: (userId: string) => set((state) => ({ members: state.members.filter((t) => t.id !== userId) })),
+      updateUserRealtime: (member: User) =>
+        set((state) => ({
+          members: state.members.map((t) => (t.id === member.id ? { ...t, ...member } : t)),
+        })),
   };
 });
