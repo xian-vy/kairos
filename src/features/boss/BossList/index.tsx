@@ -68,12 +68,12 @@ export function BossList() {
     );
   }
 
-  const handleSelectBoss = (name: string, respawnInterval: number, location: string) => {
+  const handleSelectBoss = (name: string, selectedLocation: string) => {
     setSelectedBoss({
       user_id: "",
       created_at: new Date().toISOString(),
       boss_name: name,
-      location: location,
+      location: selectedLocation,
       time_of_death: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false }),
       notes: "",
     });
