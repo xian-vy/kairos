@@ -8,32 +8,36 @@ const useRealtimeBossData = () => {
     const supabase = createClientComponentClient();
     const {group} = useGroupStore()
     const { addBossDataRealtime, updateBossDataRealtime, removeBossDataRealtime } = useBossDataStore()
+
     useEffect(() => {   
         const channel = supabase
         .channel("boss_data")
         .on("postgres_changes", { event: "*", schema: "public", table: "boss_data" }, async (payload) => {
+            if (!group?.id) return;
 
-        if (!group?.id) return;
+            if (payload.eventType === "INSERT" ) {
+                addBossDataRealtime(payload.new as BossData);
+                console.log("Realtime BossData Added")
+            } else if (payload.eventType === "UPDATE") {
+                updateBossDataRealtime(payload.new as BossData);  
+                console.log("Realtime BossData Updated")
+            } else if (payload.eventType === "DELETE") {
+                removeBossDataRealtime(payload.old.id);
+                console.log("Realtime BossData Removed")
+            }
+        })
+        .subscribe();
 
-        if (payload.eventType === "INSERT" ) {
-            addBossDataRealtime(payload.new as BossData);
-            console.log("Realtime BosData Added")
-        }else if (payload.eventType === "UPDATE") {
-            updateBossDataRealtime(payload.new as BossData);  
-            console.log("Realtime BosData Updated")
-        } else if (payload.eventType === "DELETE") {
-            removeBossDataRealtime(payload.old.id);
-            console.log("Realtime BosData Removed")
-        }
-      })
-      .subscribe();
-
-    return () => {
-        channel.unsubscribe();
-    };  
-
-    }, [supabase])
-
+        return () => {
+            channel.unsubscribe();
+        };  
+    }, [
+        group?.id, 
+        supabase, 
+        addBossDataRealtime, 
+        updateBossDataRealtime, 
+        removeBossDataRealtime
+    ]); 
 }
 
-export default useRealtimeBossData
+export default useRealtimeBossData;

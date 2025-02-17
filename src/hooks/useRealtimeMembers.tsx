@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 
 const useRealtimeMembers = () => {
     const supabase = createClientComponentClient();
-    const {group} = useGroupStore()
+    const {group,fetchUserGroup} = useGroupStore()
     const { addUserRealtime, removeUserRealtime,updateUserRealtime} = useGroupMembersStore()
     useEffect(() => {   
         const channel = supabase
@@ -21,6 +21,7 @@ const useRealtimeMembers = () => {
         }else if (payload.eventType === "UPDATE") {
             updateUserRealtime(payload.new as User);  
             console.log("Realtime User Updated")
+            fetchUserGroup();
         } else if (payload.eventType === "DELETE") {
             removeUserRealtime(payload.old.id);
             console.log("Realtime User Removed")
@@ -32,7 +33,7 @@ const useRealtimeMembers = () => {
         channel.unsubscribe();
     };  
 
-    }, [supabase])
+    }, [supabase, addUserRealtime, removeUserRealtime, updateUserRealtime, group?.id,fetchUserGroup]);
 
 }
 

@@ -12,17 +12,13 @@ interface BossDataState {
   addBossDataRealtime: (bossData: BossData) => void;
   removeBossDataRealtime: (Id: string) => void;
   updateBossDataRealtime: (bossData: BossData) => void;
+  updateBossData: (bossData: BossData) => Promise<void>;
 }
 
-export const useBossDataStore = create<BossDataState>((set) => ({
-  bossData: [],
-  isLoading: true,
-  error: null,
-  setBossData: (data) => set({ bossData: data }),
-  addBossDataRealtime: (bossData) => set((state) => ({ bossData: [...state.bossData, bossData] })),
-  removeBossDataRealtime: (id) => set((state) => ({ bossData: state.bossData.filter((bossData) => bossData.id !== id) })),
-  updateBossDataRealtime: (bossData) => set((state) => ({ bossData: state.bossData.map((b) => b.id === bossData.id ? bossData : b) })),
-  refreshBossData: async () => {
+export const useBossDataStore = create<BossDataState>((set) => {
+  const supabase = createClientComponentClient<Database>();
+
+  const refreshBossData = async () => {
     try {
       console.log("fetching boss data");
       
@@ -32,7 +28,6 @@ export const useBossDataStore = create<BossDataState>((set) => ({
         return;
       }
 
-      const supabase = createClientComponentClient<Database>();
       const { data:bossData, error } = await supabase
         .from("boss_data")
         .select("*")
@@ -49,5 +44,47 @@ export const useBossDataStore = create<BossDataState>((set) => ({
     } finally {
       set({ isLoading: false });
     }
-  },
-})); 
+  };
+
+  const updateBossData = async (bossData: BossData) => {
+    try {
+      const group = useGroupStore.getState().group;
+      
+      if (!group?.id) {
+        throw new Error("No group found");
+      }
+
+      const { error: updateError } = await supabase
+        .from("boss_data")
+        .update({
+          boss_name: bossData.boss_name,
+          data: bossData.data,
+          sortOrder: bossData.sortOrder
+        })
+        .eq("group_id", group.id)
+        .eq("boss_name", bossData.boss_name);
+
+      if (updateError) throw updateError;
+
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return {
+    bossData: [],
+    isLoading: true,
+    error: null,
+    refreshBossData,
+    updateBossData,
+    setBossData: (data: BossData[]) => set({ bossData: data }),
+    addBossDataRealtime: (bossData: BossData) => 
+      set((state) => ({ bossData: [...state.bossData, bossData] })),
+    removeBossDataRealtime: (id: string) => 
+      set((state) => ({ bossData: state.bossData.filter((b) => b.id !== id) })),
+    updateBossDataRealtime: (bossData: BossData) =>
+      set((state) => ({
+        bossData: state.bossData.map((b) => (b.id === bossData.id ? bossData : b))
+      })),
+  };
+}); 

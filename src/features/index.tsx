@@ -10,11 +10,13 @@ import { CreateGroupDialog } from "./group/create-group-dialog";
 import { JoinGroupDialog } from "./group/join-group-dialog";
 import { LeaveGroupDialog } from "./group/leave-group-dialog";
 import UsersList from "./users";
+import useRealtimeMembers from "@/hooks/useRealtimeMembers";
 
 export function Features() {
   const { currentUser } = useCurrentUser();
   const { group, userData, fetchUserGroup,isLoading } = useGroupStore();
   const isAdmin = group?.created_by === currentUser?.id;
+  useRealtimeMembers();
 
   return (
     <>

@@ -15,8 +15,8 @@ import useRealtimeBossData from "@/hooks/useRealtimeBossData";
 export function BossList() {
 
   const [selectedBoss, setSelectedBoss] = useState<BossTimer | null>(null);
-  const RealtimeTimerListener  = useRealtimeTimers();
-  const RealtimeBossDataListener = useRealtimeBossData();
+  useRealtimeTimers();
+  useRealtimeBossData();
   const [killCounts, setKillCounts] = useState<
     Record<
       string,
@@ -114,8 +114,6 @@ export function BossList() {
         }}
       />
     </div>
-    {RealtimeTimerListener}
-    {RealtimeBossDataListener}
     </>
   );
 }
