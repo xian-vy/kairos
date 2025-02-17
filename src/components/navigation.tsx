@@ -20,6 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import useCurrentUser from '@/hooks/useCurrentUser'
+import { useGroupStore } from "@/stores/groupStore"
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Loader2 } from "lucide-react"
 import Link from 'next/link'
@@ -33,7 +34,7 @@ const Navigation = () => {
   const [signOutDialogOpen, setSignOutDialogOpen] = useState(false)
   const [isSigningOut, setIsSigningOut] = useState(false)
   const { currentUser } = useCurrentUser();
-
+  const {userData}= useGroupStore();
   const handleSignOutClick = () => {
     setSignOutDialogOpen(true)
   }
@@ -105,11 +106,17 @@ const Navigation = () => {
                         </AvatarFallback>
                       </Avatar>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-56 bg-[#0D0F23] border-[#1F2137]">
+                    <DropdownMenuContent className="w-56 bg-[#0D0F23] border-[#1F2137] p-2">
                       <DropdownMenuLabel className="text-[#E2E4FF]">
                         <div className="flex flex-col">
-                          <span className="font-medium">My Account</span>
+                          <span className="font-medium">Email</span>
                           <span className="text-xs text-[#B4B7E5]">{currentUser.email}</span>
+                        </div>
+                      </DropdownMenuLabel>
+                      <DropdownMenuLabel className="text-[#E2E4FF]">
+                        <div className="flex flex-col">
+                          <span className="font-medium">Username</span>
+                          <span className="text-xs text-[#B4B7E5]">{userData?.username}</span>
                         </div>
                       </DropdownMenuLabel>
                       <DropdownMenuSeparator className="bg-[#1F2137]" />
