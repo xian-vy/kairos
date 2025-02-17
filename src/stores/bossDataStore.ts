@@ -14,6 +14,7 @@ interface BossDataState {
   updateBossDataRealtime: (bossData: BossData) => void;
   updateBossData: (bossData: BossData) => Promise<void>;
   addBossData: (bossData: BossData) => Promise<void>;
+  deleteBossData: (id: string) => Promise<void>;
 }
 
 export const useBossDataStore = create<BossDataState>((set) => {
@@ -82,6 +83,19 @@ export const useBossDataStore = create<BossDataState>((set) => {
 
   };
 
+  const deleteBossData = async (id: string) => {
+    const group = useGroupStore.getState().group;
+    if (!group?.id) throw new Error("No group found");
+
+    const { error } = await supabase
+      .from('boss_data')
+      .delete()
+      .eq('id', id)
+      .eq('group_id', group.id);
+
+    if (error) throw error;
+  };
+
   return {
     bossData: [],
     isLoading: true,
@@ -98,5 +112,6 @@ export const useBossDataStore = create<BossDataState>((set) => {
         bossData: state.bossData.map((b) => (b.id === bossData.id ? bossData : b))
       })),
     addBossData,
+    deleteBossData,
   };
 }); 

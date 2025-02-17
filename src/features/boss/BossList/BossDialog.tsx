@@ -13,6 +13,7 @@ import { useGroupStore } from "@/stores/groupStore";
 import { BossData } from "@/types/database.types";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 interface BossDialogProps {
   isOpen: boolean;
@@ -45,6 +46,8 @@ export function BossDialog({ isOpen, onClose, bossData }: BossDialogProps) {
       respawnIntervalDelay: 0
     }
   });
+
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   useEffect(() => {
     if (bossData) {
@@ -144,6 +147,29 @@ export function BossDialog({ isOpen, onClose, bossData }: BossDialogProps) {
         variant: "destructive",
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to modify boss data",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      setIsLoading(true);
+      if (!isAdmin) throw new Error("Only Admin can delete boss data.");
+      
+      await useBossDataStore.getState().deleteBossData(formData.id);
+      toast({
+        variant: "success",
+        title: "Success",
+        description: "Boss deleted successfully",
+      });
+      onClose();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to delete boss",
       });
     } finally {
       setIsLoading(false);
@@ -259,28 +285,50 @@ export function BossDialog({ isOpen, onClose, bossData }: BossDialogProps) {
           </TabsContent>
         </Tabs>
         <DialogFooter className="mt-2">
-          <div className="flex justify-end gap-2">
-            <Button
-              variant="ghost"
-              onClick={onClose}
-              className="text-[#B4B7E5] hover:text-[#E2E4FF] hover:bg-[#1F2137]/50"
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSubmit}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-              disabled={isLoading || !isAdmin}
-            >
-              {isLoading ? (
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-              ) : (
-                isEditMode ? "Save Changes" : "Add Boss"
-              )}
-            </Button>
+          <div className="flex justify-between w-full">
+            {isEditMode && (
+              <Button
+                variant="destructive"
+                onClick={() => setShowDeleteConfirm(true)}
+                disabled={isLoading}
+                size="sm"
+              >
+                Delete Boss
+              </Button>
+            )}
+              <Button
+                onClick={handleSubmit}
+                className="bg-blue-600 hover:bg-blue-700 text-white"
+                disabled={isLoading || !isAdmin}
+              >
+                {isLoading ? (
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                ) : (
+                  isEditMode ? "Save Changes" : "Add Boss"
+                )}
+              </Button>
           </div>
         </DialogFooter>
       </DialogContent>
+      <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <AlertDialogContent className="bg-[#0A0C1B] border-gray-800">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="text-white">Delete Boss</AlertDialogTitle>
+            <AlertDialogDescription className="text-[#B4B7E5]">
+              Are you sure you want to delete this boss? This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel className="bg-[#1F2137] text-[#B4B7E5]">Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-red-600 hover:bg-red-700"
+              onClick={handleDelete}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </Dialog>
   );
 } 
