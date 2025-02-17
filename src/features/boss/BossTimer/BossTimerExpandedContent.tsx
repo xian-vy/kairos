@@ -1,5 +1,7 @@
+import useCurrentUser from "@/hooks/useCurrentUser";
+import { useGroupStore } from "@/stores/groupStore";
 import { BossTimer } from "@/types/database.types";
-import {  Pencil, Star, Trash2 } from "lucide-react";
+import { Pencil, Star, Trash2 } from "lucide-react";
 
 interface ExpandedContentProps {
   timer: BossTimer;
@@ -7,31 +9,40 @@ interface ExpandedContentProps {
   onDelete: () => void;
 }
 
-export const ExpandedContent = ({ timer, onEdit, onDelete }: ExpandedContentProps) => (
+export const ExpandedContent = ({ timer, onEdit, onDelete }: ExpandedContentProps) => {
+  const {currentUser}= useCurrentUser();
+  const {group}= useGroupStore();
+  const currentUserId  = currentUser?.id;
+  const authorId =  timer.user_id
+  const isAuthor = authorId === currentUserId
+  const isAdmin = currentUserId === group?.created_by
+  return(
   <div className="mt-4 flex items-center justify-between w-full">
     <div className="flex items-center gap-2">
       <Star className="w-4 h-4 fill-yellow-500" />
       {timer.notes && <p className="text-sm text-[#B4B7E5]">{timer.notes}</p>}
     </div>
-    <div className="flex justify-end gap-2">
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onEdit();
-        }}
-        className="p-1 hover:bg-[#1F2137] rounded-md transition-colors"
-      >
-        <Pencil strokeWidth={1.5} className="h-4 w-4 text-[#B4B7E5]" />
-      </button>
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          onDelete();
-        }}
-        className="p-1 hover:bg-[#1F2137] rounded-md transition-colors"
-      >
-        <Trash2 strokeWidth={1.5} className="h-4 w-4 text-[#B4B7E5]" />
-      </button>
+    { (isAuthor || isAdmin) &&
+        <div className="flex justify-end gap-2">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit();
+            }}
+            className="p-1 hover:bg-[#1F2137] rounded-md transition-colors"
+          >
+            <Pencil strokeWidth={1.5} className="h-4 w-4 text-[#B4B7E5]" />
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+            className="p-1 hover:bg-[#1F2137] rounded-md transition-colors"
+          >
+            <Trash2 strokeWidth={1.5} className="h-4 w-4 text-[#B4B7E5]" />
+          </button>
     </div>
+    }
   </div>
-);
+)};
