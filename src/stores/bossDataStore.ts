@@ -9,6 +9,9 @@ interface BossDataState {
   error: string | null;
   setBossData: (data: BossData[]) => void;
   refreshBossData: () => Promise<void>;
+  addBossDataRealtime: (bossData: BossData) => void;
+  removeBossDataRealtime: (Id: string) => void;
+  updateBossDataRealtime: (bossData: BossData) => void;
 }
 
 export const useBossDataStore = create<BossDataState>((set) => ({
@@ -16,6 +19,9 @@ export const useBossDataStore = create<BossDataState>((set) => ({
   isLoading: true,
   error: null,
   setBossData: (data) => set({ bossData: data }),
+  addBossDataRealtime: (bossData) => set((state) => ({ bossData: [...state.bossData, bossData] })),
+  removeBossDataRealtime: (id) => set((state) => ({ bossData: state.bossData.filter((bossData) => bossData.id !== id) })),
+  updateBossDataRealtime: (bossData) => set((state) => ({ bossData: state.bossData.map((b) => b.id === bossData.id ? bossData : b) })),
   refreshBossData: async () => {
     try {
       console.log("fetching boss data");
