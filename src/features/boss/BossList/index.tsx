@@ -10,11 +10,13 @@ import { BossListCard } from "./BossListCard";
 import { BossListCardSkeleton } from "./BossListCardSkeleton";
 import { BossTimer } from "@/types/database.types";
 import useRealtimeTimers from "@/hooks/useRealtimeTimers";
+import useRealtimeBossData from "@/hooks/useRealtimeBossData";
 
 export function BossList() {
 
   const [selectedBoss, setSelectedBoss] = useState<BossTimer | null>(null);
   const RealtimeTimerListener  = useRealtimeTimers();
+  const RealtimeBossDataListener = useRealtimeBossData();
   const [killCounts, setKillCounts] = useState<
     Record<
       string,
@@ -26,7 +28,7 @@ export function BossList() {
   >({});
 
   const supabase = createClientComponentClient();
-  const { bossData, isLoading, refreshBossData } = useBossDataStore();
+  const { bossData, isLoading } = useBossDataStore();
   const updateKillCounts = async () => {
     const counts = await refreshKillCounts(bossData, supabase);
     setKillCounts(counts);
@@ -96,7 +98,6 @@ export function BossList() {
               boss={boss}
               killCount={killCounts[boss.boss_name]}
               onLocationSelect={handleSelectBoss}
-              onBossUpdated={refreshBossData}
             />
           ))}
       </div>
@@ -114,6 +115,7 @@ export function BossList() {
       />
     </div>
     {RealtimeTimerListener}
+    {RealtimeBossDataListener}
     </>
   );
 }

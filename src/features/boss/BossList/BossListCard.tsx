@@ -17,10 +17,9 @@ interface BossListCardProps {
     total: number;
   } | null;
   onLocationSelect: (name: string, selectedLocation: string) => void;
-  onBossUpdated: () => void;
 }
 
-export function BossListCard({ boss, killCount, onLocationSelect, onBossUpdated }: BossListCardProps) {
+export function BossListCard({ boss, killCount, onLocationSelect }: BossListCardProps) {
   const [showEditDialog, setShowEditDialog] = useState(false);
 
   const KillCountDisplay = () => {
@@ -97,7 +96,6 @@ export function BossListCard({ boss, killCount, onLocationSelect, onBossUpdated 
         isOpen={showEditDialog}
         onClose={() => setShowEditDialog(false)}
         bossData={boss}
-        onBossUpdated={onBossUpdated}
       />
     </Card>
   );

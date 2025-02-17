@@ -17,10 +17,9 @@ interface EditBossDialogProps {
   isOpen: boolean;
   onClose: () => void;
   bossData: BossData;
-  onBossUpdated: () => void;
 }
 
-export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: EditBossDialogProps) {
+export function EditBossDialog({ isOpen, onClose, bossData }: EditBossDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [bossDataState, setBossDataState] = useState<BossData>(bossData);
   const { currentUser } = useCurrentUser();
@@ -102,7 +101,6 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
         description: "Boss data updated successfully",
       });
 
-      onBossUpdated();
       onClose();
     } catch (error) {
       console.error("Error updating boss data:", error);
