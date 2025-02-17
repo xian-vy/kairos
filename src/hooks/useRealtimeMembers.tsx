@@ -9,11 +9,12 @@ const useRealtimeMembers = () => {
     const {group,fetchUserGroup} = useGroupStore()
     const { addUserRealtime, removeUserRealtime,updateUserRealtime} = useGroupMembersStore()
     useEffect(() => {   
+        if (!group?.id) return;
+
         const channel = supabase
-        .channel("users")
+        .channel("users" + group.id)
         .on("postgres_changes", { event: "*", schema: "public", table: "users" }, async (payload) => {
 
-        if (!group?.id) return;
 
         if (payload.eventType === "INSERT" ) {
             addUserRealtime(payload.new as User);

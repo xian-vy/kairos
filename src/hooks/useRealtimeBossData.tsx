@@ -10,10 +10,11 @@ const useRealtimeBossData = () => {
     const { addBossDataRealtime, updateBossDataRealtime, removeBossDataRealtime } = useBossDataStore()
 
     useEffect(() => {   
+        if (!group?.id) return;
+
         const channel = supabase
-        .channel("boss_data")
+        .channel("boss_data" + group.id)
         .on("postgres_changes", { event: "*", schema: "public", table: "boss_data" }, async (payload) => {
-            if (!group?.id) return;
 
             if (payload.eventType === "INSERT" ) {
                 addBossDataRealtime(payload.new as BossData);

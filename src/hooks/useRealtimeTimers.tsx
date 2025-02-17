@@ -10,10 +10,10 @@ const useRealtimeTimers = () => {
     const { addTimerRealtime, updateTimerRealtime, removeTimerRealtime } = useBossTimersStore()
 
     useEffect(() => {   
+        if (!group?.id) return;
         const channel = supabase
-        .channel("boss_timers")
+        .channel("boss_timers" + group.id)
         .on("postgres_changes", { event: "*", schema: "public", table: "boss_timers" }, async (payload) => {
-            if (!group?.id) return;
 
             if (payload.eventType === "INSERT" ) {
                 addTimerRealtime(payload.new as BossTimer);
