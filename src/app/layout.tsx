@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation';
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react"
+import Script from "next/script";
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
@@ -55,6 +56,11 @@ export default async function RootLayout({
         <Toaster />
        </body>
        <Analytics />
+       <Script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3830709842288861"
+            crossOrigin="anonymous"
+          />
     </html>
   );
 }
