@@ -16,6 +16,7 @@ import { BossDialog } from "./BossDialog";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { useGroupStore } from "@/stores/groupStore";
 import useScreenSize from "@/hooks/useScreensize";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function BossList() {
 
@@ -67,10 +68,13 @@ export function BossList() {
 
   if (isLoading) {
     return (
-      <div className="p-4 space-y-6">
-        <p className="text-[#B4B7E5] text-xs flex items-center gap-1.5 ">
-          <Info className="h-4 w-4" /> Select kill location to create a timer for next spawn
-        </p>
+      <div className="p-4 space-y-6"> 
+        <div className="flex w-full justify-between items-center">
+            <p className="text-[#B4B7E5] text-xs flex items-center gap-1.5 ">
+              <Info className="h-4 w-4" /> Select kill location to create a timer for next spawn
+            </p>
+            <Skeleton className="w-[100px] h-7" />
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {Array.from({ length: 8 }).map((_, index) => (
             <BossListCardSkeleton key={index} />
