@@ -76,9 +76,10 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
           sortOrder: bossData.sortOrder,
         }));
 
-        const { error: bossDataError } = await supabase
+        const { data : newData, error: bossDataError } = await supabase
           .from("boss_data")
-          .insert(bossDataInserts);
+          .insert(bossDataInserts)
+          .select();
 
         if (bossDataError) throw bossDataError;
 
@@ -87,7 +88,7 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
           description: "Group created successfully",
         });
         
-        setBossData(BOSSDATA_NIGHTCROWS);
+        setBossData(newData);
         await fetchUserGroup(); // Fetch updated group data
         onGroupCreated();
       }
