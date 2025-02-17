@@ -1,14 +1,16 @@
 import React, { useEffect } from 'react'
 
 const useScreenSize = () => {
-    const [screenSize, setScreenSize] = React.useState(window.innerWidth)
+    const [screenSize, setScreenSize] = React.useState(typeof window !== 'undefined' ? window.innerWidth : 0)
     useEffect(() => {
-        const handleResize = () => {
-            setScreenSize(window.innerWidth)
-        }
-        window.addEventListener('resize', handleResize)
-        return () => {
-            window.removeEventListener('resize', handleResize)
+        if (typeof window !== 'undefined') {
+            const handleResize = () => {
+                setScreenSize(window.innerWidth)
+            }
+            window.addEventListener('resize', handleResize)
+            return () => {
+                window.removeEventListener('resize', handleResize)
+            }
         }
     }, [])
   return screenSize  < 768 ? 'mobile' : 'desktop'

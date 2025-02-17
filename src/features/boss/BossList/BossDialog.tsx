@@ -180,7 +180,7 @@ export function BossDialog({ isOpen, onClose, bossData }: BossDialogProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-[#0A0C1B] border-gray-800 w-11/12 sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-xl text-white">
+          <DialogTitle className="text-base text-white">
             {isEditMode ? `Edit ${bossData.boss_name}` : 'Add New Boss'}
           </DialogTitle>
         </DialogHeader>
@@ -273,10 +273,10 @@ export function BossDialog({ isOpen, onClose, bossData }: BossDialogProps) {
                 />
                 <Button onClick={handleAddLocation} className="bg-[#1F2137] ">Add</Button>
               </div>
-              <div className="space-y-3">
+              <div className="space-y-4">
                 {locations.map((location) => (
                   <div key={location} className="flex items-center justify-between">
-                    <span className="text-xs sm:text-sm text-[#B4B7E5]">{location}</span>
+                    <span className="text-xs sm:text-[0.8rem] text-[#B4B7E5]">{location}</span>
                     <X  onClick={() => handleRemoveLocation(location)} className="h-4 w-4 text-[#B4B7E5] cursor-pointer" />
                   </div>
                 ))}
@@ -296,17 +296,20 @@ export function BossDialog({ isOpen, onClose, bossData }: BossDialogProps) {
                 Delete Boss
               </Button>
             )}
-              <Button
-                onClick={handleSubmit}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
-                disabled={isLoading || !isAdmin}
-              >
-                {isLoading ? (
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-                ) : (
-                  isEditMode ? "Save Changes" : "Add Boss"
-                )}
-              </Button>
+              <div className={`flex justify-end w-full`}>
+                  <Button
+                    size="sm"
+                    onClick={handleSubmit}
+                    className="bg-blue-600 hover:bg-blue-700 text-white "
+                    disabled={isLoading || !isAdmin}
+                  >
+                    {isLoading ? (
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                    ) : (
+                      isEditMode ? "Save Changes" : "Add Boss"
+                    )}
+                  </Button>
+              </div>
           </div>
         </DialogFooter>
       </DialogContent>

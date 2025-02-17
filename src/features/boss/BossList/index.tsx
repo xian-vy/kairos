@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { BossDialog } from "./BossDialog";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { useGroupStore } from "@/stores/groupStore";
+import useScreenSize from "@/hooks/useScreensize";
 
 export function BossList() {
 
@@ -35,7 +36,7 @@ export function BossList() {
   const { currentUser } = useCurrentUser();
   const { group } = useGroupStore();
   const isAdmin = group?.created_by === currentUser?.id;
-
+  const screenSize = useScreenSize();
   const supabase = createClientComponentClient();
   const { bossData, isLoading } = useBossDataStore();
   const updateKillCounts = async () => {
@@ -105,7 +106,7 @@ export function BossList() {
             onClick={() => {setSelectedBossForEdit(undefined);setShowAddBossDialog(true);}}
             className="bg-[#1F2137] hover:bg-[#2A2D4B] text-[#E2E4FF] text-xs"
           >
-            <Plus className="h-4 w-4" /> New Boss
+            <Plus className="h-4 w-4" /> {screenSize === "desktop"  &&"Add Boss"}
           </Button>
         )}
       </div>
