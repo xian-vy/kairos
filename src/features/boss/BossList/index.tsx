@@ -27,7 +27,6 @@ export function BossList() {
 
   const supabase = createClientComponentClient();
   const { bossData, isLoading, refreshBossData } = useBossDataStore();
-
   const updateKillCounts = async () => {
     const counts = await refreshKillCounts(bossData, supabase);
     setKillCounts(counts);
@@ -38,7 +37,7 @@ export function BossList() {
     if (bossData.length > 0) {
       // Initialize all boss kill counts as null to show loading state
       const initialCounts = bossData.reduce((acc, boss) => {
-        acc[boss.name] = null;
+        acc[boss.boss_name] = null;
         return acc;
       }, {} as Record<string, { current: number; total: number } | null>);
       
@@ -93,10 +92,9 @@ export function BossList() {
           .sort((a, b) => a.sortOrder - b.sortOrder)
           .map((boss) => (
             <BossListCard
-              key={boss.name}
+              key={boss.id}
               boss={boss}
-              killCount={killCounts[boss.name]}
-              //onBossSelect={(name, respawnInterval, locations) => setSelectedBoss({ name, respawnInterval, locations })}
+              killCount={killCounts[boss.boss_name]}
               onLocationSelect={handleSelectBoss}
               onBossUpdated={refreshBossData}
             />

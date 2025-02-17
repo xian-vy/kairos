@@ -14,6 +14,22 @@ export interface BossTimer {
   time_of_death: string;
   notes: string | null;
 }
+type BossDataJSON = {
+  name: string;
+  locations: string[];
+  sortOrder: number;
+  respawnCount: number;
+  respawnInterval: number;
+  respawnIntervalDelay: number;
+};
+export interface BossData  {
+ id : string;
+ boss_name : string;
+ data : BossDataJSON;
+ group_id :string
+ created_at : string;
+ sortOrder : number
+}
 
 export interface Group {
   id: string;

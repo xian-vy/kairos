@@ -1,5 +1,5 @@
 import {  BOSSDATA_TYPE } from "@/lib/data/presets"
-import { BossTimer } from "@/types/database.types"
+import { BossData, BossTimer } from "@/types/database.types"
 import { SupabaseClient } from '@supabase/supabase-js'
 
 export const createDateFromTimeString = (timeStr: string) => {
@@ -139,11 +139,11 @@ interface BossKillCount {
 export async function getBossKillCount(
   bossName: string, 
   supabase: SupabaseClient,
-  bossData: BOSSDATA_TYPE[]
+  bossData: BossData[]
 ): Promise<BossKillCount> {
   // Get the preset data for this boss
-  const preset = bossData.find(boss => boss.name === bossName)
-  const totalRequired = preset?.respawnCount || 1
+  const boss = bossData.find(boss => boss.boss_name === bossName)
+  const totalRequired = boss?.data?.respawnCount || 0
 
   // Get today's date at midnight
   const today = new Date()
@@ -225,14 +225,14 @@ export const enrichTimerWithLocations = (timer: BossTimer, bossData: BOSSDATA_TY
 }
 
 export async function refreshKillCounts(
-  bossData: BOSSDATA_TYPE[],
+  bossData: BossData[],
   supabase: SupabaseClient
 ): Promise<Record<string, { current: number; total: number }>> {
   const counts: Record<string, { current: number; total: number }> = {};
 
   for (const boss of bossData) {
-    const count = await getBossKillCount(boss.name, supabase, bossData);
-    counts[boss.name] = {
+    const count = await getBossKillCount(boss.boss_name, supabase, bossData);
+    counts[boss.boss_name] = {
       current: count.currentKills,
       total: count.totalRequired,
     };

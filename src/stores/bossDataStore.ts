@@ -1,14 +1,13 @@
 import { create } from 'zustand';
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "@/types/database.types";
-import { BOSSDATA_TYPE } from "@/lib/data/presets";
+import { BossData, Database } from "@/types/database.types";
 import { useGroupStore } from './groupStore';
 
 interface BossDataState {
-  bossData: BOSSDATA_TYPE[];
+  bossData: BossData[];
   isLoading: boolean;
   error: string | null;
-  setBossData: (data: BOSSDATA_TYPE[]) => void;
+  setBossData: (data: BossData[]) => void;
   refreshBossData: () => Promise<void>;
 }
 
@@ -28,15 +27,15 @@ export const useBossDataStore = create<BossDataState>((set) => ({
       }
 
       const supabase = createClientComponentClient<Database>();
-      const { data, error } = await supabase
+      const { data:bossData, error } = await supabase
         .from("boss_data")
         .select("*")
         .eq("group_id", group.id);
 
       if (error) throw error;
 
-      if (data) {
-        set({ bossData: data.map((item) => item.data) });
+      if (bossData) {
+        set({ bossData});
         console.log("Boss data fetched");
       }
     } catch (err) {

@@ -1,46 +1,48 @@
 "use client";
 
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"; // Import Tabs components
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Database } from "@/types/database.types";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"; // Import Tabs components
 import { useToast } from "@/hooks/use-toast";
-import { BOSS_NAMES_NIGHTCROWS, BOSSDATA_TYPE } from "@/lib/data/presets";
 import useCurrentUser from "@/hooks/useCurrentUser";
+import { BOSS_NAMES_NIGHTCROWS } from "@/lib/data/presets";
 import { useGroupStore } from "@/stores/groupStore";
+import { BossData, Database } from "@/types/database.types";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { X } from "lucide-react";
+import { useState } from "react";
 
 interface EditBossDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  bossData: BOSSDATA_TYPE;
+  bossData: BossData;
   onBossUpdated: () => void;
 }
 
 export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: EditBossDialogProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    name: bossData.name,
-    respawnInterval: bossData.respawnInterval,
-    respawnCount: bossData.respawnCount,
-    respawnIntervalDelay: bossData.respawnIntervalDelay,
-    sortOrder: bossData.sortOrder,
-  });
+  const [bossDataState, setBossDataState] = useState<BossData>(bossData);
   const { currentUser } = useCurrentUser();
   const { group } = useGroupStore();
   const isAdmin = group?.created_by === currentUser?.id;
   const supabase = createClientComponentClient<Database>();
   const { toast } = useToast();
 
-  const [locations, setLocations] = useState(bossData.locations);
+  const [locations, setLocations] = useState(bossData.data.locations);
   const [newLocation, setNewLocation] = useState("");
 
   const handleAddLocation = () => {
     if (newLocation.trim() !== "" && locations.length < 15) {
-      setLocations([...locations, newLocation.trim()]);
+      const updatedLocations = [...locations, newLocation.trim()];
+      setLocations(updatedLocations);
+      setBossDataState({
+        ...bossDataState,
+        data: {
+          ...bossDataState.data,
+          locations: updatedLocations
+        }
+      });
       setNewLocation("");
     } else if (locations.length >= 15) {
       toast({
@@ -53,7 +55,15 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
 
   const handleRemoveLocation = (location: string) => {
     if (locations.length > 1) {
-      setLocations(locations.filter((loc) => loc !== location));
+      const updatedLocations = locations.filter((loc) => loc !== location);
+      setLocations(updatedLocations);
+      setBossDataState({
+        ...bossDataState,
+        data: {
+          ...bossDataState.data,
+          locations: updatedLocations
+        }
+      });
     } else {
       toast({
         variant: "destructive",
@@ -73,18 +83,16 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
 
       if (!userGroup?.group_id) throw new Error("No group found");
 
-      // Update the boss data
-      const updatedBossData: BOSSDATA_TYPE = {
-        ...bossData,
-        ...formData,
-        locations, 
-      };
-
       const { error: updateError } = await supabase
         .from("boss_data")
-        .update({ data: updatedBossData })
+        .update({
+          ...bossDataState,
+          boss_name : bossDataState.boss_name,
+          data : bossDataState.data,
+          sortOrder : bossDataState.sortOrder
+        })
         .eq("group_id", userGroup.group_id)
-        .eq("boss_name", bossData.name);
+        .eq("boss_name", bossData.boss_name);
 
       if (updateError) throw updateError;
 
@@ -112,7 +120,7 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-[#0A0C1B] border-gray-800 w-11/12 sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-xl text-white">Edit {bossData.name}</DialogTitle>
+          <DialogTitle className="text-xl text-white">Edit {bossData.boss_name}</DialogTitle>
         </DialogHeader>
         <Tabs defaultValue="info">
           <TabsList className="flex gap-2  justify-center">
@@ -125,8 +133,8 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
                 <label className=" text-[#B4B7E5]">Boss Name</label>
                 <Input
                   type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value as BOSS_NAMES_NIGHTCROWS })}
+                  value={bossDataState.boss_name}
+                  onChange={(e) => setBossDataState({ ...bossDataState, boss_name: e.target.value as BOSS_NAMES_NIGHTCROWS })}
                   className="bg-black/20 border-gray-800 text-white"
                 />
               </div>
@@ -135,8 +143,8 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
                       <label className=" text-[#B4B7E5]">Sort Order</label>
                       <Input
                         type="number"
-                        value={formData.sortOrder}
-                        onChange={(e) => setFormData({ ...formData, sortOrder: Number(e.target.value) })}
+                        value={bossDataState.sortOrder}
+                        onChange={(e) => setBossDataState({ ...bossDataState, sortOrder: Number(e.target.value) })}
                         className="bg-black/20 border-gray-800 text-white"
                         min={1}
                       />
@@ -145,8 +153,14 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
                       <label className=" text-[#B4B7E5]">Respawn Interval (hrs)</label>
                       <Input
                         type="number"
-                        value={formData.respawnInterval}
-                        onChange={(e) => setFormData({ ...formData, respawnInterval: Number(e.target.value) })}
+                        value={bossDataState.data.respawnInterval}
+                        onChange={(e) => setBossDataState({ 
+                          ...bossDataState, 
+                          data: {
+                            ...bossDataState.data,
+                            respawnInterval: Number(e.target.value)
+                          }
+                        })}
                         className="bg-black/20 border-gray-800 text-white"
                       />
                     </div>
@@ -156,8 +170,14 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
                       <label className=" text-[#B4B7E5]">Respawn Count</label>
                       <Input
                         type="number"
-                        value={formData.respawnCount}
-                        onChange={(e) => setFormData({ ...formData, respawnCount: Number(e.target.value) })}
+                        value={bossDataState.data.respawnCount}
+                        onChange={(e) => setBossDataState({ 
+                          ...bossDataState, 
+                          data: {
+                            ...bossDataState.data,
+                            respawnCount: Number(e.target.value)
+                          }
+                        })}
                         className="bg-black/20 border-gray-800 text-white"
                       />
                     </div>
@@ -165,8 +185,14 @@ export function EditBossDialog({ isOpen, onClose, bossData, onBossUpdated }: Edi
                       <label className=" text-[#B4B7E5]">Interval Delay (hrs)</label>
                       <Input
                         type="number"
-                        value={formData.respawnIntervalDelay}
-                        onChange={(e) => setFormData({ ...formData, respawnIntervalDelay: Number(e.target.value) })}
+                        value={bossDataState.data.respawnIntervalDelay}
+                        onChange={(e) => setBossDataState({ 
+                          ...bossDataState, 
+                          data: {
+                            ...bossDataState.data,
+                            respawnIntervalDelay: Number(e.target.value)
+                          }
+                        })}
                         className="bg-black/20 border-gray-800 text-white"
                       />
                     </div>
