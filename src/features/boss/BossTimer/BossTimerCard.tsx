@@ -1,10 +1,9 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { BOSSDATA_TYPE } from "@/lib/data/presets";
 import { cn } from "@/lib/utils";
 import { useGroupMembersStore } from "@/stores/groupMembersStore";
-import type { BossTimer } from "@/types/database.types";
+import type { BossData, BossTimer } from "@/types/database.types";
 import { ChevronDown, Circle, MapPin, Star } from "lucide-react";
 import { getPresetRespawnInterval, getTimerColor } from "../helper";
 import { ExpandedContent } from "./BossTimerExpandedContent";
@@ -16,7 +15,7 @@ interface TimerCardProps {
   onToggle: () => void;
   onEdit: (timer: BossTimer) => void;
   onDelete: (id: string) => void;
-  bossData : BOSSDATA_TYPE[]
+  bossData : BossData[]
 }
 
 export const TimerCard = ({ timer, isExpanded, onToggle, onEdit, onDelete,bossData }: TimerCardProps) => {

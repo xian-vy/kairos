@@ -60,7 +60,7 @@ export function BossTimerList() {
 
   const getGroupedTimers = useCallback((timers: BossTimer[]) => {
     const sortOrder = bossData.reduce((acc, boss) => {
-      acc[boss.name] = boss.sortOrder;
+      acc[boss.boss_name] = boss.sortOrder;
       return acc;
     }, {} as Record<string, number>);
   

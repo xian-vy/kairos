@@ -1,4 +1,3 @@
-import {  BOSSDATA_TYPE } from "@/lib/data/presets"
 import { BossData, BossTimer } from "@/types/database.types"
 import { SupabaseClient } from '@supabase/supabase-js'
 
@@ -86,18 +85,18 @@ export const getNextRespawnTimes = (timeOfDeath: string, respawnInterval: number
 }
 
 
-export const getPresetRespawnInterval = (bossName: string, bossData: BOSSDATA_TYPE[]) => {
+export const getPresetRespawnInterval = (bossName: string, bossData: BossData[]) => {
   const preset = bossData.find(
-    boss => boss.name === bossName
+    boss => boss.boss_name === bossName
   )
-  return preset?.respawnInterval || 12 // fallback to 12 if not found
+  return preset?.data.respawnInterval || 12 // fallback to 12 if not found
 }
 
-export const getRespawnDelay = (bossName: string, bossData: BOSSDATA_TYPE[]) => {
+export const getRespawnDelay = (bossName: string, bossData: BossData[]) => {
   const preset = bossData.find(
-    boss => boss.name === bossName
+    boss => boss.boss_name === bossName
   )
-  return preset?.respawnIntervalDelay || 3 
+  return preset?.data.respawnIntervalDelay || 3 
 }
 
 export const getTimerColor = (timeOfDeath: string, respawnInterval: number) => {
@@ -201,7 +200,7 @@ export interface TimerWithLocations extends BossTimer {
 //     return aSpawnTime < now ? -1 : 1
 //   })
 // }
-export const sortTimers = (timers: BossTimer[], bossData: BOSSDATA_TYPE[]) => {
+export const sortTimers = (timers: BossTimer[], bossData: BossData[]) => {
   return [...timers].sort((a, b) => {
     const aDeathTime = new Date(a.time_of_death).getTime();
     const bDeathTime = new Date(b.time_of_death).getTime();
@@ -214,9 +213,9 @@ export const sortTimers = (timers: BossTimer[], bossData: BOSSDATA_TYPE[]) => {
 };
 
 
-export const enrichTimerWithLocations = (timer: BossTimer, bossData: BOSSDATA_TYPE[]): TimerWithLocations => {
-  const bossPreset = bossData.find(boss => boss.name === timer.boss_name)
-  const allLocations = bossPreset?.locations || [timer.location]
+export const enrichTimerWithLocations = (timer: BossTimer, bossData: BossData[]): TimerWithLocations => {
+  const bossPreset = bossData.find(boss => boss.boss_name === timer.boss_name)
+  const allLocations = bossPreset?.data.locations || [timer.location]
   
   return {
     ...timer,

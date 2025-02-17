@@ -1,13 +1,12 @@
 import { cn } from "@/lib/utils"
-import type { BossTimer } from "@/types/database.types"
+import type { BossData, BossTimer } from "@/types/database.types"
 import { Timer } from "lucide-react"
 import { FaSkullCrossbones } from "react-icons/fa"
-import {  getNextRespawnTimes, getPresetRespawnInterval, getRespawnDelay } from "../helper"
-import { BOSSDATA_TYPE } from "@/lib/data/presets"
+import { getNextRespawnTimes, getPresetRespawnInterval, getRespawnDelay } from "../helper"
 
 interface TimerInfoProps {
   timer: BossTimer
-  bossData : BOSSDATA_TYPE[]
+  bossData : BossData[]
 }
 
 export const TimerInfo = ({ timer ,bossData}: TimerInfoProps) => {
