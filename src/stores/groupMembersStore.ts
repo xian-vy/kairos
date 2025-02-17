@@ -197,7 +197,7 @@ export const useGroupMembersStore = create<GroupMembersState>((set) => {
       } = await supabase.auth.getUser();
       if (error || !user) {
         toast({
-          title: "Error",
+          title: "Failed",
           description: "Failed to verify user",
           variant: "destructive",
         });
@@ -212,15 +212,15 @@ export const useGroupMembersStore = create<GroupMembersState>((set) => {
           });
 
           if (error) {
-            throw new Error("Invalid password");
+            throw new Error("Password is Incorrect.");
           }
           setPassword("");
           return true;
         } catch (error) {
           console.error(error);
           toast({
-            title: "Error",
-            description: "Invalid password",
+            title: "Failed",
+            description: "Password is Incorrect.",
             variant: "destructive",
           });
           return false;
