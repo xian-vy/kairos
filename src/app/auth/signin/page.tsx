@@ -5,9 +5,11 @@ import { Icons } from '@/components/ui/icons'
 import { Input } from '@/components/ui/input'
 import { useToast } from '@/hooks/use-toast'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { Lock, Mail, User } from 'lucide-react'
+import { Lock, Mail, ShieldCheck, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import Turnstile from "react-turnstile";
+
 export default function SignIn() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -16,6 +18,8 @@ export default function SignIn() {
   const [message, setMessage] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [showTurnstile, setShowTurnstile] = useState(false)
   const router = useRouter()
   const supabase = createClientComponentClient()
   const {toast} = useToast()
@@ -46,23 +50,47 @@ export default function SignIn() {
     return null
   }
 
+  const handleTurnstileSuccess = (token: string) => {
+    setTurnstileToken(token)
+  }
+
+  const handleVerifyClick = () => {
+    setShowTurnstile(true)
+  }
+
+  const resetVerification = () => {
+    setTurnstileToken(null)
+    setShowTurnstile(false)
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setIsLoading(true)
     setMessage(null)
+
+    if (!turnstileToken) {
+      toast({
+        title: "Verification Required",
+        description: "Please complete the security check",
+      })
+      setIsLoading(false)
+      return
+    }
 
     try {
       if (mode === 'signin') {
         const { error: signInError } = await supabase.auth.signInWithPassword({
           email,
           password,
+          options: {
+            captchaToken: turnstileToken
+          }
         })
         if (signInError) throw signInError
 
         router.push('/app')
         router.refresh()
       } else {
-        // Validate username for sign up
         const usernameError = validateUsername(username)
         if (usernameError) {
           toast({
@@ -73,7 +101,6 @@ export default function SignIn() {
           return
         }
 
-        // Validate password for sign up
         const passwordError = validatePassword(password)
         if (passwordError) {
           toast({
@@ -84,7 +111,6 @@ export default function SignIn() {
           return
         }
 
-        // Check if passwords match
         if (password !== confirmPassword) {
           toast({
             title: "Sign Up Failed",
@@ -99,6 +125,7 @@ export default function SignIn() {
           password,
           options: {
             emailRedirectTo: `${window.location.origin}/auth/callback`,
+            captchaToken: turnstileToken,
             data: {
               username,
               email_confirmed: false,
@@ -108,7 +135,6 @@ export default function SignIn() {
         
         if (signUpError) throw signUpError
 
-        // Insert into users table
         if (data.user) {
           const { error: insertError } = await supabase
             .from('users')
@@ -124,7 +150,6 @@ export default function SignIn() {
           if (insertError) throw insertError
         }
 
-        // Check if the response indicates user already exists
         if (data?.user?.identities?.length === 0) {
           toast({
             title: "Sign In Failed",
@@ -136,17 +161,14 @@ export default function SignIn() {
         setMessage(
           'Success! Please check your email for the confirmation link to complete your registration. If you don\'t see it, check your spam folder.'
         )
-        // Clear form
         setEmail('')
         setPassword('')
         setConfirmPassword('')
         setUsername('')
-        
-        // Don't redirect yet - wait for email confirmation
         return
       }
     } catch (error) {
-      console.error('Error:', error) // For debugging
+      console.error('Error:', error)
       toast({
         title: "Sign In Failed",
         description: error instanceof Error ? error.message : 'An error occurred',
@@ -158,7 +180,7 @@ export default function SignIn() {
 
   return (
     <div className="container flex min-h-screen flex-col items-center justify-center w-full mx-auto">
-      <div className="mx-auto flex flex-col justify-center space-y-6 w-11/12 sm:w-[360px] px-4">
+      <div className="mx-auto flex flex-col justify-center space-y-6 w-full max-w-[380px] px-4">
         <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
           <CardHeader className="space-y-2 text-center">
             <CardTitle className="text-xl font-bold text-[#E2E4FF]">
@@ -237,8 +259,49 @@ export default function SignIn() {
                     {message}
                   </div>
                 )}
+                {!turnstileToken ? (
+                  <Button 
+                    type="button"
+                    onClick={handleVerifyClick}
+                    className="bg-[#4B79E4] hover:bg-[#3D63C9] text-white"
+                  >
+                    <ShieldCheck className='w-3 h-3'/> Im not a robot
+                  </Button>
+                ) : (
+                  <div className="text-sm text-emerald-400 text-center">
+                    ✓ Verification Complete
+                  </div>
+                )}
+
+                {showTurnstile && (
+                  <div className="flex justify-center">
+                    <Turnstile
+                      sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY!}
+                      onVerify={handleTurnstileSuccess}
+                      onError={() => {
+                        toast({
+                          title: "Error",
+                          description: "Failed to load security check. Please try again.",
+                        })
+                        setShowTurnstile(false)
+                      }}
+                      onExpire={() => {
+                        toast({
+                          title: "Verification Expired",
+                          description: "Please complete the security check again.",
+                        })
+                        setTurnstileToken(null)
+                      }}
+                      theme="dark"
+                      refreshExpired="auto"
+                      className="flex justify-center"
+                    />
+                  </div>
+                )}
+
                 <Button 
-                  disabled={isLoading}
+                  type="submit"
+                  disabled={isLoading || !turnstileToken}
                   className="bg-[#4B79E4] hover:bg-[#3D63C9] text-white"
                 >
                   {isLoading && (
@@ -260,6 +323,7 @@ export default function SignIn() {
                 setPassword('')
                 setConfirmPassword('')
                 setUsername('')
+                resetVerification()
               }}
             >
               {mode === 'signin'
