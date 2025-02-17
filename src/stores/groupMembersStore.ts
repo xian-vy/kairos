@@ -1,3 +1,4 @@
+import { MAX_MEMBERS_COUNT } from "@/lib/constants";
 import { useGroupStore } from "@/stores/groupStore";
 import { Database, User } from "@/types/database.types";
 import { ToastOptions } from "@/types/utils";
@@ -153,11 +154,11 @@ export const useGroupMembersStore = create<GroupMembersState>((set) => {
         .select("id", { count: "exact" })
         .eq("group_id", group.id);
       
-      if (userCount !== null && userCount >= 5) {
+      if (userCount !== null && userCount >= MAX_MEMBERS_COUNT) {
         toast({
           variant: "destructive",
           title: "Failed to join group",
-          description: "Group already has the maximum of 5 users",
+          description: `Maximum members count reached (${MAX_MEMBERS_COUNT})`,
         });
         return;
       }
