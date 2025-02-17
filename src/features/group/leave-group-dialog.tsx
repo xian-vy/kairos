@@ -16,7 +16,7 @@ import useScreenSize from "@/hooks/useScreensize";
 import { useBossDataStore } from "@/stores/bossDataStore";
 import { useGroupMembersStore } from "@/stores/groupMembersStore";
 import type { Database } from "@/types/database.types";
-import { Eye, EyeOff, Loader2, Lock, LogOut } from "lucide-react";
+import { Eye, EyeOff, Loader2, LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -58,18 +58,13 @@ export function LeaveGroupDialog({
                 You are the admin of this group. Deleting the group will delete all related data including all boss
                 timers and group members.
               </div>
-              <div className="space-y-3">
-                <label className="text-[#B4B7E5] text-xs lg:text-sm flex items-center gap-1">
-                  <Lock strokeWidth={1.5} className="h-4 w-4" />
-                  Confirm your password to delete
-                </label>
-                <div className="relative">
+              <div className="relative">
                   <Input
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter your password"
-                    className="bg-black/20 border-gray-800 text-white pr-10"
+                    placeholder="Enter your password to Delete Group"
+                    className="bg-black/20 border-gray-800 text-white pr-10 placeholder:text-xs placeholder:text-[#B4B7E5] "
                   />
                   <button
                     type="button"
@@ -82,7 +77,6 @@ export function LeaveGroupDialog({
                       <Eye strokeWidth={1.5} className="h-4 w-4" />
                     )}
                   </button>
-                </div>
               </div>
             </div>
           ) : (
