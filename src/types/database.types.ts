@@ -27,7 +27,7 @@ export interface BossData  {
  boss_name : string;
  data : BossDataJSON;
  group_id :string
- created_at : string;
+ created_at? : string;
  sortOrder : number
 }
 

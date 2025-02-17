@@ -13,6 +13,7 @@ interface BossDataState {
   removeBossDataRealtime: (Id: string) => void;
   updateBossDataRealtime: (bossData: BossData) => void;
   updateBossData: (bossData: BossData) => Promise<void>;
+  addBossData: (bossData: BossData) => Promise<void>;
 }
 
 export const useBossDataStore = create<BossDataState>((set) => {
@@ -62,13 +63,23 @@ export const useBossDataStore = create<BossDataState>((set) => {
           sortOrder: bossData.sortOrder
         })
         .eq("group_id", group.id)
-        .eq("boss_name", bossData.boss_name);
+        .eq("id", bossData.id);
 
       if (updateError) throw updateError;
 
     } catch (error) {
       throw error;
     }
+  };
+
+  const addBossData = async (bossData: BossData) => {
+    const { error } = await supabase
+      .from('boss_data')
+      .insert([bossData])
+      .select();
+
+    if (error) throw error;
+
   };
 
   return {
@@ -86,5 +97,6 @@ export const useBossDataStore = create<BossDataState>((set) => {
       set((state) => ({
         bossData: state.bossData.map((b) => (b.id === bossData.id ? bossData : b))
       })),
+    addBossData,
   };
 }); 

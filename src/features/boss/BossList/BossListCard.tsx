@@ -8,7 +8,7 @@ import { MapPin, Pencil } from "lucide-react";
 import { useState } from "react";
 import { FaSkull } from "react-icons/fa";
 import { getKillCountColor } from "../helper";
-import { EditBossDialog } from "./EditBossDialog";
+import { BossDialog } from "./BossDialog";
 
 interface BossListCardProps {
   boss: BossData;
@@ -92,7 +92,7 @@ export function BossListCard({ boss, killCount, onLocationSelect }: BossListCard
         </ScrollArea>
       </CardContent>
 
-      <EditBossDialog
+      <BossDialog
         isOpen={showEditDialog}
         onClose={() => setShowEditDialog(false)}
         bossData={boss}
