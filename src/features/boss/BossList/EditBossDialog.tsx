@@ -7,9 +7,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import useCurrentUser from "@/hooks/useCurrentUser";
 import { BOSS_NAMES_NIGHTCROWS } from "@/lib/data/presets";
+import { useBossDataStore } from "@/stores/bossDataStore";
 import { useGroupStore } from "@/stores/groupStore";
-import { BossData, Database } from "@/types/database.types";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { BossData } from "@/types/database.types";
 import { X } from "lucide-react";
 import { useState } from "react";
 
@@ -25,7 +25,6 @@ export function EditBossDialog({ isOpen, onClose, bossData }: EditBossDialogProp
   const { currentUser } = useCurrentUser();
   const { group } = useGroupStore();
   const isAdmin = group?.created_by === currentUser?.id;
-  const supabase = createClientComponentClient<Database>();
   const { toast } = useToast();
 
   const [locations, setLocations] = useState(bossData.data.locations);
@@ -76,24 +75,8 @@ export function EditBossDialog({ isOpen, onClose, bossData }: EditBossDialogProp
     try {
       setIsLoading(true);
       if (!isAdmin) throw new Error("Only Admin can update boss data.");
-      if (!currentUser) throw new Error("No user found");
-
-      const { data: userGroup } = await supabase.from("users").select("group_id").eq("id", currentUser.id).single();
-
-      if (!userGroup?.group_id) throw new Error("No group found");
-
-      const { error: updateError } = await supabase
-        .from("boss_data")
-        .update({
-          ...bossDataState,
-          boss_name : bossDataState.boss_name,
-          data : bossDataState.data,
-          sortOrder : bossDataState.sortOrder
-        })
-        .eq("group_id", userGroup.group_id)
-        .eq("boss_name", bossData.boss_name);
-
-      if (updateError) throw updateError;
+      
+      await useBossDataStore.getState().updateBossData(bossDataState);
 
       toast({
         variant: "success",
