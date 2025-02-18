@@ -16,7 +16,7 @@ const Features = () => {
             </h3>
             <p className="text-[#B4B7E5] text-xs sm:text-sm leading-relaxed text-center">{feature.description}</p>
             {/* Gradient Overlay */}
-            <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#0A0C1B] to-transparent rounded-b-xl" />
+            <div className="absolute inset-x-0 bottom-0 h-8 sm:h-16 bg-gradient-to-t from-[#0A0C1B] to-transparent rounded-b-xl" />
             </div>
         ))}
         </div>

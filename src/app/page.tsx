@@ -6,8 +6,9 @@ export default function Home() {
   return (
     <>
       <Hero />
-      <Games />
       <Features />
+      <Games />
+
     </>
   );
 }

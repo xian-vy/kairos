@@ -23,22 +23,23 @@ const games = [
 
 const Games = () => {
   return (
-    <div className=" grid grid-cols-4  gap-0 sm:gap-5 md:gap-8 max-w-[400px]   md:max-w-[500px] xl:max-w-[700px] 2xl:max-w-screen-md mx-auto my-10 sm:my-16 lg:my-20">
-    {games.map((game, index) => (
-      <div key={index} className='relative w-[100px] h-[30px] xl:w-[150px] xl:h-[50px] 2xl:w-[180px] 2xl:h-[70px]'>
-        <Image src={game.image} alt={game.name}   sizes="300px"
-        fill
-        style={{
-          objectFit: 'contain',
-        }}
-        />
-        <div className="absolute inset-0 rounded-lg  mix-blend-overlay z-40"></div>
-        {/* Gradient Overlay */}
-        <div className="absolute inset-x-0 bottom-0 h-12 lg:h-20 bg-gradient-to-t from-[#0A0C1B] to-transparent rounded-b-xl" />
-      </div>
-    ))}
+    <div className="mt-10 mb-16 sm:mt-14 lg:mt-16">
+      <h2 className="text-center text-base sm:text-xl xl:text-2xl font-bold text-[#B4B7E5] mb-8 md:mb-12">Supported Games</h2>
+        <div className=" grid grid-cols-4  gap-0 sm:gap-5 md:gap-8 max-w-[400px] md:max-w-[500px] lg:max-w-[700px] 2xl:max-w-screen-md mx-auto ">
+            {games.map((game, index) => (
+              <div key={index} className='relative w-[100px] h-[30px] lg:w-[150px] lg:h-[50px] 2xl:w-[175px] 2xl:h-[70px]'>
+                <Image src={game.image} alt={game.name}   sizes="300px"
+                fill
+                style={{
+                  objectFit: 'contain',
+                }}
+                />
+                {/* Gradient Overlay */}
+                <div className="absolute inset-x-0 bottom-0 h-16 lg:h-28 bg-gradient-to-t from-[#0A0C1B] to-transparent rounded-b-xl" />
+              </div>
+            ))}
+        </div>
   </div>
-
   )
 }
 
