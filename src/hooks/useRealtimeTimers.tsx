@@ -28,9 +28,19 @@ const useRealtimeTimers = () => {
         })
         .subscribe();
 
+        // ✅ New: Listen for pg_notify deletes (manual notifications)
+        const customChannel = supabase
+        .channel("boss_timers_deleted")
+        .on("broadcast", { event: "DELETE" }, async (payload) => {
+            removeTimerRealtime(payload.record.id);
+            console.log("Boss timer deleted via CRON:", payload);
+        })
+        .subscribe();
+
         return () => {
             channel.unsubscribe();
-        };  
+            customChannel.unsubscribe(); 
+        };   
     }, [
         group?.id, 
         supabase, 
