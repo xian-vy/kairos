@@ -50,7 +50,7 @@ export function LeaveGroupDialog({
           <AlertDialogTitle className="text-[#E2E4FF]">{isAdmin ? "Delete Group" : "Leave Group"}</AlertDialogTitle>
           {isAdmin ? (
             <div className="space-y-4 text-sm">
-              <div className="text-red-400">
+              <div className="text-red-400 text-xs sm:text-[0.8rem] lg:text-sm">
                 You are the admin of this group. Deleting the group will delete all related data including all boss
                 timers and group members.
               </div>

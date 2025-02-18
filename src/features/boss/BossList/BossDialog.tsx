@@ -180,7 +180,7 @@ export function BossDialog({ isOpen, onClose, bossData }: BossDialogProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="bg-[#0A0C1B] border-gray-800 w-11/12 sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle className="text-base text-white">
+          <DialogTitle className="text-base text-white text-start">
             {isEditMode ? `Edit ${bossData.boss_name}` : 'Add New Boss'}
           </DialogTitle>
         </DialogHeader>
@@ -200,7 +200,7 @@ export function BossDialog({ isOpen, onClose, bossData }: BossDialogProps) {
                   className="bg-black/20 border-gray-800 text-white"
                 />
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2  gap-3">
                     <div className="space-y-2">
                       <label className=" text-[#B4B7E5]">Sort Order</label>
                       <Input
@@ -227,7 +227,7 @@ export function BossDialog({ isOpen, onClose, bossData }: BossDialogProps) {
                       />
                     </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-2">
                       <label className=" text-[#B4B7E5]">Respawn Count</label>
                       <Input

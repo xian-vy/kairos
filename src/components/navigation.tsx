@@ -144,16 +144,16 @@ const Navigation = () => {
               Are you sure you want to sign out?
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
+          <AlertDialogFooter className="flex flex-row w-full justify-between items-center">
             <AlertDialogCancel 
-              className="bg-[#090915] text-[#B4B7E5] hover:bg-[#2A2D4B] hover:text-[#E2E4FF] border-none"
+              className="bg-[#090915] text-[#B4B7E5] mt-0 hover:bg-[#2A2D4B] hover:text-[#E2E4FF] border-none"
               disabled={isSigningOut}
             >
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmSignOut}
-              className="bg-red-700 text-white hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-red-700 h-8 text-white hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
               disabled={isSigningOut}
             >
               {isSigningOut ? (
