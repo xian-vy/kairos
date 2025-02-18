@@ -35,16 +35,15 @@ const Hero = () => {
             <span className="absolute -inset-2 blur-2xl bg-gradient-to-r from-[#4B79E4]/20 to-[#9D68E4]/20" />
 
             {/* Main text with gradient */}
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl 3xl:text-5xl relative bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl 3xl:text-4xl font-extrabold relative bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
               Kairos
-              <small className="text-[0.55rem] sm:text-[0.65rem] font-normal text-[#B4B7E5] ml-0.5">beta</small>
             </h1>
 
             {/* Bottom shine effect */}
             <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#4B79E4]/50 to-transparent" />
           </span>
         </h1>
-        <h2 className="text-sm md:text-base xl:text-lg text-[#B4B7E5]/90 max-w-2xl mx-auto mb-8">
+        <h2 className="text-sm md:text-base 3xl:text-lg text-[#B4B7E5]/90 max-w-2xl mx-auto mb-8">
           The ultimate boss tracking tool for any MMORPG
         </h2>
         <div className="flex justify-center">

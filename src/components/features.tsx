@@ -8,10 +8,10 @@ const Features = () => {
         {features.map((feature, index) => (
             <div
             key={index}
-            className="relative group bg-[#0D0F23] backdrop-blur-sm p-8 rounded-xl transition-colors duration-300 shadow-lg hover:shadow-xl flex flex-col items-center"
+            className="relative  bg-[#0D0F23] backdrop-blur-sm p-8 rounded-xl transition-colors flex flex-col items-center"
             >
             <div className="mb-5 inline-block rounded-lg bg-[#4B79E4]/10 p-3">{feature.icon}</div>
-            <h3 className="text-sm md:text-base 3xl:text-lg font-semibold text-white mb-3 group-hover:text-[#4B79E4] transition-colors duration-300">
+            <h3 className="text-sm md:text-base 3xl:text-lg font-semibold text-[#E2E4FF] mb-3">
                 {feature.title}
             </h3>
             <p className="text-[#B4B7E5] text-xs sm:text-sm leading-relaxed text-center">{feature.description}</p>
