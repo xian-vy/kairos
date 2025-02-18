@@ -24,7 +24,7 @@ const Footer = () => {
         </Link>
       </div>
 
-      <div className="text-center text-[#B4B7E5]/60 text-sm">
+      <div className="text-center text-[#B4B7E5] text-sm">
         <small>© {new Date().getFullYear()} Kairos. All rights reserved.</small>
       </div>
     </div>

@@ -37,21 +37,21 @@ const Hero = () => {
             {/* Main text with gradient */}
             <h1 className="text-2xl sm:text-3xl lg:text-4xl 3xl:text-5xl relative bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
               Kairos
-              <small className="text-[0.65rem] font-normal text-[#B4B7E5] ml-0.5">beta</small>
+              <small className="text-[0.55rem] sm:text-[0.65rem] font-normal text-[#B4B7E5] ml-0.5">beta</small>
             </h1>
 
             {/* Bottom shine effect */}
             <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#4B79E4]/50 to-transparent" />
           </span>
         </h1>
-        <p className="text-sm md:text-base xl:text-lg text-[#B4B7E5]/90 max-w-2xl mx-auto mb-8">
+        <h2 className="text-sm md:text-base xl:text-lg text-[#B4B7E5]/90 max-w-2xl mx-auto mb-8">
           The ultimate boss tracking tool for any MMORPG
-        </p>
+        </h2>
         <div className="flex justify-center">
           <Button
             onClick={handleGetStarted}
             size="lg"
-            className="relative bg-[#4B79E4] text-white 
+            className="relative bg-blue-600 text-white 
             hover:bg-[#3D63C9] 
             transform transition-all duration-200 
             px-8 py-5 text-base font-medium rounded-lg
