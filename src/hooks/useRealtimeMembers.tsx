@@ -20,13 +20,8 @@ const useRealtimeMembers = () => {
             addUserRealtime(payload.new as User);
             console.log("Realtime User Added")
         }else if (payload.eventType === "UPDATE") {
-            //remove user if group id is different (user moved to another group / left group)
-            if(payload.new.group_id !== group.id) {
-                removeUserRealtime(payload.new.id);
-            } else {
-                updateUserRealtime(payload.new as User);  
-                fetchUserGroup();
-            }
+            updateUserRealtime(payload.new as User);  
+            fetchUserGroup();
             console.log("Realtime User Updated")
         } else if (payload.eventType === "DELETE") {
             removeUserRealtime(payload.old.id);

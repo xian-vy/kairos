@@ -102,6 +102,7 @@ export const useGroupMembersStore = create<GroupMembersState>((set) => {
         title: "Success",
         description: `User join request has been denied.`,
       });
+      set((state) => ({ members: state.members.filter((t) => t.id !== userId) }));
     } catch (error) {
       console.error("Error removing user from group:", error);
       toast({

@@ -14,7 +14,7 @@ import useRealtimeMembers from "@/hooks/useRealtimeMembers";
 
 export function Features() {
   const { currentUser } = useCurrentUser();
-  const { group, userData, fetchUserGroup,isLoading } = useGroupStore();
+  const { group, userData, isLoading } = useGroupStore();
   const isAdmin = group?.created_by === currentUser?.id;
   useRealtimeMembers();
 
@@ -74,7 +74,7 @@ export function Features() {
             <h1 className="text-white text-base md:text-2xl font-bold pointer-events-auto">You are not in a group!</h1>
             <p className="text-white text-xs pointer-events-auto">Please create or join a group to continue</p>
             <div className="flex gap-4 mt-4 pointer-events-auto">
-              <CreateGroupDialog onGroupCreated={fetchUserGroup} variant="welcome" />
+              <CreateGroupDialog  variant="welcome" />
               <JoinGroupDialog  variant="welcome" />
             </div>
           </div>

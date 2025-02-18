@@ -23,6 +23,7 @@ export function JoinGroupDialog({  variant = "default" }: JoinGroupDialogProps) 
     setIsLoading(false);
     setShowJoinForm(false);
     setJoinGroupName("");
+    window.location.reload();
   };
 
   return (
