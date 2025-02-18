@@ -25,9 +25,9 @@ const Games = () => {
   return (
     <div className="mt-10 mb-16 sm:mt-14 lg:mt-16">
       <h2 className="text-center text-base sm:text-xl xl:text-2xl font-bold text-[#B4B7E5] mb-8 md:mb-12">Supported Games</h2>
-        <div className=" grid grid-cols-4  gap-0 sm:gap-5 md:gap-8 max-w-[400px] md:max-w-[500px] lg:max-w-[700px] 2xl:max-w-screen-md mx-auto ">
+        <div className=" grid grid-cols-4  gap-0 sm:gap-5 lg:gap-10 max-w-[400px] md:max-w-[650px] lg:max-w-[700px] 2xl:max-w-screen-md mx-auto ">
             {games.map((game, index) => (
-              <div key={index} className='relative w-[100px] h-[30px] lg:w-[150px] lg:h-[50px] 2xl:w-[175px] 2xl:h-[70px]'>
+              <div key={index} className='relative w-[90px] h-[32px] md:w-[150px] md:h-[50px] 2xl:w-[175px] 2xl:h-[70px]'>
                 <Image src={game.image} alt={game.name}   sizes="300px"
                 fill
                 style={{
@@ -35,7 +35,7 @@ const Games = () => {
                 }}
                 />
                 {/* Gradient Overlay */}
-                <div className="absolute inset-x-0 bottom-0 h-16 lg:h-28 bg-gradient-to-t from-[#0A0C1B] to-transparent rounded-b-xl" />
+                <div className="absolute inset-x-0 bottom-0 h-10 sm:h-16 lg:h-28 bg-gradient-to-t from-[#0A0C1B] to-transparent rounded-b-xl" />
               </div>
             ))}
         </div>
