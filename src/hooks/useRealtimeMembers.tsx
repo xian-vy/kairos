@@ -25,9 +25,9 @@ const useRealtimeMembers = () => {
                 removeUserRealtime(payload.new.id);
             } else {
                 updateUserRealtime(payload.new as User);  
+                fetchUserGroup();
             }
             console.log("Realtime User Updated")
-            fetchUserGroup();
         } else if (payload.eventType === "DELETE") {
             removeUserRealtime(payload.old.id);
             console.log("Realtime User Removed")
