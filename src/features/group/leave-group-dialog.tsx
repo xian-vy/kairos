@@ -16,7 +16,6 @@ import { useBossDataStore } from "@/stores/bossDataStore";
 import { useGroupMembersStore } from "@/stores/groupMembersStore";
 import type { Database } from "@/types/database.types";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export function LeaveGroupDialog({
@@ -24,7 +23,6 @@ export function LeaveGroupDialog({
 }: {
   group: Database["public"]["Tables"]["groups"]["Row"];
 }) {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState("");
@@ -36,7 +34,7 @@ export function LeaveGroupDialog({
   const {setBossData} = useBossDataStore();
   const handleLeaveGroup = async () => {
     await leaveGroup(group,  password, setPassword, setIsLoading, isAdmin,(options) => toast({ ...options, variant: options.variant as "default" | "destructive" }));
-    router.refresh();
+    window.location.reload();
     setBossData([]);
   };
 

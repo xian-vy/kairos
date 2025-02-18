@@ -8,22 +8,19 @@ import { Database } from "@/types/database.types";
 import { useToast } from "@/hooks/use-toast";
 import { BOSSDATA_NIGHTCROWS } from "@/lib/data/presets";
 import { useBossDataStore } from "@/stores/bossDataStore";
-import { useGroupStore } from "@/stores/groupStore";
 import useCurrentUser from "@/hooks/useCurrentUser";
 
 interface CreateGroupDialogProps {
-  onGroupCreated: () => void;
   variant?: "default" | "welcome";
 }
 
-export function CreateGroupDialog({ onGroupCreated, variant = "default" }: CreateGroupDialogProps) {
+export function CreateGroupDialog({  variant = "default" }: CreateGroupDialogProps) {
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [newGroupName, setNewGroupName] = useState("");
   const supabase = createClientComponentClient<Database>();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const { setBossData } = useBossDataStore();
-  const { fetchUserGroup } = useGroupStore();
   const { currentUser } = useCurrentUser();
 
   const createGroup = async () => {
@@ -89,8 +86,7 @@ export function CreateGroupDialog({ onGroupCreated, variant = "default" }: Creat
         });
         
         setBossData(newData);
-        await fetchUserGroup(); // Fetch updated group data
-        onGroupCreated();
+        window.location.reload();
       }
     } catch (error) {
       console.error("Unexpected error:", error);
