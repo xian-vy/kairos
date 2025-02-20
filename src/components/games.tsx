@@ -23,7 +23,7 @@ const games = [
 
 const Games = () => {
   return (
-    <div className="mt-10 mb-16 sm:mt-14 lg:mt-16">
+    <div className="mt-10 mb-24 sm:mt-14 lg:mt-16">
       <h2 className="text-center text-base sm:text-xl xl:text-2xl font-bold text-[#B4B7E5] mb-8 md:mb-12">Supported Games</h2>
         <div className=" grid grid-cols-4  gap-0 sm:gap-5 lg:gap-10 max-w-[400px] md:max-w-[650px] lg:max-w-[700px] 2xl:max-w-screen-md mx-auto ">
             {games.map((game, index) => (

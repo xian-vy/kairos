@@ -1,8 +1,7 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import React, { useTransition } from "react";
-import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useTransition } from "react";
 
 const Hero = () => {
   const router = useRouter();
@@ -12,7 +11,7 @@ const Hero = () => {
     startTransition(() => {
       router.push("/app");
     });
-  };
+  }; 
   if (isPending) {
     return (
       <div className="flex justify-center items-center w-full min-h-screen">
@@ -29,35 +28,22 @@ const Hero = () => {
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-16 md:pt-20">
-        <h1 className="relative font-space-grotesk text-4xl md:text-6xl font-bold mb-4">
+        <h1 className="relative font-space-grotesk text-4xl md:text-6xl font-bold mb-5 xl:mb-6">
           <span className="relative inline-block">
             {/* Subtle glow effect */}
             <span className="absolute -inset-2 blur-2xl bg-gradient-to-r from-[#4B79E4]/20 to-[#9D68E4]/20" />
 
             {/* Main text with gradient */}
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl 3xl:text-4xl font-extrabold relative bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
-              Kairos
+            <h1 className="text-3xl sm:text-4xl md:text-5xl 3xl:text-6xl max-w-screen-sm !leading-[1.2] font-extrabold relative bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
+                 The ultimate boss tracking tool for any MMORPG
             </h1>
-
             {/* Bottom shine effect */}
-            <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#4B79E4]/50 to-transparent" />
+            {/* <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#4B79E4]/50 to-transparent" /> */}
           </span>
         </h1>
-        <h2 className="text-sm md:text-base 3xl:text-lg text-[#B4B7E5]/90 max-w-2xl mx-auto mb-8">
-          The ultimate boss tracking tool for any MMORPG
-        </h2>
+ 
         <div className="flex justify-center">
-          <Button
-            onClick={handleGetStarted}
-            size="lg"
-            className="relative bg-blue-600 text-white 
-            hover:bg-[#3D63C9] 
-            transform transition-all duration-200 
-            px-8 py-5 text-base font-medium rounded-lg
-            shadow-lg hover:shadow-xl overflow-hidden"
-          >
-            <span className="relative z-10 xl:text-[0.8rem]">Get Started</span>
-          </Button>
+            <span onClick={handleGetStarted} className="relative z-10 cursor-pointer text-[0.8rem] sm:text-sm md:text-base 3xl:text-lg text-[#E2E4FF] underline underline-offset-[6px] ">Get Started</span>
         </div>
       </div>
 
