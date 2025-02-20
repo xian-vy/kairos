@@ -2,6 +2,8 @@
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { LinearLoading } from "./linear-loading";
+import { GlowEffect } from "./ui/glow-effect";
+import { Button } from "./ui/button";
 
 const Hero = () => {
   const router = useRouter();
@@ -23,26 +25,35 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-16 md:pt-20">
-        <h1 className="relative font-space-grotesk text-4xl md:text-6xl font-bold mb-5 xl:mb-6">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-12 md:pt-16">
+        <h1 className="relative font-space-grotesk text-4xl md:text-6xl font-bold mb-1">
           <span className="relative inline-block">
             {/* Subtle glow effect */}
             <span className="absolute -inset-2 blur-2xl bg-gradient-to-r from-[#4B79E4]/20 to-[#9D68E4]/20" />
 
             {/* Main text with gradient */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl 3xl:text-6xl max-w-[450px] md:max-w-[560px] 3xl:max-w-screen-sm !leading-[1.2] font-extrabold relative bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
-                 The ultimate boss tracking tool for any MMORPG
+            <h1 className="text-4xl sm:text-5xl xl:text-6xl 3xl:text-7xl max-w-[450px] md:max-w-[560px] 3xl:max-w-screen-sm !leading-[1.2] font-extrabold tracking-widest relative bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
+                 KAIROS
             </h1>
-            {/* Bottom shine effect */}
-            {/* <span className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#4B79E4]/50 to-transparent" /> */}
           </span>
         </h1>
- 
-        <div className="flex justify-center">
-            <span onClick={handleGetStarted} className="relative z-10 cursor-pointer text-[0.8rem] sm:text-sm md:text-base 3xl:text-lg text-[#E2E4FF] underline underline-offset-[6px] ">Get Started</span>
-        </div>
+         <h2 className="text-sm xl:text-base 2xl:text-lg  !font-normal text-[#E2E4FF]">The ultimate boss tracking tool for any MMORPG</h2>
+         <div className="flex justify-center mt-4 xl:mt-6 2xl:mt-8">
+            <div className='relative'>
+              <GlowEffect
+                  colors={['#E45A68','#9D68E4','#9D68E4','#4B79E4']}
+                    mode='rotate'
+                    blur='strong'
+                    duration={4}
+                    scale={0.9}
+                  />
+                <Button onClick={handleGetStarted} className='relative h-10 font-normal rounded-lg 3xl:text-sm font-space-grotesk bg-[#0D0F23] '>
+                  Get Started Free
+                </Button>
+              </div>
+          </div>
       </div>
-
+     
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0A0C1B] via-transparent to-[#0A0C1B] pointer-events-none" />
     </div>
