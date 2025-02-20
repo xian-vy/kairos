@@ -25,44 +25,49 @@ import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Loader2 } from "lucide-react"
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { FaDiscord, FaFacebookMessenger, FaGithub, FaUser } from "react-icons/fa"
+import { LinearLoading } from "./linear-loading"
 
 const Navigation = () => {
   const router = useRouter()
   const supabase = createClientComponentClient()
   const [signOutDialogOpen, setSignOutDialogOpen] = useState(false)
-  const [isSigningOut, setIsSigningOut] = useState(false)
   const { currentUser } = useCurrentUser();
   const {userData}= useGroupStore();
+  const [isPending, startTransition] = useTransition();
+
   const handleSignOutClick = () => {
     setSignOutDialogOpen(true)
   }
 
   const confirmSignOut = async () => {
-    try {
-      setIsSigningOut(true)
-      await supabase.auth.signOut()
-      router.push('/auth/signin')
-      router.refresh()
-    } finally {
-      setIsSigningOut(false)
-      setSignOutDialogOpen(false)
-    }
+      startTransition(() => {
+        supabase.auth.signOut()
+        router.push('/auth/signin')
+        router.refresh()
+      })
   }
 
+  const handleNavigateToGuide = ()=> {
+    startTransition(() => {
+      router.push("/guide");
+    });
+  }
+  const handleNavigateToHome = ()=>{
+    startTransition(() => {
+      router.push("/");
+    });
+  }
   return (
     <>
-      {isSigningOut && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-white" />
-        </div>
-      )}
-      
       <nav className="border-b border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
+      <LinearLoading isLoading={isPending} />
+
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-              <span onClick={() => router.push('/')} className="cursor-pointer font-space-grotesk mb-0.5 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
+              <span onClick={handleNavigateToHome} className="cursor-pointer font-space-grotesk mb-0.5 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
                 Kairos
               </span>
          
@@ -81,22 +86,11 @@ const Navigation = () => {
                       </Link>
                       </>
                 )}
-              <Button onClick={() => router.push('/guide')} variant="ghost" className=" text-[#E2E4FF] hover:text-black !px-2">
+              <Button onClick={handleNavigateToGuide} variant="ghost" className=" text-[#E2E4FF] hover:text-black !px-2">
                 <span className="font-space-grotesk 3xl:text-sm">Guide</span>
               </Button>
                {currentUser && (
                 <div className="flex items-center gap-4">
-                  {/* <div>
-                    {GAMESLIST.map((game) => (
-                      <Select key={game.slug}>
-                        <SelectTrigger className="hover:bg-[#1F2137] text-white flex items-center gap-2">
-                          <Image src={game.icon} alt={game.name} width={20} height={20} />
-                          <span className="font-space-grotesk text-white">{game.name}</span>
-                        </SelectTrigger>
-                      </Select>
-                    ))}
-                  </div> */}
-                  
                   <DropdownMenu>
                     <DropdownMenuTrigger className="focus:outline-none">
                       <Avatar className="h-8 w-8">
@@ -147,16 +141,16 @@ const Navigation = () => {
           <AlertDialogFooter className="flex flex-row w-full justify-between items-center">
             <AlertDialogCancel 
               className="bg-[#090915] text-[#B4B7E5] mt-0 hover:bg-[#2A2D4B] hover:text-[#E2E4FF] border-none"
-              disabled={isSigningOut}
+              disabled={isPending}
             >
               Cancel
             </AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmSignOut}
               className="bg-red-700 h-8 text-white hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={isSigningOut}
+              disabled={isPending}
             >
-              {isSigningOut ? (
+              {isPending ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 'Sign Out'

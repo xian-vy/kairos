@@ -1,7 +1,7 @@
 "use client";
-import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { LinearLoading } from "./linear-loading";
 
 const Hero = () => {
   const router = useRouter();
@@ -12,15 +12,11 @@ const Hero = () => {
       router.push("/app");
     });
   }; 
-  if (isPending) {
-    return (
-      <div className="flex justify-center items-center w-full min-h-screen">
-        <Loader2 className="h-4 w-4 animate-spin text-white" />
-      </div>
-    );
-  }
+
   return (
     <div className="relative min-h-[400px] 2xl:min-h-[550px] flex items-center justify-center overflow-hidden">
+      <LinearLoading isLoading={isPending} />
+
       {/* Glowing circle gradient */}
       <div className="absolute w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] lg:w-[700px] lg:h-[900px] xl:w-[900px] opacity-25">
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#4B79E4] via-[#9D68E4] to-[#E45A68] blur-3xl" />
