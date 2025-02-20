@@ -8,7 +8,7 @@ const Features = () => {
         {features.map((feature, index) => (
             <div
             key={index}
-            className="relative  bg-[#0D0F23] backdrop-blur-sm p-4 md:p-8 rounded-xl transition-colors flex flex-col items-center"
+            className="relative  bg-[#0D0F23] backdrop-blur-sm p-4 sm:p-6 md:p-8 rounded-xl transition-colors flex flex-col items-center"
             >
             <div className="mb-5 inline-block rounded-lg bg-[#4B79E4]/10 p-3">{feature.icon}</div>
             <h3 className="text-sm md:text-base 3xl:text-lg font-semibold text-[#E2E4FF] mb-1.5 sm:mb-3 text-center">
