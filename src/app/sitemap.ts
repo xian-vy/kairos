@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://kairos-mmo.vercel.app'
+  const baseUrl = 'https://kairos-tracker.vercel.app'
 
   return [
     {
