@@ -38,7 +38,7 @@ const Hero = () => {
           </span>
         </h1>
          <h2 className="text-sm xl:text-base 2xl:text-lg  !font-normal text-[#E2E4FF]">The ultimate boss tracking tool for any MMORPG</h2>
-         <div className="flex justify-center mt-4 xl:mt-6 2xl:mt-8">
+         <div className="flex justify-center mt-7 xl:mt-9 2xl:mt-10">
             <div className='relative'>
               <GlowEffect
                   colors={['#E45A68','#9D68E4','#9D68E4','#4B79E4']}
