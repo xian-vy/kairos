@@ -16,11 +16,11 @@ const Hero = () => {
   }; 
 
   return (
-    <div className="relative min-h-[400px] 2xl:min-h-[550px] flex items-center justify-center overflow-hidden">
+    <div className="relative min-h-[400px] 2xl:min-h-[450px] 3xl:min-h-[550px] flex items-center justify-center overflow-hidden">
       <LinearLoading isLoading={isPending} />
 
       {/* Glowing circle gradient */}
-      <div className="absolute w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] lg:w-[700px] lg:h-[900px] xl:w-[900px] opacity-25">
+      <div className="absolute w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] lg:w-[700px] lg:h-[900px] xl:w-[750px] 3xl:w-[800px] opacity-25">
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#4B79E4] via-[#9D68E4] to-[#E45A68] blur-3xl" />
       </div>
 
@@ -47,7 +47,7 @@ const Hero = () => {
                     duration={4}
                     scale={0.9}
                   />
-                <Button onClick={handleGetStarted} className='relative h-10 font-normal rounded-lg 3xl:text-sm font-space-grotesk bg-[#0D0F23] '>
+                <Button onClick={handleGetStarted} className='relative h-10 2xl:h-11 font-normal rounded-lg 2xl:text-[0.9rem] font-space-grotesk bg-[#0D0F23] '>
                   Get Started Free
                 </Button>
               </div>

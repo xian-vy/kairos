@@ -7,8 +7,8 @@ export default function Home() {
     <main className="bg-[#0A0C1B]">
       <Hero />
       {/* <Statistics /> */}
-      <Games />
       <Features />
+      <Games />
       {/* <Testimonials /> */}
     </main>
   );
