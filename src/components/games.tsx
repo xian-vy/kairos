@@ -46,7 +46,7 @@ const Games = () => {
               </div>
               <div className="text-center mt-4">
                 <p className="text-[#E2E4FF] font-space-grotesk">{game.name}</p>
-                <p className="text-sm text-[#B4B7E5]">{game.players}</p>
+                <p className="text-[#B4B7E5]">{game.players}</p>
               </div>
             </div>
           ))}
