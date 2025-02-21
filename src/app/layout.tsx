@@ -17,16 +17,43 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Kairos - MMORPG Boss Tracking Tool",
-  description: "A flexible boss tracking tool for any MMORPG",
+  description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
   keywords: ["MMORPG", "Boss Tracking", "Boss Timer", "Night Crows Boss Tracking", "Kildebat", "MMORPG Boss Tracking Tool", "Kairos"],
-  authors: [{ name: "Kairos", url: "xianvy.vercel.app" }],
+  authors: [{ name: "Kairos", url: "kairos-tracker.vercel.app" }],
   creator: "Kairos",
   themeColor: "#0A0C1B",
   icons: {
     icon: "/favicon.ico",
   },
+  openGraph: {
+    title: "Kairos - MMORPG Boss Tracking Tool",
+    description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
+    url: "https://kairos-tracker.vercel.app",
+    images: [
+      {
+        url: "/kairos.jpeg",
+        alt: "Kairos - MMORPG Boss Tracking Tool",
+      },
+    ],
+    siteName: "Kairos - MMORPG Boss Tracking Tool",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kairos - MMORPG Boss Tracking Tool",
+    description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
+    images: "/kairos.jpeg",
+  },
   other: { 
     'google-adsense-account': 'ca-pub-3830709842288861', 
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  alternates: {
+    canonical: "https://kairos-tracker.vercel.app/",
   },
 };
 
