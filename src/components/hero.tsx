@@ -16,11 +16,11 @@ const Hero = () => {
   }; 
 
   return (
-    <div className="relative min-h-[400px] 2xl:min-h-[450px] 3xl:min-h-[550px] flex items-center justify-center overflow-hidden">
+    <div className="relative min-h-[400px] 2xl:min-h-[450px] 3xl:min-h-[500px] flex items-center justify-center overflow-hidden">
       <LinearLoading isLoading={isPending} />
 
       {/* Glowing circle gradient */}
-      <div className="absolute w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] lg:w-[700px] lg:h-[900px] xl:w-[750px] 3xl:w-[800px] opacity-25">
+      <div className="absolute w-[300px] sm:w-[500px]  lg:w-[700px] xl:w-[750px] 3xl:w-[800px] h-[300px] sm:h-[500px] 3xl:h-[550px] opacity-25">
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#4B79E4] via-[#9D68E4] to-[#E45A68] blur-3xl" />
       </div>
 
