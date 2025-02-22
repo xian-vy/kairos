@@ -17,6 +17,7 @@ import useCurrentUser from "@/hooks/useCurrentUser";
 import { useGroupStore } from "@/stores/groupStore";
 import useScreenSize from "@/hooks/useScreensize";
 import { Skeleton } from "@/components/ui/skeleton";
+import MonetagOnclick from "@/app/MontetagOnclick";
 
 export function BossList() {
 
@@ -99,6 +100,7 @@ export function BossList() {
 
   return (
     <>
+    <MonetagOnclick />
     <div className="p-4 space-y-6">
       <div className="flex items-center justify-between">
         <p className="text-[#B4B7E5] text-xs flex items-center gap-1.5 ">
