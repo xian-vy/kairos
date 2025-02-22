@@ -16,8 +16,8 @@ export async function middleware(req: NextRequest) {
   }
 
   // If trying to access auth pages while already authenticated
-  if (session && (req.nextUrl.pathname.startsWith('/auth'))) {
-    return NextResponse.redirect(new URL('/', req.url))
+  if (session && (req.nextUrl.pathname.startsWith('/auth') || req.nextUrl.pathname === '/')) {
+    return NextResponse.redirect(new URL('/app', req.url))
   }
 
   return res
