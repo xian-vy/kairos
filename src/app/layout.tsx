@@ -5,6 +5,7 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react"
+import MonetagAds from "./Montetag";
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
@@ -66,6 +67,7 @@ export default async function RootLayout({
   return (   
     <html lang="en">
       <body className={`min-h-screen bg-[#0A0C1B] ${spaceGrotesk.variable} ${inter.variable} font-inter antialiased`}>
+      <MonetagAds />
        <Navigation />
         {children}
         <Footer />
