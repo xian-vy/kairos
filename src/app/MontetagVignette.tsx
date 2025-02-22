@@ -32,6 +32,7 @@ export default function MontetagVignette() {
         try {
           (document.body || document.documentElement).appendChild(s);
         } catch (e) {
+          console.error(e);
           handleLoad();
         }
       };
