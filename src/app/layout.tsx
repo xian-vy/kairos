@@ -18,12 +18,12 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Kairos - MMORPG Boss Tracking Tool",
   description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
-  keywords: ["MMORPG", "Boss Tracking", "Boss Timer", "Night Crows Boss Tracking", "Kildebat", "MMORPG Boss Tracking Tool", "Kairos"],
+  keywords: ["MMORPG Tool", "Boss Tracking Tool", "Boss Timer", "Night Crows Boss Tracking", "Kildebat", "MMORPG Boss Tracking Tool", "Kairos  Boss Tracking Tool"],
   authors: [{ name: "Kairos", url: "kairos-tracker.vercel.app" }],
   creator: "Kairos",
   themeColor: "#0A0C1B",
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.ico?v=2",
   },
   openGraph: {
     title: "Kairos - MMORPG Boss Tracking Tool",
@@ -55,6 +55,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://kairos-tracker.vercel.app/",
   },
+  manifest: "/manifest.json",
 };
 
 export default async function RootLayout({
