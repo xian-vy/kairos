@@ -74,7 +74,7 @@ export default function GuidePage() {
               <li>GitHub Issues: github.com/xian-vy</li>
             </ul>
             <p className="mt-4 italic">
-              Happy hunting! May your timers be accurate and your kills be plenty! 🗡️
+              Happy hunting 🗡️
             </p>
           </section>
         </CardContent>
