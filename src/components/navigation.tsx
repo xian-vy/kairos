@@ -22,12 +22,13 @@ import {
 import useCurrentUser from '@/hooks/useCurrentUser'
 import { useGroupStore } from "@/stores/groupStore"
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { Loader2 } from "lucide-react"
+import { Loader2, Share2 } from "lucide-react"
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
 import { FaDiscord, FaFacebookMessenger, FaGithub, FaUser } from "react-icons/fa"
 import { LinearLoading } from "./linear-loading"
+import { ShareDialog } from "./share-dialog"
 
 const Navigation = () => {
   const router = useRouter()
@@ -36,6 +37,7 @@ const Navigation = () => {
   const { currentUser } = useCurrentUser();
   const {userData}= useGroupStore();
   const [isPending, startTransition] = useTransition();
+  const [shareDialogOpen, setShareDialogOpen] = useState(false)
 
   const handleSignOutClick = () => {
     setSignOutDialogOpen(true)
@@ -72,7 +74,7 @@ const Navigation = () => {
               </span>
          
            
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
                {!currentUser && (
                       <>
                       <Link href="https://discord.com/crispysnowflake." aria-label="Discord Link" target="_blank" className="text-[#B4B7E5] hover:text-white">
@@ -86,7 +88,14 @@ const Navigation = () => {
                       </Link>
                       </>
                 )}
-              <Button onClick={handleNavigateToGuide} variant="ghost" className=" text-[#E2E4FF] hover:text-black !px-2">
+               <Button 
+                  onClick={() => setShareDialogOpen(true)} 
+                  variant="ghost" 
+                  className="text-[#E2E4FF] hover:text-black !px-2"
+                >
+                  <Share2 className="h-4 w-4" />
+                </Button>
+              <Button onClick={handleNavigateToGuide} variant="ghost" className=" text-[#E2E4FF] hover:text-black !px-3">
                 <span className="font-space-grotesk 3xl:text-sm">Guide</span>
               </Button>
                {currentUser && (
@@ -129,6 +138,8 @@ const Navigation = () => {
           </div>
         </div>
       </nav>
+
+      <ShareDialog open={shareDialogOpen} onOpenChange={setShareDialogOpen} />
 
       <AlertDialog open={signOutDialogOpen} onOpenChange={setSignOutDialogOpen}>
         <AlertDialogContent className="bg-[#090915] border-[#1F2137]">
