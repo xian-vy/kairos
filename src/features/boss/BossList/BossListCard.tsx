@@ -40,7 +40,7 @@ export function BossListCard({ boss, killCount, onLocationSelect }: BossListCard
   };
 
   return (
-    <Card className="group hover:shadow-lg transition-all duration-300 border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm cursor-pointer">
+    <Card className="group hover:shadow-lg transition-all duration-300 border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm cursor-pointer !z-10">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center justify-between text-[#E2E4FF]">
           <span className=" transition-colors text-base flex items-center gap-2">
