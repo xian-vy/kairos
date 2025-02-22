@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export default function AboutPage() {
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="container mx-auto px-4 py-8 max-w-4xl min-h-[70vh] flex flex-col items-center justify-center">
       <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-[#E2E4FF] text-center">

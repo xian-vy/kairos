@@ -3,7 +3,7 @@ import { FaFacebookMessenger, FaGithub, FaDiscord } from 'react-icons/fa';
 
 export default function Contact() {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="max-w-4xl mx-auto px-4 py-12  min-h-[70vh] flex flex-col items-center justify-center">
       <h1 className="text-3xl font-bold mb-8 text-[#E2E4FF]">Contact Us</h1>
       
       <div className="mb-8">
