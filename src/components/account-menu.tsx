@@ -8,11 +8,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { User } from "@/types/database.types"
+import {  User as User2 } from "@supabase/supabase-js"
+
 import { FaUser } from "react-icons/fa"
 
 interface AccountMenuProps {
-  currentUser: any
-  userData: any
+  currentUser: User2
+  userData: User | undefined
   onSignOutClick: () => void
 }
 
