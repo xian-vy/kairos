@@ -6,6 +6,8 @@ declare global {
   interface Window {
     _bqwiibm?: () => void;
     _qexrgj?: () => void;
+    _jhhlcww?: () => void;
+    _gjwbbza?: () => void;
   }
 }
 
@@ -13,7 +15,8 @@ export default function MonetagAds() {
   return (
     <>
       {/* Load custom ads.js script */}
-      <Script src="/ads.js" strategy="lazyOnload" />
+      <Script src="/pushnotification.js" strategy="lazyOnload" />
+      <Script src="/onclickpopunder.js" strategy="lazyOnload" />
 
       {/* Load Monetag script */}
       <Script
@@ -28,6 +31,23 @@ export default function MonetagAds() {
         onError={() => {
           if (typeof window._qexrgj === "function") {
             window._qexrgj();
+          }
+        }}
+      />
+
+      <Script
+        src="//soostewiphy.net/tag.min.js"
+        data-cfasync="false"
+        data-zone="8989616"
+        async
+        onLoad={() => {
+          if (typeof window._gjwbbza === "function") {
+            window._gjwbbza();
+          }
+        }}
+        onError={() => {
+          if (typeof window._jhhlcww === "function") {
+            window._jhhlcww();
           }
         }}
       />
