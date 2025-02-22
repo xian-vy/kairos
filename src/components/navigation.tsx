@@ -4,10 +4,8 @@ import useCurrentUser from '@/hooks/useCurrentUser'
 import { useGroupStore } from "@/stores/groupStore"
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Share2 } from "lucide-react"
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState, useTransition } from 'react'
-import { FaDiscord, FaFacebookMessenger, FaGithub } from "react-icons/fa"
 import AccountMenu from './account-menu'
 import { LinearLoading } from "./linear-loading"
 import { ShareDialog } from "./share-dialog"
@@ -56,25 +54,12 @@ const Navigation = () => {
            
            
             <div className="flex items-center gap-2">
-               {!currentUser && (
-                      <>
-                      <Link href="https://discord.com/crispysnowflake." aria-label="Discord Link" target="_blank" className="text-[#B4B7E5] hover:text-white">
-                        <FaDiscord className="h-4 w-4" />
-                      </Link>
-                      <Link href="https://github.com/xian-vy" aria-label="Github Link" target="_blank" className="text-[#B4B7E5] hover:text-white">
-                        <FaGithub className="h-4 w-4" />
-                      </Link>
-                      <Link href="https://facebook.com/xzyian.vy" aria-label="FB Messenger Link" target="_blank" className="text-[#B4B7E5] hover:text-white">
-                        <FaFacebookMessenger className="h-4 w-4" />
-                      </Link>
-                      </>
-                )}
                <Button 
                   onClick={() => setShareDialogOpen(true)} 
                   variant="ghost" 
                   className="text-[#E2E4FF] hover:text-black !px-2"
                 >
-                  <Share2 className="h-4 w-4" />
+                  <Share2 className="h-3 w-3" />
                 </Button>
               <Button onClick={handleNavigateToGuide} variant="ghost" className=" text-[#E2E4FF] hover:text-black !px-3">
                 <span className="font-space-grotesk 3xl:text-sm">Guide</span>
