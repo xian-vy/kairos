@@ -26,7 +26,7 @@ const Footer = () => {
           <p className="text-sm text-[#B4B7E5]/70 font-space-grotesk">Track, notify, collaborate - all in one place</p>
         </div>
 
-        <div className="flex justify-center space-x-8 mb-10 sm:mb-16 lg:mb-20 max-w-7xl mx-auto">
+        <div className="flex justify-center space-x-8 mb-20 max-w-7xl mx-auto">
           <span onClick={() => handleNavigate("/features")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-sm cursor-pointer">
             Features
           </span>
