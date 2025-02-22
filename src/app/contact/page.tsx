@@ -39,7 +39,7 @@ export default function Contact() {
               <FaGithub size={18} />
             </Link>
             <Link 
-              href="https://facebook.com/crispysnowflake" 
+              href="https://www.facebook.com/xzyian.vy" 
               target="_blank" 
               className="text-[#B4B7E5] hover:text-white transition-colors"
             >
