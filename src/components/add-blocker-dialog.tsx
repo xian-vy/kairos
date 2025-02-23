@@ -12,7 +12,7 @@ export function AdBlockerDialog({ isOpen }: AdBlockerDialogProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={() => {}}>
-      <DialogContent className="sm:max-w-[525px]">
+      <DialogContent className="w-11/12 sm:max-w-[525px]">
         <DialogHeader>
           <DialogTitle>We Understand You Use an Ad Blocker</DialogTitle>
           <DialogDescription>
@@ -34,7 +34,7 @@ export function AdBlockerDialog({ isOpen }: AdBlockerDialogProps) {
               <li><strong>Temporarily pause</strong> your ad blocker for this session</li>
             </ol>
           </div>
-          <div className="flex gap-3 justify-end mt-2">
+          <div className="flex flex-col sm:flex-row gap-3 justify-center sm:justify-end items-center mt-2">
             <Button variant="outline" onClick={handleReload}>
               I&apos;ll Keep My Ad Blocker On
             </Button>
