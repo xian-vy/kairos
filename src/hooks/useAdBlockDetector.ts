@@ -18,6 +18,7 @@ export const useAdBlockDetector = () => {
         setIsAdBlockEnabled(isBlocked);
         document.body.removeChild(testAd);
       } catch (e) {
+        console.error('Error detecting ad block', e);
         setIsAdBlockEnabled(true);
       }
     };
