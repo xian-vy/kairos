@@ -8,11 +8,15 @@ import { useBossDataStore } from "@/stores/bossDataStore";
 import { useGroupMembersStore } from "@/stores/groupMembersStore";
 import { useBossTimersStore } from "@/stores/bossTimersStore";
 import useRealtimeMembers from "@/hooks/useRealtimeMembers";
+import { useAdBlockDetector } from "@/hooks/useAdBlockDetector";
+import { AdBlockerDialog } from "@/components/add-blocker-dialog";
 export function GroupSelection() {
   const { group, isLoading: groupLoading,  userData , fetchUserGroup} = useGroupStore();
   const { refreshBossData} = useBossDataStore();
   const { fetchGroupMembers, loading : membersLoading } = useGroupMembersStore();
   const { fetchTimers } = useBossTimersStore();
+  const isAdBlockEnabled = useAdBlockDetector()
+
   useRealtimeMembers();
   useEffect(() => {
     fetchUserGroup().then(() => {
@@ -34,6 +38,8 @@ export function GroupSelection() {
 
   return (
     <div className="space-y-6 relative">
+      <AdBlockerDialog isOpen={isAdBlockEnabled} />
+
       {group && userData?.status !== "pending" && (
         <div className="flex flex-col items-center w-full px-0 sm:px-4 py-4 3xl:py-8">
           <h2 className="text-base md:text-lg font-bold text-center text-[#E2E4FF] font-space-grotesk">
