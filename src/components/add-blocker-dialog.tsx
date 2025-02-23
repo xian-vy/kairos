@@ -17,7 +17,7 @@ export function AdBlockerDialog({ isOpen }: AdBlockerDialogProps) {
           <DialogTitle>We Understand You Use an Ad Blocker</DialogTitle>
           <DialogDescription>
             We respect your choice to use an ad blocker for your online safety. However, our website relies on 
-           ads to keep our services free for everyone.
+            ads to keep our services free for everyone.
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-4 mt-4">
@@ -27,7 +27,7 @@ export function AdBlockerDialog({ isOpen }: AdBlockerDialogProps) {
               <li><strong>Whitelist our website</strong> (recommended):
                 <ul className="list-disc ml-5 mt-1 space-y-1">
                   <li>Click on your ad blocker icon in the browser toolbar</li>
-                  <li>Look for "Don't run on this site" or "Whitelist this site"</li>
+                  <li>Look for &quot;Don&apos;t run on this site&quot; or &quot;Whitelist this site&quot;</li>
                   <li>Refresh the page after whitelisting</li>
                 </ul>
               </li>
@@ -36,10 +36,10 @@ export function AdBlockerDialog({ isOpen }: AdBlockerDialogProps) {
           </div>
           <div className="flex gap-3 justify-end mt-2">
             <Button variant="outline" onClick={handleReload}>
-              I'll Keep My Ad Blocker On
+              I&apos;ll Keep My Ad Blocker On
             </Button>
             <Button onClick={handleReload}>
-              I've Whitelisted - Reload Page
+              I&apos;ve Whitelisted - Reload Page
             </Button>
           </div>
         </div>
