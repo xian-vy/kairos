@@ -12,21 +12,36 @@ export function AdBlockerDialog({ isOpen }: AdBlockerDialogProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={() => {}}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[525px]">
         <DialogHeader>
-          <DialogTitle>Ad Blocker Detected</DialogTitle>
+          <DialogTitle>We Understand You Use an Ad Blocker</DialogTitle>
           <DialogDescription>
-            We noticed you&apos;re using an ad blocker. Our website is 100% free, and we rely on ads to keep it that way.
-            Please disable your ad blocker to continue using our services.
+            We respect your choice to use an ad blocker for your online safety. However, our website relies on 
+           ads to keep our services free for everyone.
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-4 mt-4">
-          <p className="text-sm text-gray-500">
-            After disabling your ad blocker, click the button below to reload the page.
-          </p>
-          <Button onClick={handleReload}>
-            I&apos;ve Disabled My Ad Blocker - Reload Page
-          </Button>
+          <div className="space-y-3 text-sm text-gray-600">
+            <p>To continue using our services, you can:</p>
+            <ol className="list-decimal ml-5 space-y-2">
+              <li><strong>Whitelist our website</strong> (recommended):
+                <ul className="list-disc ml-5 mt-1 space-y-1">
+                  <li>Click on your ad blocker icon in the browser toolbar</li>
+                  <li>Look for "Don't run on this site" or "Whitelist this site"</li>
+                  <li>Refresh the page after whitelisting</li>
+                </ul>
+              </li>
+              <li><strong>Temporarily pause</strong> your ad blocker for this session</li>
+            </ol>
+          </div>
+          <div className="flex gap-3 justify-end mt-2">
+            <Button variant="outline" onClick={handleReload}>
+              I'll Keep My Ad Blocker On
+            </Button>
+            <Button onClick={handleReload}>
+              I've Whitelisted - Reload Page
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
