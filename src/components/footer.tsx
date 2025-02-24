@@ -26,7 +26,7 @@ const Footer = () => {
           <p className="text-sm text-[#B4B7E5]/70 font-space-grotesk">Track, notify, collaborate - all in one place</p>
         </div>
 
-        <div className="flex justify-center space-x-8 mb-20 max-w-7xl mx-auto">
+        <div className="flex justify-center space-x-3 sm:space-x-5 lg:space-x-8 mb-20 xl:mb-24 max-w-7xl mx-auto">
           <span onClick={() => handleNavigate("/features")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-sm cursor-pointer">
             Features
           </span>
@@ -39,6 +39,9 @@ const Footer = () => {
           <span onClick={() => handleNavigate("/contact")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-sm cursor-pointer">
             Contact
           </span>
+          <span onClick={() => handleNavigate("/privacy-policy")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-sm cursor-pointer">
+             Privacy 
+            </span>
         </div>
 
 
@@ -47,9 +50,7 @@ const Footer = () => {
           <div className="flex flex-col-reverse gap-5 sm:flex-row w-full justify-between items-center mt-5" >
                 <span>© {new Date().getFullYear()} Kairos. All rights reserved.</span>
                 <div className="flex items-center gap-5">
-                        <span onClick={() => handleNavigate("/privacy-policy")} className="hover:text-white transition-colors duration-200 cursor-pointer">
-                          Privacy Policy
-                        </span>
+                        
                         <div className="flex items-center gap-3">
                             <Link href="https://discord.com/crispysnowflake." aria-label="Discord Link" target="_blank" className="text-[#B4B7E5] hover:text-white">
                                         <FaDiscord className="h-4 w-4" />
