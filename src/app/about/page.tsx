@@ -1,5 +1,28 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-
+import { Metadata } from 'next';
+export const generateMetadata = async (): Promise<Metadata> => {
+  const BASE_URL = "https://kairos-tracker.vercel.app/";
+ 
+   return {
+     title: "Kairos | " + "About",
+     description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
+     openGraph: {
+       title: "Kairos | " + "About",
+       description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
+       type: "article",
+       url: BASE_URL + "about",
+       siteName:"About",
+     },
+     twitter: {
+       card: "summary_large_image",
+       title: "Kairos | " + "About",
+       description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
+     },
+     alternates: {
+       canonical:BASE_URL
+     },
+   };
+ };
 export default function AboutPage() {
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl min-h-[70vh] flex flex-col items-center justify-center">

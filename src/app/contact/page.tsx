@@ -1,6 +1,29 @@
 import Link from 'next/link';
 import { FaFacebookMessenger, FaGithub, FaDiscord } from 'react-icons/fa';
-
+import { Metadata } from 'next';
+export const generateMetadata = async (): Promise<Metadata> => {
+  const BASE_URL = "https://kairos-tracker.vercel.app/";
+ 
+   return {
+     title: "Kairos | " + "Contact",
+     description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
+     openGraph: {
+       title: "Kairos | " + "Contact",
+       description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
+       type: "article",
+       url: BASE_URL + "contact",
+       siteName:"Contact",
+     },
+     twitter: {
+       card: "summary_large_image",
+       title: "Kairos | " + "Contact",
+       description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
+     },
+     alternates: {
+       canonical:BASE_URL
+     },
+   };
+ };
 export default function Contact() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12  min-h-[70vh] flex flex-col items-center justify-center">

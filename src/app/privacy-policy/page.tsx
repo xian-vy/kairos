@@ -1,5 +1,28 @@
+import { Metadata } from 'next';
 import React from 'react';
-
+export const generateMetadata = async (): Promise<Metadata> => {
+  const BASE_URL = "https://kairos-tracker.vercel.app/";
+ 
+   return {
+     title: "Kairos | " + "Privacy Policy",
+     description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
+     openGraph: {
+       title: "Kairos | " + "Privacy Policy",
+       description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
+       type: "article",
+       url: BASE_URL + "privacy-policy",
+       siteName:"Privacy Policy",
+     },
+     twitter: {
+       card: "summary_large_image",
+       title: "Kairos | " + "Privacy Policy",
+       description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
+     },
+     alternates: {
+       canonical:BASE_URL
+     },
+   };
+ };
 export default function PrivacyPolicy() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
