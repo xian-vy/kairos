@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Metadata } from 'next';
+const BASE_URL = "https://kairos-tracker.vercel.app/";
+
 export const generateMetadata = async (): Promise<Metadata> => {
-  const BASE_URL = "https://kairos-tracker.vercel.app/";
  
    return {
      title: "Kairos | " + "About",
@@ -24,7 +25,19 @@ export const generateMetadata = async (): Promise<Metadata> => {
    };
  };
 export default function AboutPage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    "@type": "BlogPosting",
+    "headline": "About Kairos",
+    "description":" Kairos was created with a simple goal: to make boss tracking in MMORPGs effortless and collaborative. We believe that players should focus on the  excitement of the hunt, not the complexity of timing spawns.",
+    url: BASE_URL + "about"
+  }
   return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     <div className="container mx-auto px-4 py-8 max-w-4xl min-h-[70vh] flex flex-col items-center justify-center">
       <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
         <CardHeader>
@@ -60,5 +73,6 @@ export default function AboutPage() {
         </CardContent>
       </Card>
     </div>
+    </>
   )
 } 

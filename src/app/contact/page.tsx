@@ -1,8 +1,8 @@
 import Link from 'next/link';
 import { FaFacebookMessenger, FaGithub, FaDiscord } from 'react-icons/fa';
 import { Metadata } from 'next';
+const BASE_URL = "https://kairos-tracker.vercel.app/";
 export const generateMetadata = async (): Promise<Metadata> => {
-  const BASE_URL = "https://kairos-tracker.vercel.app/";
  
    return {
      title: "Kairos | " + "Contact",
@@ -25,7 +25,19 @@ export const generateMetadata = async (): Promise<Metadata> => {
    };
  };
 export default function Contact() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    "@type": "BlogPosting",
+    "headline": "Get in Touch",
+    "description":"Have questions or feedback? We&apos;d love to hear from you. Get in touch with us through..",
+    url: BASE_URL + "contact"
+  }
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
     <div className="max-w-4xl mx-auto px-4 py-12  min-h-[70vh] flex flex-col items-center justify-center">
       <h1 className="text-3xl font-bold mb-8 text-[#E2E4FF]">Contact Us</h1>
       
@@ -72,5 +84,6 @@ export default function Contact() {
         </div>
       </div>
     </div>
+    </>
   );
 } 

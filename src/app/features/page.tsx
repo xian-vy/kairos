@@ -1,8 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Metadata } from 'next';
 
+const BASE_URL = "https://kairos-tracker.vercel.app/";
 export const generateMetadata = async (): Promise<Metadata> => {
- const BASE_URL = "https://kairos-tracker.vercel.app/";
 
   return {
     title: "Kairos | " + "Features",
@@ -25,7 +25,19 @@ export const generateMetadata = async (): Promise<Metadata> => {
   };
 };
 export default function FeaturesPage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    "@type": "BlogPosting",
+    "headline": "Features",
+    "description":"Set precise respawn intervals for each boss, Configure countdown settings and delays.",
+    url: BASE_URL + "features"
+  }
   return (
+    <>
+       <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
         <CardHeader>
@@ -72,5 +84,6 @@ export default function FeaturesPage() {
         </CardContent>
       </Card>
     </div>
+    </>
   )
 } 

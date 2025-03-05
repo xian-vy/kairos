@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import React from 'react';
+const BASE_URL = "https://kairos-tracker.vercel.app/";
 export const generateMetadata = async (): Promise<Metadata> => {
-  const BASE_URL = "https://kairos-tracker.vercel.app/";
  
    return {
      title: "Kairos | " + "Privacy Policy",
@@ -24,7 +24,19 @@ export const generateMetadata = async (): Promise<Metadata> => {
    };
  };
 export default function PrivacyPolicy() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    "@type": "BlogPosting",
+    "headline": "Privacy Policy",
+    "description":"This Privacy Policy describes how we collect, use, and handle your information when you use our services.",
+    url: BASE_URL + "privacy-policy"
+  }
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
     <div className="max-w-4xl mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold mb-8 text-[#E2E4FF]">Privacy Policy</h1>
       
@@ -100,5 +112,6 @@ export default function PrivacyPolicy() {
         </p>
       </section>
     </div>
+    </>
   );
 } 

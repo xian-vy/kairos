@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Metadata } from 'next';
+
+const BASE_URL = "https://kairos-tracker.vercel.app/";
 export const generateMetadata = async (): Promise<Metadata> => {
-  const BASE_URL = "https://kairos-tracker.vercel.app/";
  
    return {
      title: "Kairos | " + "Guide",
@@ -10,7 +11,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
        title: "Kairos | " + "Guide",
        description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
        type: "article",
-       url: BASE_URL + "guide",
+       url: BASE_URL + "Guide",
        siteName:"Guide",
      },
      twitter: {
@@ -24,7 +25,19 @@ export const generateMetadata = async (): Promise<Metadata> => {
    };
  };
 export default function GuidePage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    "@type": "BlogPosting",
+    "headline": "Getting Started",
+    "description":"Whether youre a guild leader or a dedicated player, Kairos helps you track boss spawns efficiently and coordinate with your team.",
+    url: BASE_URL + "guide"
+  }
   return (
+    <>
+     <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
         <CardHeader>
@@ -103,5 +116,6 @@ export default function GuidePage() {
         </CardContent>
       </Card>
     </div>
+    </>
   )
 } 
