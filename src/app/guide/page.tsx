@@ -11,7 +11,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
        title: "Kairos | " + "Guide",
        description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
        type: "article",
-       url: BASE_URL + "Guide",
+       url: BASE_URL + "guide",
        siteName:"Guide",
      },
      twitter: {
