@@ -20,7 +20,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
        description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
      },
      alternates: {
-       canonical:BASE_URL
+       canonical:BASE_URL + "guide"
      },
    };
  };

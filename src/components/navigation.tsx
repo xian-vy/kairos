@@ -59,7 +59,7 @@ const Navigation = () => {
                   variant="ghost" 
                   className="text-[#E2E4FF] hover:text-black !px-2"
                 >
-                  <Share2 className="h-3 w-3" />
+                  <Share2 aria-label="Share Kairos" className="h-3 w-3" />
                 </Button>
               <Button onClick={handleNavigateToGuide} variant="ghost" className=" text-[#E2E4FF] hover:text-black !px-3">
                 <span className="font-space-grotesk 3xl:text-sm">Guide</span>
