@@ -11,6 +11,7 @@ import { JoinGroupDialog } from "./group/join-group-dialog";
 import { LeaveGroupDialog } from "./group/leave-group-dialog";
 import UsersList from "./users";
 import useRealtimeMembers from "@/hooks/useRealtimeMembers";
+import WhatsNewDialog from "@/components/WhatsNewDialog";
 // import MontetagVignette from "@/app/MontetagVignette";
 
 export function Features() {
@@ -21,6 +22,8 @@ export function Features() {
 
   return (
     <>
+    <WhatsNewDialog />
+
     {/* <MontetagVignette /> */}
     <div className="w-full relative">
       <Tabs defaultValue="bosses" className="w-full">
