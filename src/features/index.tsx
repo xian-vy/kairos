@@ -11,7 +11,7 @@ import { JoinGroupDialog } from "./group/join-group-dialog";
 import { LeaveGroupDialog } from "./group/leave-group-dialog";
 import UsersList from "./users";
 import useRealtimeMembers from "@/hooks/useRealtimeMembers";
-import MontetagVignette from "@/app/MontetagVignette";
+// import MontetagVignette from "@/app/MontetagVignette";
 
 export function Features() {
   const { currentUser } = useCurrentUser();
@@ -21,7 +21,7 @@ export function Features() {
 
   return (
     <>
-    <MontetagVignette />
+    {/* <MontetagVignette /> */}
     <div className="w-full relative">
       <Tabs defaultValue="bosses" className="w-full">
         <TabsList className="flex justify-center mt-2 xl:mt-5">
