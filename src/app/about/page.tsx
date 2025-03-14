@@ -11,7 +11,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
        title: "Kairos | " + "About",
        description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
        type: "article",
-       url: BASE_URL + "about",
+       url: BASE_URL + "about/",
        siteName:"About",
      },
      twitter: {
@@ -20,7 +20,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
        description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
      },
      alternates: {
-       canonical:BASE_URL + "about"
+       canonical:BASE_URL + "about/"
      },
    };
  };
@@ -30,7 +30,7 @@ export default function AboutPage() {
     "@type": "BlogPosting",
     "headline": "About Kairos",
     "description":" Kairos was created with a simple goal: to make boss tracking in MMORPGs effortless and collaborative. We believe that players should focus on the  excitement of the hunt, not the complexity of timing spawns.",
-    url: BASE_URL + "about"
+    url: BASE_URL + "about/"
   }
   return (
     <>

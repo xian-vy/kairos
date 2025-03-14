@@ -11,7 +11,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
       title: "Kairos | " + "Features",
       description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
       type: "article",
-      url: BASE_URL + "features",
+      url: BASE_URL + "features/",
       siteName:"Features",
     },
     twitter: {
@@ -20,7 +20,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
       description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
     },
     alternates: {
-      canonical:BASE_URL + "features"
+      canonical:BASE_URL + "features/"
     },
   };
 };
@@ -30,7 +30,7 @@ export default function FeaturesPage() {
     "@type": "BlogPosting",
     "headline": "Features",
     "description":"Set precise respawn intervals for each boss, Configure countdown settings and delays.",
-    url: BASE_URL + "features"
+    url: BASE_URL + "features/"
   }
   return (
     <>

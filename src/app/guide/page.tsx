@@ -11,7 +11,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
        title: "Kairos | " + "Guide",
        description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
        type: "article",
-       url: BASE_URL + "guide",
+       url: BASE_URL + "guide/",
        siteName:"Guide",
      },
      twitter: {
@@ -20,7 +20,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
        description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
      },
      alternates: {
-       canonical:BASE_URL + "guide"
+       canonical:BASE_URL + "guide/"
      },
    };
  };
@@ -30,7 +30,7 @@ export default function GuidePage() {
     "@type": "BlogPosting",
     "headline": "Getting Started",
     "description":"Whether youre a guild leader or a dedicated player, Kairos helps you track boss spawns efficiently and coordinate with your team.",
-    url: BASE_URL + "guide"
+    url: BASE_URL + "guide/"
   }
   return (
     <>

@@ -10,7 +10,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
        title: "Kairos | " + "Privacy Policy",
        description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
        type: "article",
-       url: BASE_URL + "privacy-policy",
+       url: BASE_URL + "privacy-policy/",
        siteName:"Privacy Policy",
      },
      twitter: {
@@ -19,7 +19,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
        description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
      },
      alternates: {
-       canonical:BASE_URL + "privacy-policy"
+       canonical:BASE_URL + "privacy-policy/"
      },
    };
  };
@@ -29,7 +29,7 @@ export default function PrivacyPolicy() {
     "@type": "BlogPosting",
     "headline": "Privacy Policy",
     "description":"This Privacy Policy describes how we collect, use, and handle your information when you use our services.",
-    url: BASE_URL + "privacy-policy"
+    url: BASE_URL + "privacy-policy/"
   }
   return (
     <>

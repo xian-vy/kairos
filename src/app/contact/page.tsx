@@ -11,7 +11,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
        title: "Kairos | " + "Contact",
        description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
        type: "article",
-       url: BASE_URL + "contact",
+       url: BASE_URL + "contact/",
        siteName:"Contact",
      },
      twitter: {
@@ -20,7 +20,7 @@ export const generateMetadata = async (): Promise<Metadata> => {
        description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
      },
      alternates: {
-       canonical:BASE_URL + "contact"
+       canonical:BASE_URL + "contact/"
      },
    };
  };
@@ -30,7 +30,7 @@ export default function Contact() {
     "@type": "BlogPosting",
     "headline": "Get in Touch",
     "description":"Have questions or feedback? We&apos;d love to hear from you. Get in touch with us through..",
-    url: BASE_URL + "contact"
+    url: BASE_URL + "contact/"
   }
   return (
     <>
