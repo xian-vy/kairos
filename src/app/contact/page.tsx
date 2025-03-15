@@ -46,7 +46,7 @@ export default function Contact() {
           Have questions or feedback? We&apos;d love to hear from you. Get in touch with us through:
         </p>
         
-        <div className="bg-slate-900 rounded-lg p-6 mb-8">
+        <div className="bg-slate-900 rounded-lg p-6 mb-8 flex flex-col items-center">
           <h2 className="text-base font-semibold mb-2 text-[#E2E4FF]">Email</h2>
           <a 
             href="mailto:xianvy0000@gmail.com" 
@@ -56,8 +56,8 @@ export default function Contact() {
           </a>
         </div>
 
-        <div className="bg-slate-900 rounded-lg p-6">
-          <h2 className="text-base font-semibold mb-4 text-[#E2E4FF]">Connect With Us</h2>
+        <div className="bg-slate-900 rounded-lg p-6 flex flex-col items-center">
+          <h2 className="text-base font-semibold mb-4 text-[#E2E4FF]">Socials</h2>
           <div className="flex space-x-6">
             <Link
               href="https://discord.com/crispysnowflake"

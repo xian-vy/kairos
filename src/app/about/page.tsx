@@ -42,15 +42,11 @@ export default function AboutPage() {
       <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-[#E2E4FF] text-center">
-            About Kairos
+              2k per day XD
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6 text-[#B4B7E5]">
-          <section className="space-y-2">
-            <p className="text-sm text-center">
-             2k per day XD
-            </p>
-          </section>
+        
 
           <div className="text-center pt-6 border-t border-[#1F2137]">
             <p className="text-xs">

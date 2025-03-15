@@ -56,7 +56,7 @@ export default function PrivacyPolicy() {
         </p>
       </section>
 
-      <section className="mb-8">
+      {/* <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4 text-[#E2E4FF]">Advertising</h2>
         <p className="mb-4 text-[#B4B7E5]">
           We use Google AdSense to display advertisements on our website. Google AdSense may use cookies 
@@ -66,7 +66,7 @@ export default function PrivacyPolicy() {
             Google&apos;s Privacy & Terms
           </a>.
         </p>
-      </section>
+      </section> */}
 
       <section className="mb-8">
         <h2 className="text-2xl font-semibold mb-4 text-[#E2E4FF]">How We Use Your Information</h2>

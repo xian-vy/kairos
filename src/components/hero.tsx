@@ -37,7 +37,7 @@ const Hero = () => {
             </h1>
           </span>
         </h1>
-         <h2 className="text-sm xl:text-base 2xl:text-lg  !font-normal text-[#E2E4FF]">The ultimate boss tracking tool for any MMORPG</h2>
+         <h2 className="!text-sm xl:!text-base !font-normal text-[#E2E4FF]">The ultimate boss tracking tool for any MMORPG</h2>
          <div className="flex justify-center mt-7 xl:mt-9 2xl:mt-10">
             <div className='relative'>
               <GlowEffect
@@ -45,9 +45,9 @@ const Hero = () => {
                     mode='rotate'
                     blur='strong'
                     duration={4}
-                    scale={0.9}
+                    scale={0.95}
                   />
-                <Button onClick={handleGetStarted} className='relative h-10 2xl:h-11 font-normal rounded-lg 2xl:text-[0.9rem] font-space-grotesk bg-[#0D0F23] '>
+                <Button onClick={handleGetStarted} className='relative h-10 2xl:h-11 font-normal rounded-lg 2xl:text-[0.85rem] font-space-grotesk bg-[#0D0F23] '>
                   Get Started Free
                 </Button>
               </div>
