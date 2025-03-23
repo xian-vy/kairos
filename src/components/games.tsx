@@ -28,7 +28,7 @@ const Games = () => {
   return (
     <div className="py-16 md:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-center text-2xl sm:text-3xl md:text-4xl font-space-grotesk font-bold mb-12 relative bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
+        <h2 className="text-center text-base sm:text-xl md:text-2xl font-space-grotesk font-bold mb-12 relative bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
           Supported Games
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">

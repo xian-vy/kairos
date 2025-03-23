@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Metadata } from 'next';
+import Link from 'next/link';
 const BASE_URL = "https://kairos-tracker.vercel.app/";
 
 export const generateMetadata = async (): Promise<Metadata> => {
@@ -39,20 +40,24 @@ export default function AboutPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
     <div className="container mx-auto px-4 py-8 max-w-4xl min-h-[70vh] flex flex-col items-center justify-center">
-      <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
+      <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm p-5">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-[#E2E4FF] text-center">
               2k per day XD
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-6 text-[#B4B7E5]">
-        
+        <CardContent className="space-y-4 text-[#B4B7E5]">
 
-          <div className="text-center pt-6 border-t border-[#1F2137]">
+            <hr />
+            <div className="flex items-center gap-1 text-xs justify-center">
+                Developed by
+                <Link  href="https://xianvy.vercel.app/" target='_blank' className='hover:underline hover:underline-offset-8'>
+                  Xian Vy
+                </Link>
+            </div>
             <p className="text-xs">
               Built with next.js and tailwindcss
             </p>
-          </div>
         </CardContent>
       </Card>
     </div>

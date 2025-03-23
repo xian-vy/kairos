@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { FaFacebookMessenger, FaGithub, FaDiscord } from 'react-icons/fa';
 import { Metadata } from 'next';
+import { Card } from '@/components/ui/card';
 const BASE_URL = "https://kairos-tracker.vercel.app/";
 export const generateMetadata = async (): Promise<Metadata> => {
  
@@ -38,52 +39,58 @@ export default function Contact() {
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
     />
-    <div className="max-w-4xl mx-auto px-4 py-12  min-h-[70vh] flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold mb-8 text-[#E2E4FF]">Contact Us</h1>
+    <div className="max-w-3xl mx-auto px-4 min-h-[70vh] flex flex-col justify-center">
+    <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm p-8 2xl:p-12 3xl:p-16 flex flex-col items-center justify-center">
+      <h1 className="text-xl font-bold mb-6 text-[#E2E4FF] bg-gradient-to-r from-[#E2E4FF] to-[#B4B7E5] bg-clip-text text-transparent">
+        Contact Us
+      </h1>
       
-      <div className="mb-8">
-        <p className="text-base mb-4 text-[#B4B7E5]">
+      <div className="w-full max-w-2xl">
+        <p className="text-sm text-center mb-8 text-[#B4B7E5] leading-relaxed">
           Have questions or feedback? We&apos;d love to hear from you. Get in touch with us through:
         </p>
         
-        <div className="bg-slate-900 rounded-lg p-6 mb-8 flex flex-col items-center">
-          <h2 className="text-base font-semibold mb-2 text-[#E2E4FF]">Email</h2>
-          <a 
-            href="mailto:xianvy0000@gmail.com" 
-            className="text-[#B4B7E5] hover:text-white transition-colors text-sm"
-          >
-            xianvy0000@gmail.com
-          </a>
-        </div>
-
-        <div className="bg-slate-900 rounded-lg p-6 flex flex-col items-center">
-          <h2 className="text-base font-semibold mb-4 text-[#E2E4FF]">Socials</h2>
-          <div className="flex space-x-6">
-            <Link
-              href="https://discord.com/crispysnowflake"
-              target="_blank"
-              className="text-[#B4B7E5] hover:text-white transition-colors"
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="p-6 rounded-lg bg-[#1F2137]/30 flex flex-col items-center transition-transform hover:scale-105">
+            <h2 className="text-base font-semibold mb-4 text-[#E2E4FF]">Email</h2>
+            <a 
+              href="mailto:xianvy0000@gmail.com" 
+              className="text-[#B4B7E5] hover:text-white transition-colors text-sm flex items-center gap-2"
             >
-              <FaDiscord size={18} />
-            </Link>
-            <Link 
-              href="https://github.com/xian-vy" 
-              target="_blank" 
-              className="text-[#B4B7E5] hover:text-white transition-colors"
-            >
-              <FaGithub size={18} />
-            </Link>
-            <Link 
-              href="https://www.facebook.com/xzyian.vy" 
-              target="_blank" 
-              className="text-[#B4B7E5] hover:text-white transition-colors"
-            >
-              <FaFacebookMessenger size={18} />
-            </Link>
+              xianvy0000@gmail.com
+            </a>
+          </div>
+      
+          <div className="p-6 rounded-lg bg-[#1F2137]/30 flex flex-col items-center transition-transform hover:scale-105">
+            <h2 className="text-base font-semibold mb-4 text-[#E2E4FF]">Socials</h2>
+            <div className="flex space-x-8">
+              <Link
+                href="https://discord.com/crispysnowflake"
+                target="_blank"
+                className="text-[#B4B7E5] hover:text-white transition-colors transform hover:scale-110"
+              >
+                <FaDiscord size={20} />
+              </Link>
+              <Link 
+                href="https://github.com/xian-vy" 
+                target="_blank" 
+                className="text-[#B4B7E5] hover:text-white transition-colors transform hover:scale-110"
+              >
+                <FaGithub size={20} />
+              </Link>
+              <Link 
+                href="https://www.facebook.com/xzyian.vy" 
+                target="_blank" 
+                className="text-[#B4B7E5] hover:text-white transition-colors transform hover:scale-110"
+              >
+                <FaFacebookMessenger size={20} />
+              </Link>
+            </div>
           </div>
         </div>
       </div>
+      </Card>
     </div>
     </>
   );
-} 
+}

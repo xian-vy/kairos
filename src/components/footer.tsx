@@ -26,20 +26,20 @@ const Footer = () => {
           <p className="text-sm text-[#B4B7E5]/70 font-space-grotesk">Track, notify, collaborate - all in one place</p>
         </div>
 
-        <div className="flex justify-center space-x-3 sm:space-x-5 lg:space-x-8 mb-20 xl:mb-24 max-w-7xl mx-auto">
-          <span onClick={() => handleNavigate("/features")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-sm cursor-pointer">
+        <div className="flex justify-center space-x-5 sm:space-x-8 lg:space-x-10 mb-20 xl:mb-24 max-w-7xl mx-auto">
+          <span onClick={() => handleNavigate("/features")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-[0.8rem] cursor-pointer">
             Features
           </span>
-          <span onClick={() => handleNavigate("/guide")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-sm cursor-pointer">
+          <span onClick={() => handleNavigate("/guide")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-[0.8rem] cursor-pointer">
             Guide
           </span>
-          <span onClick={() => handleNavigate("/about")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-sm cursor-pointer">
+          <span onClick={() => handleNavigate("/about")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-[0.8rem] cursor-pointer">
             About
           </span>
-          <span onClick={() => handleNavigate("/contact")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-sm cursor-pointer">
+          <span onClick={() => handleNavigate("/contact")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-[0.8rem] cursor-pointer">
             Contact
           </span>
-          <span onClick={() => handleNavigate("/privacy-policy")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-sm cursor-pointer">
+          <span onClick={() => handleNavigate("/privacy-policy")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-[0.8rem] cursor-pointer">
              Privacy 
             </span>
         </div>
