@@ -53,7 +53,7 @@ export const metadata: Metadata = {
     follow: true,
   },
   alternates: {
-    canonical: "https://kairos-tracker.vercel.app/",
+    canonical: "https://kairos-tracker.vercel.app",
   },
   manifest: "/manifest.json",
 };
