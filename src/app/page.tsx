@@ -1,5 +1,4 @@
 import Features from "@/components/features";
-import Games from "@/components/games";
 import Hero from "@/components/hero";
 
 export default function Home() {
@@ -8,7 +7,6 @@ export default function Home() {
       <Hero />
       {/* <Statistics /> */}
       <Features />
-      <Games />
       {/* <Testimonials /> */}
     </main>
   );
