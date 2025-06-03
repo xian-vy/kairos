@@ -11,6 +11,7 @@ const Features = () => {
               key={index}
               className="relative backdrop-blur-sm p-4 sm:p-6 md:p-8 rounded-xl transition-colors flex flex-col items-center max-w-[250px] md:max-w-[400px] mx-auto"
             >
+               <div className=" sm:mb-2 md:mb-3 xl:mb-5 inline-block rounded-lg  p-3">{feature.icon}</div>
               <h3 className="text-sm md:text-base 2xl:text-lg text-[#E2E4FF] mb-1.5 sm:mb-3 font-bold font-space-grotesk text-center">
                 {feature.title}
               </h3>
