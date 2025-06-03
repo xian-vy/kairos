@@ -194,7 +194,7 @@ export default function SignIn() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit}>
-              <div className="grid gap-4">
+              <div className="grid gap-3 sm:gap-4">
                 {mode === 'signup' && (
                   <div className="grid gap-2 relative">
                     <User className='w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#B4B7E5] text-sm' />

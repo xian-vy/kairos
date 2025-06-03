@@ -44,15 +44,15 @@ const Navigation = () => {
   }
   return (
     <>
-      <nav className="border-b border-[#1F2137]  bg-[#0D0F23]/50 backdrop-blur-sm">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-[#1F2137]  bg-[#0D0F23]/50 backdrop-blur-sm">
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] sm:w-[500px]  lg:w-[700px] xl:w-[750px] 3xl:w-[800px] h-[150px]  opacity-10">
         <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#4B79E4] via-[#9D68E4] to-[#E45A68] blur-3xl" />
       </div>
         <LinearLoading isLoading={isPending} />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <span onClick={handleNavigateToHome} className="cursor-pointer font-space-grotesk mb-0.5 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
-              Kairos
+            <span onClick={handleNavigateToHome} className="cursor-pointer font-space-grotesk mb-0.5 text-base lg:!text-lg 3xl:!text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
+              KAIROS
             </span>
            
            
