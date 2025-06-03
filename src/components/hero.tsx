@@ -19,10 +19,6 @@ const Hero = () => {
     <div className="relative min-h-[400px] 2xl:min-h-[450px] 3xl:min-h-[500px] flex items-center justify-center overflow-hidden">
       <LinearLoading isLoading={isPending} />
 
-      {/* Glowing circle gradient */}
-      <div className="absolute w-[300px] sm:w-[500px]  lg:w-[700px] xl:w-[750px] 3xl:w-[800px] h-[300px] sm:h-[500px] 3xl:h-[550px] opacity-25">
-        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#4B79E4] via-[#9D68E4] to-[#E45A68] blur-3xl" />
-      </div>
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-12 md:pt-16">
@@ -44,8 +40,8 @@ const Hero = () => {
                   colors={['#E45A68','#9D68E4','#9D68E4','#4B79E4']}
                     mode='rotate'
                     blur='strong'
-                    duration={4}
-                    scale={0.95}
+                    duration={5}
+                    scale={1}
                   />
                 <Button onClick={handleGetStarted} className='relative h-10 2xl:h-11 font-normal rounded-lg 2xl:text-[0.85rem] font-space-grotesk bg-[#0D0F23] '>
                   Get Started Free
@@ -55,7 +51,7 @@ const Hero = () => {
       </div>
      
       {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0A0C1B] via-transparent to-[#0A0C1B] pointer-events-none" />
+      {/* <div className="absolute inset-0 bg-gradient-to-b from-[#0A0C1B] via-transparent to-[#0A0C1B] pointer-events-none" /> */}
     </div>
   );
 };
