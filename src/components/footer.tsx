@@ -20,9 +20,9 @@ const Footer = () => {
       <LinearLoading isLoading={isPending} />
       <div className=" px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col items-center text-center mb-10">
-          <span className="font-space-grotesk text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5] mb-2">
-            Kairos
-          </span>
+          <span className="cursor-pointer font-space-grotesk mb-0.5 text-sm lg:!text-base 3xl:!text-lg font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
+              KAIROS
+         </span>
           <p className="text-sm text-[#B4B7E5]/70 font-space-grotesk">Track, notify, collaborate - all in one place</p>
         </div>
 
