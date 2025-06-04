@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   creator: "Kairos",
   themeColor: "#0A0C1B",
   icons: {
-    icon: "/favicon.ico?v=2",
+    icon: "/favicon.ico?v=3",
   },
   openGraph: {
     title: "Kairos - MMORPG Boss Tracking Tool",
