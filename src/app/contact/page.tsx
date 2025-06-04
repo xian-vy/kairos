@@ -39,7 +39,7 @@ export default function Contact() {
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
     />
-    <div className="max-w-3xl mx-auto px-4 min-h-[70vh] flex flex-col justify-center">
+    <div className="max-w-3xl mx-auto px-4 min-h-[70vh] flex flex-col justify-center pt-24">
     <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm p-8 2xl:p-12 3xl:p-16 flex flex-col items-center justify-center">
       <h1 className="text-xl font-bold mb-6 text-[#E2E4FF] bg-gradient-to-r from-[#E2E4FF] to-[#B4B7E5] bg-clip-text text-transparent">
         Contact Us

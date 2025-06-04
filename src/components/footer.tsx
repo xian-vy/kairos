@@ -17,8 +17,9 @@ const Footer = () => {
 
   return (
     <footer className="border-t border-[#1F2137] bg-[#0D0F23]">
+ 
       <LinearLoading isLoading={isPending} />
-      <div className=" px-4 sm:px-6 lg:px-8 py-12">
+      <div className=" px-4 sm:px-6 lg:px-8 py-12 relative">
         <div className="flex flex-col items-center text-center mb-10">
           <span className="cursor-pointer font-space-grotesk mb-0.5 text-sm lg:!text-base 3xl:!text-lg font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
               KAIROS
@@ -29,12 +30,6 @@ const Footer = () => {
         <div className="flex justify-center space-x-5 sm:space-x-8 lg:space-x-10 mb-20 xl:mb-24 max-w-7xl mx-auto">
           <span onClick={() => handleNavigate("/features")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-[0.8rem] cursor-pointer">
             Features
-          </span>
-          <span onClick={() => handleNavigate("/guide")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-[0.8rem] cursor-pointer">
-            Guide
-          </span>
-          <span onClick={() => handleNavigate("/about")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-[0.8rem] cursor-pointer">
-            About
           </span>
           <span onClick={() => handleNavigate("/contact")} className="text-[#B4B7E5] font-space-grotesk hover:text-white transition-colors duration-200 text-[0.8rem] cursor-pointer">
             Contact
@@ -66,6 +61,9 @@ const Footer = () => {
           </div>
   
         </div>
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[300px] sm:w-[500px]  lg:w-[700px] xl:w-[750px] 3xl:w-[800px] h-[150px]  opacity-10">
+           <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#4B79E4] via-[#9D68E4] to-[#E45A68] blur-3xl" />
+         </div>
       </div>
     </footer>
   )

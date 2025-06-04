@@ -32,7 +32,7 @@ export const ShareDialog = ({ open, onOpenChange }: ShareDialogProps) => {
           <AlertDialogTitle className="text-[#E2E4FF]">Share Kairos</AlertDialogTitle>
          
             <div className="flex items-center gap-2 mt-2">
-              <div className="bg-[#1F2137] p-1 sm:p-2 rounded flex-1 text-[#E2E4FF] text-xs sm:text-sm">
+              <div className=" p-1 sm:p-2 rounded flex-1 text-[#E2E4FF] text-xs sm:text-sm">
                 https://kairos-tracker.vercel.app
               </div>
               <Button

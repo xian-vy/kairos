@@ -38,7 +38,7 @@ export default function GuidePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-    <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="max-w-4xl mx-auto px-4 pb-12 pt-24">
       <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm p-2 sm:p-4 md:p-8 2xl:p-12 3xl:p-16">
         <CardHeader>
           <CardTitle className="text-xl font-bold text-[#E2E4FF] text-center">

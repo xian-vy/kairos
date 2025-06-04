@@ -38,7 +38,7 @@ export default function PrivacyPolicy() {
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
     />
-    <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="max-w-4xl mx-auto px-4 pb-12  pt-24">
       <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm p-8 2xl:p-12 3xl:p-16">
         <h1 className="text-xl font-bold mb-8 text-[#E2E4FF] bg-gradient-to-r from-[#E2E4FF] to-[#B4B7E5] bg-clip-text text-transparent text-center">
           Privacy Policy
