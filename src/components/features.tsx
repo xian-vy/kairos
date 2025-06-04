@@ -3,7 +3,7 @@ import React from 'react'
 
 const Features = () => {
   return (
-    <div className="py-8 md:py-28 2xl:py-32 ">
+    <div className="py-16 md:py-28 2xl:py-32 ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 md:gap-8 xl:gap-10">
           {features.map((feature, index) => (
@@ -15,7 +15,7 @@ const Features = () => {
               <h3 className="text-sm xl:text-base 2xl:text-lg text-[#E2E4FF] mb-1.5 sm:mb-3 font-bold font-space-grotesk text-center">
                 {feature.title}
               </h3>
-              <p className="text-[#B4B7E5] font-space-grotesk text-xs sm:text-[0.8rem] xl:text-sm leading-tight sm:leading-relaxed text-center">
+              <p className="text-[#B4B7E5] font-space-grotesk text-xs sm:text-[0.8rem] xl:text-sm !leading-tight sm:leading-relaxed text-center">
                 {feature.description}
               </p>
             </div>

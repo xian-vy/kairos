@@ -49,7 +49,7 @@ export const ShareDialog = ({ open, onOpenChange }: ShareDialogProps) => {
             </div>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="bg-[#090915] text-[#B4B7E5] mt-0 hover:bg-[#2A2D4B] hover:text-[#E2E4FF] border-none">
+          <AlertDialogCancel className="bg-[#090915] text-[#B4B7E5] mt-0 hover:bg-[#2A2D4B] hover:text-[#E2E4FF] border-none max-w-[120px] self-end">
             Close
           </AlertDialogCancel>
         </AlertDialogFooter>
