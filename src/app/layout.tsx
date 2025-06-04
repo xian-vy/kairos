@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     url: "https://kairos-tracker.vercel.app",
     images: [
       {
-        url: "/kairos.jpeg",
+        url: "/kairos.png",
         alt: "Kairos - MMORPG Boss Tracking Tool",
       },
     ],
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Kairos - MMORPG Boss Tracking Tool",
     description: "A flexible boss tracking tool for any MMORPG. Night Crows Boss Tracking Tool.",
-    images: "/kairos.jpeg",
+    images: "/kairos.png",
   },
   other: { 
     'google-adsense-account': 'ca-pub-3830709842288861', 
