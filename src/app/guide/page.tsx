@@ -90,15 +90,6 @@ export default function GuidePage() {
             </ul>
           </section>
 
-          <section className="rounded-lg bg-[#1F2137]/30 p-6">
-            <h2 className="text-xl font-semibold text-[#E2E4FF] mb-4">Pro Tips</h2>
-            <ul className="list-disc pl-6 space-y-2 text-[#B4B7E5]">
-              <li>Keep your boss timers updated for accurate tracking</li>
-              <li>Use the group chat to coordinate with team members</li>
-              <li>Set up notifications to never miss important spawns</li>
-            </ul>
-          </section>
-
           <section className="rounded-lg bg-[#1F2137]/30 p-6 mt-8">
             <h2 className="text-xl font-semibold text-[#E2E4FF] mb-4">Need Help?</h2>
             <div className="space-y-4 text-[#B4B7E5]">

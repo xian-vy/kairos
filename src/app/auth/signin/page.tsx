@@ -381,7 +381,7 @@ export default function SignIn() {
                   </div>
                 )}
                 {message && (
-                  <div className="text-xs text-emerald-400">
+                  <div className="text-xs text-emerald-400 text-center">
                     {message}
                   </div>
                 )}
@@ -436,7 +436,7 @@ export default function SignIn() {
 
                 {showResendVerification && (
                   <div className="p-4 bg-[#1F2137] rounded-lg space-y-3">
-                    <p className="text-sm text-[#B4B7E5]">
+                    <p className="text-xs text-[#B4B7E5] text-center">
                       Your email address needs to be verified before you can sign in.
                     </p>
                     <Button
