@@ -23,6 +23,7 @@ export default function SignIn() {
   const [showResendVerification, setShowResendVerification] = useState(false)
   const [unconfirmedEmail, setUnconfirmedEmail] = useState<string | null>(null)
   const [rateLimitCountdown, setRateLimitCountdown] = useState<number>(0)
+  const [isVerifying, setIsVerifying] = useState(false)
   const router = useRouter()
   const supabase = createClientComponentClient()
   const {toast} = useToast()
@@ -68,15 +69,18 @@ export default function SignIn() {
 
   const handleTurnstileSuccess = (token: string) => {
     setTurnstileToken(token)
+    setIsVerifying(false)
   }
 
   const handleVerifyClick = () => {
+    setIsVerifying(true)
     setShowTurnstile(true)
   }
 
   const resetVerification = () => {
     setTurnstileToken(null)
     setShowTurnstile(false)
+    setIsVerifying(false)
   }
 
   const handleResendVerification = async () => {
@@ -294,11 +298,11 @@ export default function SignIn() {
   }
 
   return (
-    <div className="container flex min-h-screen flex-col items-center justify-center w-full mx-auto">
+    <div className="container flex min-h-[100dvh] flex-col items-center justify-center w-full mx-auto">
       <div className="mx-auto flex flex-col justify-center space-y-6 w-full max-w-[380px] px-4">
         <Card className="border-[#1F2137] bg-[#0D0F23]/50 backdrop-blur-sm">
-          <CardHeader className="space-y-2 text-center">
-            <CardTitle className="text-xl font-bold text-[#E2E4FF]">
+          <CardHeader className="space-y-0 text-center">
+            <CardTitle className="text-base sm:text-lg font-bold text-[#E2E4FF]">
               {mode === 'signin' ? 'Sign in' : 'Create an account'}
             </CardTitle>
             <CardDescription className="text-[#B4B7E5] text-[0.8rem]">
@@ -377,7 +381,7 @@ export default function SignIn() {
                   </div>
                 )}
                 {message && (
-                  <div className="text-sm text-emerald-400">
+                  <div className="text-xs text-emerald-400">
                     {message}
                   </div>
                 )}
@@ -385,18 +389,28 @@ export default function SignIn() {
                   <Button 
                     type="button"
                     onClick={handleVerifyClick}
+                    disabled={isVerifying}
                     className="bg-[#4B79E4] hover:bg-[#3D63C9] text-white"
                   >
-                    <ShieldCheck className='w-3 h-3'/> Im not a robot
+                    {isVerifying ? (
+                      <>
+                        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                        Verifying...
+                      </>
+                    ) : (
+                      <>
+                        <ShieldCheck className='w-3 h-3 mr-2'/> Im not a robot
+                      </>
+                    )}
                   </Button>
                 ) : (
-                  <div className="text-sm text-emerald-400 text-center">
+                  <div className="text-xs text-emerald-400 text-center">
                     ✓ Verification Complete
                   </div>
                 )}
 
                 {showTurnstile && (
-                  <div className="flex justify-center">
+                  <div className="hidden">
                     <Turnstile
                       sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY!}
                       onVerify={handleTurnstileSuccess}
@@ -416,7 +430,6 @@ export default function SignIn() {
                       }}
                       theme="dark"
                       refreshExpired="auto"
-                      className="flex justify-center"
                     />
                   </div>
                 )}
