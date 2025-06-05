@@ -7,7 +7,7 @@ import { useToast } from '@/hooks/use-toast'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Lock, Mail, ShieldCheck, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Turnstile from "react-turnstile";
 
 export default function SignIn() {
@@ -22,9 +22,23 @@ export default function SignIn() {
   const [showTurnstile, setShowTurnstile] = useState(false)
   const [showResendVerification, setShowResendVerification] = useState(false)
   const [unconfirmedEmail, setUnconfirmedEmail] = useState<string | null>(null)
+  const [rateLimitCountdown, setRateLimitCountdown] = useState<number>(0)
   const router = useRouter()
   const supabase = createClientComponentClient()
   const {toast} = useToast()
+
+  // Add useEffect for countdown timer
+  useEffect(() => {
+    let timer: NodeJS.Timeout
+    if (rateLimitCountdown > 0) {
+      timer = setInterval(() => {
+        setRateLimitCountdown((prev) => prev - 1)
+      }, 1000)
+    }
+    return () => {
+      if (timer) clearInterval(timer)
+    }
+  }, [rateLimitCountdown])
 
   const validatePassword = (password: string) => {
     if (password.length < 8) {
@@ -168,22 +182,87 @@ export default function SignIn() {
           return
         }
 
-        const { data, error: signUpError } = await supabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
-            captchaToken: turnstileToken,
-            data: {
-              username,
-              email_confirmed: false,
+        try {
+          const { data, error: signUpError } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              emailRedirectTo: `${window.location.origin}/auth/callback`,
+              captchaToken: turnstileToken,
+              data: {
+                username,
+                email_confirmed: false,
+              },
             },
-          },
-        })
-        
-        if (signUpError) {
-          // Handle specific error cases
-          if (signUpError.message.includes('User already registered')) {
+          })
+          
+          if (signUpError) {
+            // Handle rate limiting error
+            if (signUpError.message.includes('For security purposes, you can only request this after')) {
+              setRateLimitCountdown(10)
+              toast({
+                title: "Too Many Requests",
+                description: "Please wait 10 seconds before trying again.",
+              })
+              setIsLoading(false)
+              return
+            }
+            throw signUpError
+          }
+
+          if (data.user) {
+            const { error: insertError } = await supabase
+              .from('users')
+              .insert([
+                {
+                  id: data.user.id,
+                  username,
+                  status: 'pending',
+                  email: email,
+                }
+              ])
+
+            if (insertError) {
+              console.error('Database error:', insertError)
+              
+              // Handle duplicate username error
+              if (insertError.message.includes('users_username_key')) {
+                toast({
+                  title: "Username Already Taken",
+                  description: "This username is already in use. Please choose a different username.",
+                })
+                return
+              }
+
+              // Handle duplicate email error
+              if (insertError.message.includes('users_email_key')) {
+                toast({
+                  title: "Email Already Registered",
+                  description: "This email is already registered. Please sign in instead.",
+                })
+                setMode('signin')
+                return
+              }
+
+              // Handle primary key violation
+              if (insertError.message.includes('users_pkey')) {
+                toast({
+                  title: "Account Already Exists",
+                  description: "An account with this email already exists. Please sign in instead.",
+                })
+                setMode('signin')
+                return
+              }
+
+              toast({
+                title: "Account Creation Incomplete",
+                description: "Your account was created but there was an error setting up your profile. Please contact support.",
+              })
+              return
+            }
+          }
+
+          if (data?.user?.identities?.length === 0) {
             toast({
               title: "Account Already Exists",
               description: "An account with this email already exists. Please sign in instead.",
@@ -191,95 +270,17 @@ export default function SignIn() {
             setMode('signin')
             return
           }
-          
-          if (signUpError.message.includes('Password')) {
-            toast({
-              title: "Invalid Password",
-              description: "Please ensure your password meets all requirements: at least 8 characters, one uppercase letter, one lowercase letter, and one number.",
-            })
-            return
-          }
 
-          if (signUpError.message.includes('Email')) {
-            toast({
-              title: "Invalid Email",
-              description: "Please enter a valid email address.",
-            })
-            return
-          }
-
-          // For any other errors, show a more helpful message
+          // Redirect to success page with email
+          router.push(`/auth/signup-success?email=${encodeURIComponent(email)}`)
+          return
+        } catch (error) {
+          console.error('Error:', error)
           toast({
             title: "Sign Up Failed",
-            description: "Unable to create your account. Please try again or contact support if the problem persists.",
+            description: error instanceof Error ? error.message : 'An error occurred',
           })
-          console.error('Sign up error:', signUpError)
-          return
         }
-
-        if (data.user) {
-          const { error: insertError } = await supabase
-            .from('users')
-            .insert([
-              {
-                id: data.user.id,
-                username,
-                status: 'pending',
-                email: email,
-              }
-            ])
-
-          if (insertError) {
-            console.error('Database error:', insertError)
-            
-            // Handle duplicate username error
-            if (insertError.message.includes('users_username_key')) {
-              toast({
-                title: "Username Already Taken",
-                description: "This username is already in use. Please choose a different username.",
-              })
-              return
-            }
-
-            // Handle duplicate email error
-            if (insertError.message.includes('users_email_key')) {
-              toast({
-                title: "Email Already Registered",
-                description: "This email is already registered. Please sign in instead.",
-              })
-              setMode('signin')
-              return
-            }
-
-            toast({
-              title: "Account Creation Incomplete",
-              description: "Your account was created but there was an error setting up your profile. Please contact support.",
-            })
-            return
-          }
-        }
-
-        if (data?.user?.identities?.length === 0) {
-          toast({
-            title: "Account Already Exists",
-            description: "An account with this email already exists. Please sign in instead.",
-          })
-          setMode('signin')
-          return
-        }
-
-        toast({
-          title: "Account Created Successfully",
-          description: "Please check your email (including spam folder) for the confirmation link to complete your registration.",
-        })
-        setMessage(
-          'Success! Please check your email for the confirmation link to complete your registration. If you don\'t see it, check your spam folder.'
-        )
-        setEmail('')
-        setPassword('')
-        setConfirmPassword('')
-        setUsername('')
-        return
       }
     } catch (error) {
       console.error('Error:', error)
@@ -309,6 +310,13 @@ export default function SignIn() {
           <CardContent>
             <form onSubmit={handleSubmit}>
               <div className="grid gap-3 sm:gap-4">
+                {rateLimitCountdown > 0 && (
+                  <div className="p-3 bg-[#1F2137] rounded-lg text-center">
+                    <p className="text-sm text-[#B4B7E5]">
+                      Please wait <span className="text-[#E2E4FF] font-medium">{rateLimitCountdown}</span> seconds before trying again
+                    </p>
+                  </div>
+                )}
                 {mode === 'signup' && (
                   <div className="grid gap-2 relative">
                     <User className='w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#B4B7E5] text-sm' />
