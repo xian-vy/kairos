@@ -3,11 +3,8 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Mail, ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
 
 export default function SignUpSuccess() {
-  const searchParams = useSearchParams()
-  const email = searchParams.get('email')
 
   return (
     <div className="container flex min-h-screen flex-col items-center justify-center w-full mx-auto">
@@ -21,8 +18,7 @@ export default function SignUpSuccess() {
               Check Your Email
             </CardTitle>
             <CardDescription className="text-[#B4B7E5] text-[0.8rem]">
-              We&apos;ve sent a confirmation link to{' '}
-              <span className="text-[#E2E4FF] font-medium">{email}</span>
+              We&apos;ve sent a confirmation link to your email address.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">

@@ -276,7 +276,8 @@ export default function SignIn() {
           }
 
           // Redirect to success page with email
-          router.push(`/auth/signup-success?email=${encodeURIComponent(email)}`)
+          //router.push(`/auth/signup-success?email=${encodeURIComponent(email)}`)
+          router.push(`/auth/signup-success`)
           return
         } catch (error) {
           console.error('Error:', error)
