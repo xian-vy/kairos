@@ -20,6 +20,8 @@ export default function SignIn() {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin')
   const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
   const [showTurnstile, setShowTurnstile] = useState(false)
+  const [showResendVerification, setShowResendVerification] = useState(false)
+  const [unconfirmedEmail, setUnconfirmedEmail] = useState<string | null>(null)
   const router = useRouter()
   const supabase = createClientComponentClient()
   const {toast} = useToast()
@@ -63,10 +65,42 @@ export default function SignIn() {
     setShowTurnstile(false)
   }
 
+  const handleResendVerification = async () => {
+    if (!unconfirmedEmail) return
+    
+    setIsLoading(true)
+    try {
+      const { error } = await supabase.auth.resend({
+        type: 'signup',
+        email: unconfirmedEmail,
+        options: {
+          captchaToken: turnstileToken || undefined
+        }
+      })
+      
+      if (error) throw error
+      
+      toast({
+        title: "Verification Email Sent",
+        description: "Please check your email (including spam folder) for the verification link.",
+      })
+    } catch (error) {
+      console.error('Error resending verification:', error)
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : 'Failed to resend verification email',
+      })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setIsLoading(true)
     setMessage(null)
+    setShowResendVerification(false)
+    setUnconfirmedEmail(null)
 
     if (!turnstileToken) {
       toast({
@@ -86,7 +120,21 @@ export default function SignIn() {
             captchaToken: turnstileToken
           }
         })
-        if (signInError) throw signInError
+
+        if (signInError) {
+          // Check if the error is due to unconfirmed email
+          if (signInError.message.includes('Email not confirmed')) {
+            setUnconfirmedEmail(email)
+            setShowResendVerification(true)
+            toast({
+              title: "Email Not Verified",
+              description: "Please verify your email address before signing in. Check your spam folder if you don't see the verification email.",
+            })
+            setIsLoading(false)
+            return
+          }
+          throw signInError
+        }
 
         router.push('/app')
         router.refresh()
@@ -133,7 +181,41 @@ export default function SignIn() {
           },
         })
         
-        if (signUpError) throw signUpError
+        if (signUpError) {
+          // Handle specific error cases
+          if (signUpError.message.includes('User already registered')) {
+            toast({
+              title: "Account Already Exists",
+              description: "An account with this email already exists. Please sign in instead.",
+            })
+            setMode('signin')
+            return
+          }
+          
+          if (signUpError.message.includes('Password')) {
+            toast({
+              title: "Invalid Password",
+              description: "Please ensure your password meets all requirements: at least 8 characters, one uppercase letter, one lowercase letter, and one number.",
+            })
+            return
+          }
+
+          if (signUpError.message.includes('Email')) {
+            toast({
+              title: "Invalid Email",
+              description: "Please enter a valid email address.",
+            })
+            return
+          }
+
+          // For any other errors, show a more helpful message
+          toast({
+            title: "Sign Up Failed",
+            description: "Unable to create your account. Please try again or contact support if the problem persists.",
+          })
+          console.error('Sign up error:', signUpError)
+          return
+        }
 
         if (data.user) {
           const { error: insertError } = await supabase
@@ -147,17 +229,49 @@ export default function SignIn() {
               }
             ])
 
-          if (insertError) throw insertError
+          if (insertError) {
+            console.error('Database error:', insertError)
+            
+            // Handle duplicate username error
+            if (insertError.message.includes('users_username_key')) {
+              toast({
+                title: "Username Already Taken",
+                description: "This username is already in use. Please choose a different username.",
+              })
+              return
+            }
+
+            // Handle duplicate email error
+            if (insertError.message.includes('users_email_key')) {
+              toast({
+                title: "Email Already Registered",
+                description: "This email is already registered. Please sign in instead.",
+              })
+              setMode('signin')
+              return
+            }
+
+            toast({
+              title: "Account Creation Incomplete",
+              description: "Your account was created but there was an error setting up your profile. Please contact support.",
+            })
+            return
+          }
         }
 
         if (data?.user?.identities?.length === 0) {
           toast({
-            title: "Sign In Failed",
-            description: 'An account with this email already exists. Please sign in instead.',
+            title: "Account Already Exists",
+            description: "An account with this email already exists. Please sign in instead.",
           })
+          setMode('signin')
           return
         }
 
+        toast({
+          title: "Account Created Successfully",
+          description: "Please check your email (including spam folder) for the confirmation link to complete your registration.",
+        })
         setMessage(
           'Success! Please check your email for the confirmation link to complete your registration. If you don\'t see it, check your spam folder.'
         )
@@ -296,6 +410,27 @@ export default function SignIn() {
                       refreshExpired="auto"
                       className="flex justify-center"
                     />
+                  </div>
+                )}
+
+                {showResendVerification && (
+                  <div className="p-4 bg-[#1F2137] rounded-lg space-y-3">
+                    <p className="text-sm text-[#B4B7E5]">
+                      Your email address needs to be verified before you can sign in.
+                    </p>
+                    <Button
+                      type="button"
+                      onClick={handleResendVerification}
+                      disabled={isLoading}
+                      className="w-full bg-[#4B79E4] hover:bg-[#3D63C9] text-white"
+                    >
+                      {isLoading ? (
+                        <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                      ) : (
+                        <Mail className="mr-2 h-4 w-4" />
+                      )}
+                      Resend Verification Email
+                    </Button>
                   </div>
                 )}
 
