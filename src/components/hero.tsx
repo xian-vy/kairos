@@ -16,7 +16,7 @@ const Hero = () => {
   }; 
 
   return (
-    <div className="relative min-h-[450px] 3xl:min-h-[500px] flex items-center justify-center overflow-hidden">
+    <div className="min-h-[450px] 3xl:min-h-[500px] flex items-center justify-center overflow-hidden">
       <LinearLoading isLoading={isPending} />
 
 
