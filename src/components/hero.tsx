@@ -28,7 +28,7 @@ const Hero = () => {
             <span className="absolute -inset-2 blur-2xl bg-gradient-to-r from-[#4B79E4]/20 to-[#9D68E4]/20" />
 
             {/* Main text with gradient */}
-            <h1 className="text-4xl sm:text-6xl 3xl:text-7xl max-w-[450px] md:max-w-[560px] 3xl:max-w-screen-sm !leading-[1.2] font-extrabold tracking-widest relative bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
+            <h1 className="text-4xl sm:text-6xl  max-w-[450px] md:max-w-[560px] 3xl:max-w-screen-sm !leading-[1.2] font-extrabold tracking-widest relative bg-clip-text text-transparent bg-gradient-to-r from-white via-[#E2E4FF] to-[#B4B7E5]">
                  KAIROS
             </h1>
           </span>
