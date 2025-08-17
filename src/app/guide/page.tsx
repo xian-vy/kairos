@@ -48,7 +48,7 @@ export default function GuidePage() {
         <CardContent className="space-y-8">
           <section className="rounded-lg bg-[#1F2137]/30 p-6">
             <h2 className="text-xl font-semibold text-[#E2E4FF] mb-4">Getting Started</h2>
-            <p className='text-[#B4B7E5] leading-relaxed'>
+            <p className='text-[#B4B7E5] leading-relaxed text-xs sm:text-sm'>
               Welcome to Kairos, your ultimate MMORPG boss timer companion! Whether youre a guild leader
               or a dedicated player, Kairos helps you track boss spawns efficiently and coordinate with
               your team.
@@ -57,7 +57,7 @@ export default function GuidePage() {
 
           <section className="rounded-lg bg-[#1F2137]/30 p-6">
             <h2 className="text-xl font-semibold text-[#E2E4FF] mb-4">Creating Your Account</h2>
-            <div className='text-[#B4B7E5] leading-relaxed space-y-2 text-sm'>
+            <div className='text-[#B4B7E5] leading-relaxed space-y-2 text-xs sm:text-sm'>
               1. Click Sign Up on the sign-in page<br />
               2. Choose a username that your teammates will recognize<br />
               3. Enter your email and create a secure password<br />
