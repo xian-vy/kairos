@@ -1,5 +1,5 @@
 <h1>Kairos</h1>
-<h2>Kill timer / recorder for mmorpg</h2>
+<h2>Boss till timer / timestamp recorder for mmorpg</h2>
 <h3>Tech stacks : typescript, nextjs, zustand</h3>
 
 <img width="1761" height="914" alt="1" src="https://github.com/user-attachments/assets/bdfac443-9395-4961-b97b-3f37a2f1be00" />
