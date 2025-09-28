@@ -21,7 +21,7 @@ interface AccountMenuProps {
 
 const AccountMenu = ({ currentUser, userData, onSignOutClick }: AccountMenuProps) => {
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger className="focus:outline-none">
         <Avatar className="h-8 w-8">
           <AvatarImage src={currentUser.user_metadata?.avatar_url} />
