@@ -25,8 +25,8 @@ const Navigation = () => {
   }
 
   const confirmSignOut = async () => {
-      startTransition(() => {
-        supabase.auth.signOut()
+      startTransition(async () => {
+        await supabase.auth.signOut()
         router.push('/auth/signin')
         router.refresh()
       })
