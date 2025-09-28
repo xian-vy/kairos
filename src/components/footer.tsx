@@ -50,7 +50,7 @@ const Footer = () => {
                             <Link href="https://discord.com/crispysnowflake." aria-label="Discord Link" target="_blank" className="text-[#B4B7E5] hover:text-white">
                                         <FaDiscord className="h-4 w-4" />
                             </Link>
-                            <Link href="https://github.com/xian-vy" aria-label="Github Link" target="_blank" className="text-[#B4B7E5] hover:text-white">
+                            <Link href="https://github.com/xian-vy/kairos" aria-label="Github Link" target="_blank" className="text-[#B4B7E5] hover:text-white">
                               <FaGithub className="h-4 w-4" />
                             </Link>
                             <Link href="https://facebook.com/xzyian.vy" aria-label="FB Messenger Link" target="_blank" className="text-[#B4B7E5] hover:text-white">

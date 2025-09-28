@@ -72,7 +72,7 @@ export default function Contact() {
                 <FaDiscord size={20} />
               </Link>
               <Link 
-                href="https://github.com/xian-vy" 
+                href="https://github.com/xian-vy/kairos" 
                 target="_blank" 
                 className="text-[#B4B7E5] hover:text-white transition-colors transform hover:scale-110"
               >

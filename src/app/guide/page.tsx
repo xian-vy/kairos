@@ -97,7 +97,7 @@ export default function GuidePage() {
               <ul className="list-disc pl-6 space-y-2">
                 <li className="transition-transform hover:translate-x-2">Email: xianvy0000@gmail.com</li>
                 <li className="transition-transform hover:translate-x-2">Discord: discord.gg/crispy.snowflake.</li>
-                <li className="transition-transform hover:translate-x-2">GitHub Issues: github.com/xian-vy</li>
+                <li className="transition-transform hover:translate-x-2">GitHub Issues: github.com/xian-vy/kairos</li>
               </ul>
               <p className="mt-4 italic">Happy hunting 🗡️</p>
             </div>
