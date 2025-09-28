@@ -482,6 +482,7 @@ export default function SignIn() {
                 setUsername('')
                 resetVerification()
               }}
+              disabled={isVerifying || isLoading}
             >
               {mode === 'signin'
                 ? "Don't have an account? Sign up"
