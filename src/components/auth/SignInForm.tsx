@@ -10,11 +10,8 @@ import { FormField } from './FormField'
 import { SecurityVerification } from './SecurityVerification'
 import { EmailVerification } from './EmailVerification'
 
-interface SignInFormProps {
-  onToggleMode: () => void
-}
 
-export function SignInForm({ onToggleMode }: SignInFormProps) {
+export function SignInForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -78,13 +75,6 @@ export function SignInForm({ onToggleMode }: SignInFormProps) {
     }
   }
 
-  const handleReset = () => {
-    setEmail('')
-    setPassword('')
-    setTurnstileToken(null)
-    setShowResendVerification(false)
-    setUnconfirmedEmail(null)
-  }
 
   return (
     <form onSubmit={handleSubmit}>

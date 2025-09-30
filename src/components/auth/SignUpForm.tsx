@@ -209,14 +209,7 @@ export function SignUpForm({ onToggleMode }: SignUpFormProps) {
     }
   }
 
-  const handleReset = () => {
-    setEmail('')
-    setPassword('')
-    setConfirmPassword('')
-    setUsername('')
-    setTurnstileToken(null)
-    setRateLimitCountdown(0)
-  }
+
 
   return (
     <form onSubmit={handleSubmit}>

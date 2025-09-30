@@ -26,11 +26,6 @@ export function SecurityVerification({ onTokenChange, token }: SecurityVerificat
     setShowTurnstile(true)
   }
 
-  const resetVerification = () => {
-    onTokenChange(null)
-    setShowTurnstile(false)
-    setIsVerifying(false)
-  }
 
   return (
     <>

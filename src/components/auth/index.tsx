@@ -27,7 +27,7 @@ export function AuthPage() {
       onToggle={handleToggleMode}
     >
       {isSignIn ? (
-        <SignInForm onToggleMode={handleToggleMode} />
+        <SignInForm />
       ) : (
         <SignUpForm onToggleMode={handleToggleMode} />
       )}
